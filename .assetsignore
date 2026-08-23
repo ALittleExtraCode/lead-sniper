@@ -1,0 +1,10 @@
+.git/
+.github/
+_worker.js
+wrangler.toml
+.assetsignore
+README.md
+__pycache__/
+core/__pycache__/
+*.pyc
+*.py
