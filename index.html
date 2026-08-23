@@ -16,7 +16,7 @@
   <meta property="og:description" content="Acquire high-intent customers from Reddit & communities in real time. Zero API keys, AI intent scoring, and 1-click assisted conversion.">
   <meta property="og:site_name" content="LeadSniper">
 
-  <!-- Google Fonts: Plus Jakarta Sans + JetBrains Mono + Outfit -->
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -267,7 +267,7 @@
       background: radial-gradient(circle at top right, rgba(56, 189, 248, 0.08) 0%, var(--card) 60%);
       border: 1px solid var(--card-border);
       border-radius: 20px;
-      padding: 34px 28px;
+      padding: 30px 26px;
       position: relative;
       overflow: hidden;
     }
@@ -285,17 +285,17 @@
       border: 1px solid rgba(56, 189, 248, 0.25);
       padding: 4px 10px;
       border-radius: 6px;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
       font-weight: 600;
     }
 
     .hero-heading {
       font-family: var(--font-display);
-      font-size: clamp(26px, 4vw, 42px);
+      font-size: clamp(24px, 3.8vw, 38px);
       font-weight: 700;
       line-height: 1.2;
-      margin-bottom: 12px;
-      letter-spacing: -0.6px;
+      margin-bottom: 10px;
+      letter-spacing: -0.5px;
     }
 
     .hero-heading span.cyan {
@@ -305,9 +305,9 @@
     }
 
     .hero-subtext {
-      font-size: 15px;
+      font-size: 14.5px;
       color: var(--text-secondary);
-      max-width: 740px;
+      max-width: 760px;
       line-height: 1.55;
     }
 
@@ -405,6 +405,22 @@
       border-color: var(--accent);
     }
 
+    .custom-sub-input {
+      background: var(--card-inner);
+      border: 1px solid var(--card-border);
+      color: var(--text-primary);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      padding: 7px 12px;
+      border-radius: 8px;
+      outline: none;
+      width: 140px;
+    }
+
+    .custom-sub-input:focus {
+      border-color: var(--accent);
+    }
+
     /* Split Radar Layout */
     .radar-split {
       display: grid;
@@ -435,24 +451,24 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 12px;
+      font-size: 11.5px;
       color: var(--text-secondary);
       font-family: var(--font-mono);
     }
 
     .stream-items {
-      max-height: 440px;
+      max-height: 480px;
       overflow-y: auto;
     }
 
     .lead-row {
-      padding: 12px 14px;
+      padding: 13px 15px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.04);
       cursor: pointer;
       transition: all 0.15s ease;
       display: flex;
       flex-direction: column;
-      gap: 5px;
+      gap: 6px;
     }
 
     .lead-row:hover, .lead-row.selected {
@@ -502,6 +518,25 @@
       line-height: 1.35;
     }
 
+    /* Score Breakdown Pill Bar */
+    .score-breakdown-bar {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      margin-top: 4px;
+      flex-wrap: wrap;
+    }
+
+    .score-chip {
+      font-size: 10px;
+      font-family: var(--font-mono);
+      color: var(--text-muted);
+      background: rgba(255, 255, 255, 0.03);
+      padding: 2px 6px;
+      border-radius: 4px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
     /* Reply Studio Panel */
     .reply-panel {
       background: var(--card-inner);
@@ -518,14 +553,15 @@
       background: rgba(255, 255, 255, 0.02);
       border: 1px solid rgba(255, 255, 255, 0.06);
       border-radius: 8px;
-      padding: 10px 12px;
+      padding: 12px;
     }
 
     .selected-lead-title {
-      font-size: 13px;
+      font-size: 13.5px;
       font-weight: 600;
       color: var(--text-primary);
-      margin-bottom: 4px;
+      margin-bottom: 6px;
+      line-height: 1.4;
     }
 
     .selected-lead-author {
@@ -544,7 +580,7 @@
       background: rgba(255, 255, 255, 0.04);
       border: 1px solid var(--card-border);
       color: var(--text-secondary);
-      padding: 4px 10px;
+      padding: 5px 11px;
       border-radius: 6px;
       font-size: 11.5px;
       font-weight: 600;
@@ -604,6 +640,43 @@
       box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
     }
 
+    /* Live Target Simulator Form */
+    .custom-product-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 16px;
+      margin-top: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    @media (max-width: 600px) {
+      .form-row { grid-template-columns: 1fr; }
+    }
+
+    .input-field {
+      background: var(--card-inner);
+      border: 1px solid var(--card-border);
+      color: var(--text-primary);
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 12.5px;
+      outline: none;
+      font-family: var(--font);
+    }
+
+    .input-field:focus {
+      border-color: var(--accent);
+    }
+
     /* Feature Grid Section */
     .grid-3col {
       display: grid;
@@ -641,6 +714,14 @@
       font-size: 13.5px;
       color: var(--text-secondary);
       line-height: 1.5;
+    }
+
+    /* Calculator */
+    .calc-slider {
+      width: 100%;
+      accent-color: var(--accent);
+      margin: 8px 0;
+      cursor: pointer;
     }
 
     /* Footer */
@@ -722,6 +803,7 @@
       <button class="tab-btn active" onclick="openTab('tab-radar')">🎯 Live Target Radar</button>
       <button class="tab-btn" onclick="openTab('tab-features')">⚡ Architecture & Features</button>
       <button class="tab-btn" onclick="openTab('tab-presets')">⚙️ Multi-Product Presets</button>
+      <button class="tab-btn" onclick="openTab('tab-calculator')">📊 Conversion Calculator</button>
       <button class="tab-btn" onclick="openTab('tab-desktop')">💻 Desktop App (.DMG / .EXE)</button>
     </nav>
 
@@ -730,17 +812,20 @@
       <div class="radar-card">
         <div class="radar-top-controls">
           <div class="control-row">
-            <span style="font-size: 12px; font-weight: 600; color: var(--text-muted);">Active Preset:</span>
+            <span style="font-size: 12px; font-weight: 600; color: var(--text-muted);">Preset:</span>
             <select id="activePresetSelect" class="preset-selector" onchange="onPresetChange()">
               <option value="sunoget" selected>SunoGet Studio (AI Music & DAW)</option>
               <option value="saas">Micro-SaaS & Indie Product</option>
               <option value="video">Video Editor & Auto-Captions</option>
             </select>
+            
+            <input type="text" id="customSubInput" class="custom-sub-input" placeholder="r/custom_sub..." onkeydown="if(event.key==='Enter')scanCustomSub()">
+            <button onclick="scanCustomSub()" class="btn-action-nav" style="padding: 5px 10px;">🔍 Scan Sub</button>
           </div>
 
           <div class="control-row">
             <span id="liveTargetLockBadge" style="font-size: 11px; font-family: var(--font-mono); color: var(--emerald);">● TARGET LOCK ACQUIRED</span>
-            <button onclick="simulateScan()" class="btn-action-nav" style="padding: 5px 12px;">⚡ Scan Feeds</button>
+            <button onclick="simulateScan()" class="btn-action-nav" style="padding: 5px 12px;">⚡ Live Scan</button>
           </div>
         </div>
 
@@ -748,7 +833,7 @@
           <!-- Left: Incoming Leads -->
           <div class="stream-container">
             <div class="stream-header">
-              <span>INCOMING LEADS FEED</span>
+              <span>INCOMING HIGH-INTENT TARGETS</span>
               <span id="leadCountDisplay">3 Targets</span>
             </div>
             <div class="stream-items" id="leadsStreamList">
@@ -762,16 +847,21 @@
               <div class="selected-lead-card">
                 <div class="selected-lead-title" id="cardLeadTitle">Select a target from the radar...</div>
                 <div class="selected-lead-author" id="cardLeadMeta">r/-- • u/-- • Intent: --</div>
+                <div class="score-breakdown-bar" id="scoreBreakdownBar">
+                  <span class="score-chip">Question Pattern: +35%</span>
+                  <span class="score-chip">Feature Match: +25%</span>
+                  <span class="score-chip">Intent Density: +25%</span>
+                </div>
               </div>
 
-              <div style="margin: 10px 0 6px 0; font-size: 11.5px; font-weight: 600; color: var(--text-muted);">SELECT PERSONA:</div>
+              <div style="margin: 12px 0 6px 0; font-size: 11.5px; font-weight: 600; color: var(--text-muted);">SELECT PERSONA:</div>
               <div class="persona-bar" id="personaButtons">
-                <button class="persona-tag-btn active" onclick="setPersona('founder')">🚀 Founder</button>
+                <button class="persona-tag-btn active" onclick="setPersona('founder')">🚀 Helpful Founder</button>
                 <button class="persona-tag-btn" onclick="setPersona('tech')">⚙️ Tech Lead</button>
                 <button class="persona-tag-btn" onclick="setPersona('creator')">🎬 Creator Peer</button>
               </div>
 
-              <div style="margin: 10px 0 4px 0; font-size: 11.5px; font-weight: 600; color: var(--text-muted);">GENERATED REPLY (100% RAW CLEAN LINK):</div>
+              <div style="margin: 10px 0 4px 0; font-size: 11.5px; font-weight: 600; color: var(--text-muted);">GENERATED CONTEXTUAL REPLY (100% CLEAN URL):</div>
               <textarea id="replyTextarea" class="reply-textarea" spellcheck="false"></textarea>
             </div>
 
@@ -779,6 +869,18 @@
               <span id="btnDispatchIcon">🚀</span>
               <span id="btnDispatchText">1-Click Copy Reply & Open Reddit Post</span>
             </button>
+          </div>
+        </div>
+
+        <!-- Custom Product Simulation Box -->
+        <div class="custom-product-card">
+          <div style="font-size: 12px; font-weight: 700; color: var(--accent); font-family: var(--font-mono);">🛠️ TEST WITH YOUR OWN PRODUCT (INSTANT SIMULATION)</div>
+          <div class="form-row">
+            <input type="text" id="simProductName" class="input-field" placeholder="Your Product Name (e.g. Acme Studio)">
+            <input type="text" id="simProductUrl" class="input-field" placeholder="Your Clean URL (e.g. https://mytool.com)">
+          </div>
+          <div style="display: flex; justify-content: flex-end;">
+            <button onclick="applyCustomProduct()" class="btn-action-nav" style="background: rgba(56, 189, 248, 0.15); border-color: var(--accent); color: var(--accent);">⚡ Inject My Product Into Live Radar</button>
           </div>
         </div>
       </div>
@@ -851,7 +953,55 @@
       </div>
     </div>
 
-    <!-- TAB 4: DESKTOP APP -->
+    <!-- TAB 4: CONVERSION CALCULATOR -->
+    <div id="tab-calculator" class="tab-content">
+      <div class="radar-card">
+        <h3 style="font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px;">🎯 Organic Lead Acquisition & ROI Estimator</h3>
+        <p style="font-size: 13.5px; color: var(--text-secondary); margin-bottom: 18px;">Estimate your monthly growth by engaging high-intent community leads with 1-click conversion.</p>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+          <div>
+            <div style="margin-bottom: 14px;">
+              <div style="display: flex; justify-content: space-between; font-size: 12.5px; font-weight: 600;">
+                <span>Daily High-Intent Snipes:</span>
+                <span id="calcSnipesVal" style="color: var(--accent); font-family: var(--font-mono);">15 leads/day</span>
+              </div>
+              <input type="range" id="calcSnipes" min="5" max="60" value="15" class="calc-slider" oninput="updateCalculator()">
+            </div>
+
+            <div style="margin-bottom: 14px;">
+              <div style="display: flex; justify-content: space-between; font-size: 12.5px; font-weight: 600;">
+                <span>Conversion Rate (%):</span>
+                <span id="calcConvVal" style="color: var(--emerald); font-family: var(--font-mono);">8%</span>
+              </div>
+              <input type="range" id="calcConv" min="2" max="25" value="8" class="calc-slider" oninput="updateCalculator()">
+            </div>
+
+            <div>
+              <div style="display: flex; justify-content: space-between; font-size: 12.5px; font-weight: 600;">
+                <span>Customer Lifetime Value / Sub ($):</span>
+                <span id="calcLtvVal" style="color: var(--amber); font-family: var(--font-mono);">$49</span>
+              </div>
+              <input type="range" id="calcLtv" min="10" max="250" value="49" class="calc-slider" oninput="updateCalculator()">
+            </div>
+          </div>
+
+          <!-- Calculated ROI Result HUD -->
+          <div style="background: var(--card-inner); border: 1px solid var(--card-border); border-radius: 12px; padding: 20px; display: flex; flex-direction: column; justify-content: center; gap: 16px;">
+            <div>
+              <div style="font-size: 11px; font-family: var(--font-mono); color: var(--text-muted); text-transform: uppercase;">Estimated Monthly New Customers</div>
+              <div id="calcResultCustomers" style="font-family: var(--font-display); font-size: 32px; font-weight: 700; color: var(--emerald);">36 users/mo</div>
+            </div>
+            <div>
+              <div style="font-size: 11px; font-family: var(--font-mono); color: var(--text-muted); text-transform: uppercase;">Estimated Added Monthly Revenue</div>
+              <div id="calcResultRevenue" style="font-family: var(--font-display); font-size: 32px; font-weight: 700; color: var(--accent);">$1,764 /mo</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 5: DESKTOP APP -->
     <div id="tab-desktop" class="tab-content">
       <div class="radar-card" style="text-align: center; padding: 40px 20px;">
         <div style="font-size: 40px; margin-bottom: 12px;">💻</div>
@@ -891,9 +1041,28 @@
       if (event && event.target) event.target.classList.add('active');
     }
 
+    // Audio Chime Feedback (Web Audio API Synthesizer)
+    function playTargetLockChime() {
+      try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(587.33, audioCtx.currentTime); // D5
+        osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.12); // A5
+        gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.18);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.18);
+      } catch(e) {}
+    }
+
     // Live Lead Presets
     const PRESETS = {
       sunoget: {
+        name: "SunoGet",
         url: "https://www.sunoget.com/daw",
         leads: [
           {
@@ -935,6 +1104,7 @@
         ]
       },
       saas: {
+        name: "Acme SaaS",
         url: "https://yourapp.com",
         leads: [
           {
@@ -964,6 +1134,7 @@
         ]
       },
       video: {
+        name: "ClipMaster",
         url: "https://yourvideotool.com",
         leads: [
           {
@@ -990,6 +1161,7 @@
       activeKey = document.getElementById("activePresetSelect").value;
       activeIndex = 0;
       renderLeads();
+      playTargetLockChime();
     }
 
     function setPersona(p) {
@@ -1005,6 +1177,7 @@
         r.classList.toggle("selected", i === idx);
       });
       updateReplyBox();
+      playTargetLockChime();
     }
 
     function renderLeads() {
@@ -1021,7 +1194,7 @@
         row.innerHTML = `
           <div class="lead-meta">
             <span class="lead-sub-tag">${lead.sub}</span>
-            <span class="${badgeClass}">${lead.intent} 🔥</span>
+            <span class="${badgeClass}">${lead.intent} 🔥 85%</span>
           </div>
           <div class="lead-post-title">${lead.title}</div>
           <div style="font-size: 11px; color: #64748b;">u/${lead.author}</div>
@@ -1055,6 +1228,7 @@
         const label = document.getElementById("btnDispatchText");
         icon.textContent = "✅";
         label.textContent = "Copied to Clipboard & Opened Reddit!";
+        playTargetLockChime();
 
         if (lead && lead.permalink) {
           window.open(lead.permalink, '_blank');
@@ -1075,7 +1249,66 @@
         badge.textContent = "● TARGET LOCK ACQUIRED";
         badge.style.color = "#10b981";
         renderLeads();
-      }, 600);
+        playTargetLockChime();
+      }, 500);
+    }
+
+    function scanCustomSub() {
+      const sub = document.getElementById("customSubInput").value.trim().replace(/^r\//, '');
+      if (!sub) return;
+
+      const p = PRESETS[activeKey];
+      p.leads.unshift({
+        sub: `r/${sub}`,
+        intent: "HOT",
+        title: `What is the best workflow tool to solve bottlenecks in r/${sub}?`,
+        author: "live_prospect",
+        permalink: `https://www.reddit.com/r/${sub}/`,
+        replies: {
+          founder: `Hey u/live_prospect! If you need a reliable tool for ${p.name}, check out ${p.url} — designed specifically to streamline this with 0 hassle.`,
+          tech: `Hey u/live_prospect, take a look at ${p.url}. Solves the core bottlenecks directly.`,
+          creator: `Great question u/live_prospect! I use ${p.url} for this exact workflow.`
+        }
+      });
+      activeIndex = 0;
+      renderLeads();
+      playTargetLockChime();
+    }
+
+    function applyCustomProduct() {
+      const name = document.getElementById("simProductName").value.trim() || "My App";
+      const url = document.getElementById("simProductUrl").value.trim() || "https://myapp.com";
+
+      const p = PRESETS[activeKey];
+      p.name = name;
+      p.url = url;
+      p.leads.forEach(l => {
+        l.replies.founder = `Hey u/${l.author}! If you're looking to streamline this workflow, check out ${name} at ${url}. Zero complex setup needed!`;
+        l.replies.tech = `Hey u/${l.author}, for this exact use-case, ${url} provides direct workflows.`;
+        l.replies.creator = `Nice post u/${l.author}! ${url} makes handling this super fast.`;
+      });
+
+      updateReplyBox();
+      playTargetLockChime();
+      alert(`✅ Product "${name}" injected! Look at the generated replies in the studio panel.`);
+    }
+
+    // ROI Calculator Function
+    function updateCalculator() {
+      const snipes = parseInt(document.getElementById("calcSnipes").value, 10);
+      const conv = parseInt(document.getElementById("calcConv").value, 10);
+      const ltv = parseInt(document.getElementById("calcLtv").value, 10);
+
+      document.getElementById("calcSnipesVal").textContent = `${snipes} leads/day`;
+      document.getElementById("calcConvVal").textContent = `${conv}%`;
+      document.getElementById("calcLtvVal").textContent = `$${ltv}`;
+
+      const monthlyLeads = snipes * 30;
+      const customers = Math.round(monthlyLeads * (conv / 100));
+      const revenue = customers * ltv;
+
+      document.getElementById("calcResultCustomers").textContent = `${customers.toLocaleString()} users/mo`;
+      document.getElementById("calcResultRevenue").textContent = `$${revenue.toLocaleString()} /mo`;
     }
 
     // Tactical Sniper Crosshair Follower
@@ -1104,19 +1337,20 @@
 
     // Target Lock on clickable elements
     document.addEventListener('mouseover', (e) => {
-      if (e.target.closest('button, a, select, textarea, .lead-row, .tab-btn, .persona-tag-btn')) {
+      if (e.target.closest('button, a, select, textarea, .lead-row, .tab-btn, .persona-tag-btn, input')) {
         crosshair.classList.add('locked');
       }
     });
 
     document.addEventListener('mouseout', (e) => {
-      if (e.target.closest('button, a, select, textarea, .lead-row, .tab-btn, .persona-tag-btn')) {
+      if (e.target.closest('button, a, select, textarea, .lead-row, .tab-btn, .persona-tag-btn, input')) {
         crosshair.classList.remove('locked');
       }
     });
 
     document.addEventListener("DOMContentLoaded", () => {
       renderLeads();
+      updateCalculator();
     });
   </script>
 </body>
