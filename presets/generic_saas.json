@@ -1,0 +1,40 @@
+{
+  "id": "saas_growth",
+  "name": "Micro-SaaS & Indie Product",
+  "product_url": "https://yourapp.com",
+  "description": "All-in-one productivity & automation tool for indie founders and remote teams.",
+  "subreddits": [
+    "SaaS",
+    "SideProject",
+    "IndieHackers",
+    "startups",
+    "Entrepreneur",
+    "productivity"
+  ],
+  "keywords": [
+    "tool", "software", "alternative", "recommend", "how to automate", "looking for",
+    "workflow", "dashboard", "analytics", "integrate", "api", "save time"
+  ],
+  "negative_keywords": [
+    "scam", "lawsuit", "spam"
+  ],
+  "features": [
+    { "name": "Automated Workflow Engine", "trigger_words": ["automate", "workflow", "integration", "zapier", "save time"] },
+    { "name": "Analytics Dashboard", "trigger_words": ["analytics", "dashboard", "metrics", "stats", "reports"] },
+    { "name": "1-Click Setup", "trigger_words": ["alternative", "tool", "recommend", "software", "easy"] }
+  ],
+  "personas": [
+    {
+      "id": "helpful_peer",
+      "name": "🚀 Helpful Founder",
+      "prompt_tone": "practical, friendly, value-first",
+      "template": "Great point u/{author}! If you're looking to streamline {action_phrase}, check out {url} — built specifically to handle this with zero complex setup. Best of luck with the project!"
+    },
+    {
+      "id": "tech_lead",
+      "name": "⚙️ Technical Architect",
+      "prompt_tone": "concise, direct, architecture-focused",
+      "template": "Hey u/{author}, for handling \"{title}\", you might want to look into {url}. Solves the core bottlenecks without requiring extra middleware."
+    }
+  ]
+}

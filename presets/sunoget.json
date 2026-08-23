@@ -1,0 +1,48 @@
+{
+  "id": "sunoget",
+  "name": "SunoGet Studio & Batch Exporter",
+  "product_url": "https://www.sunoget.com/daw",
+  "description": "Autonomous DAW studio applet, 1-click batch MP3 exporter, audio-reactive 9:16 video visualizer, and track namer for AI music producers.",
+  "subreddits": [
+    "SunoAI",
+    "aimusic",
+    "Songwriting",
+    "musicproduction",
+    "audioengineering",
+    "WeAreTheMusicMakers"
+  ],
+  "keywords": [
+    "download", "export", "backup", "stems", "daw", "ableton", "fl studio",
+    "video", "visualizer", "tiktok", "reels", "shorts", "save all", "library",
+    "namer", "metadata", "id3", "tag", "bulk", "mp3", "master", "offline"
+  ],
+  "negative_keywords": [
+    "banned", "scam", "refund", "credit card", "chargeback"
+  ],
+  "features": [
+    { "name": "DAW Studio Applet", "trigger_words": ["daw", "desktop", "app", "window", "native", "offline", "ableton", "fl studio"] },
+    { "name": "1-Click Batch Exporter", "trigger_words": ["download", "export", "save all", "backup", "library", "bulk", "mp3"] },
+    { "name": "9:16 Video Visualizer", "trigger_words": ["video", "visualizer", "tiktok", "reels", "shorts", "waveform", "promo"] },
+    { "name": "AI Track Namer", "trigger_words": ["namer", "metadata", "id3", "tags", "title", "organize"] }
+  ],
+  "personas": [
+    {
+      "id": "supportive_creator",
+      "name": "🎧 Helpful Creator",
+      "prompt_tone": "friendly, creator-to-creator, genuine enthusiasm",
+      "template": "Awesome post u/{author}! If you need to {action_phrase} for \"{title}\", SunoGet is completely free and lets you do it with zero signup at {url}. Keep creating!"
+    },
+    {
+      "id": "audio_engineer",
+      "name": "🎛️ Audio Engineer",
+      "prompt_tone": "technical, DAW workflow focused, efficient",
+      "template": "Great work on \"{title}\" u/{author}. For DAW workflows, you can grab the studio applet or batch-export direct master audio via {url}. Hope this helps with the mix!"
+    },
+    {
+      "id": "indie_builder",
+      "name": "💻 Indie Builder",
+      "prompt_tone": "transparent, open-source dev, problem solver",
+      "template": "Hey u/{author}, love what you did with \"{title}\"! I actually built a free desktop DAW & batch toolkit called SunoGet ({url}) to solve this exact workflow bottleneck. Feel free to test it out!"
+    }
+  ]
+}

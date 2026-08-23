@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🎯 LeadSniper — Autonomous Real-Time Lead Acquisition & Community Radar</title>
+  <meta name="description" content="Acquire high-intent buyers and users from Reddit, forums, and communities in real time. Zero API keys, AI intent scoring, multi-persona response engine, and 1-click conversion.">
+  <meta name="keywords" content="lead sniper, reddit lead generation, community radar, ai growth tool, saas marketing, automated outreach, reddit marketing, social listening, indie hacker tools">
+  <meta name="author" content="LeadSniper">
+  <link rel="canonical" href="https://leadsniper.com/">
+  
+  <!-- Open Graph / Social Meta -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="🎯 LeadSniper — Autonomous Community Radar & Lead Acquisition">
+  <meta property="og:description" content="Acquire high-intent customers from Reddit & communities in real time. Zero API keys, AI intent scoring, and 1-click assisted conversion.">
+  <meta property="og:image" content="https://raw.githubusercontent.com/ALittleExtraCode/lead-sniper/main/preview.png">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-dark: #07090e;
+      --bg-card: rgba(15, 23, 42, 0.75);
+      --bg-card-hover: rgba(30, 41, 59, 0.85);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --border-glow: rgba(56, 189, 248, 0.35);
+      --primary: #38bdf8;
+      --primary-glow: #0284c7;
+      --accent: #10b981;
+      --accent-orange: #f97316;
+      --accent-purple: #a855f7;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-sub: #64748b;
+      --font-display: 'Outfit', sans-serif;
+      --font-body: 'Plus Jakarta Sans', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: var(--font-body);
+      line-height: 1.6;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Ambient Background Glows */
+    .ambient-glow-1 {
+      position: absolute;
+      top: -120px;
+      left: 15%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(56, 189, 248, 0.15) 0%, rgba(0, 0, 0, 0) 70%);
+      filter: blur(80px);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .ambient-glow-2 {
+      position: absolute;
+      top: 600px;
+      right: 10%;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(16, 185, 129, 0.12) 0%, rgba(0, 0, 0, 0) 70%);
+      filter: blur(80px);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .container {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 0 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Navigation */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 24px 0;
+      border-bottom: 1px solid var(--border-color);
+      backdrop-filter: blur(12px);
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--text-main);
+      text-decoration: none;
+    }
+
+    .nav-brand span.logo-icon {
+      font-size: 26px;
+      filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.5));
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+
+    .nav-link {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      transition: color 0.2s ease;
+    }
+
+    .nav-link:hover {
+      color: var(--primary);
+    }
+
+    .btn-github {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 8px 16px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .btn-github:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: var(--primary);
+      transform: translateY(-1px);
+    }
+
+    /* Hero Section */
+    .hero {
+      text-align: center;
+      padding: 75px 0 50px 0;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 24px;
+    }
+
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(38px, 6vw, 68px);
+      font-weight: 900;
+      line-height: 1.12;
+      margin-bottom: 20px;
+      letter-spacing: -1.2px;
+    }
+
+    .hero-title span.gradient-text {
+      background: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-subtitle {
+      font-size: clamp(16px, 2vw, 20px);
+      color: var(--text-muted);
+      max-width: 780px;
+      margin: 0 auto 36px auto;
+    }
+
+    .hero-cta-group {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #0284c7 0%, #2563eb 100%);
+      color: #fff;
+      font-weight: 700;
+      font-size: 15px;
+      padding: 14px 28px;
+      border-radius: 12px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(37, 99, 235, 0.4);
+      transition: all 0.25s ease;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(37, 99, 235, 0.6);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      font-weight: 700;
+      font-size: 15px;
+      padding: 14px 24px;
+      border-radius: 12px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Live Interactive Demo Box */
+    .radar-demo-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 24px;
+      margin: 48px auto;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(16px);
+      position: relative;
+    }
+
+    .radar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--border-color);
+      margin-bottom: 18px;
+    }
+
+    .radar-controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .select-project {
+      background: #1e293b;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #f8fafc;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .status-live-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      background: #10b981;
+      border-radius: 50%;
+      box-shadow: 0 0 8px #10b981;
+      animation: pulseDot 1.8s infinite;
+    }
+
+    @keyframes pulseDot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
+    }
+
+    .radar-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 1fr;
+      gap: 20px;
+    }
+
+    @media (max-width: 900px) {
+      .radar-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Leads Stream Table */
+    .leads-list {
+      background: #0f172a;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      overflow: hidden;
+      max-height: 380px;
+      overflow-y: auto;
+    }
+
+    .lead-item {
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      cursor: pointer;
+      transition: background 0.15s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .lead-item:hover, .lead-item.active {
+      background: rgba(37, 99, 235, 0.15);
+      border-left: 3px solid var(--primary);
+    }
+
+    .lead-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+    }
+
+    .lead-sub {
+      color: var(--primary);
+      font-weight: 700;
+      font-family: var(--font-mono);
+    }
+
+    .lead-badge-hot {
+      background: rgba(239, 68, 68, 0.2);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      color: #f87171;
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: 10.5px;
+      font-weight: 800;
+    }
+
+    .lead-badge-warm {
+      background: rgba(245, 158, 11, 0.2);
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      color: #fbbf24;
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: 10.5px;
+      font-weight: 800;
+    }
+
+    .lead-title {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--text-main);
+      line-height: 1.35;
+    }
+
+    /* Reply Studio */
+    .reply-studio {
+      background: #0f172a;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .persona-selector {
+      display: flex;
+      gap: 8px;
+      margin: 10px 0;
+      flex-wrap: wrap;
+    }
+
+    .persona-chip {
+      background: #1e293b;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: var(--text-muted);
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .persona-chip.active {
+      background: var(--primary);
+      color: #0f172a;
+      border-color: var(--primary);
+    }
+
+    .reply-box {
+      background: #1e293b;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 13px;
+      font-family: var(--font-body);
+      color: #f1f5f9;
+      line-height: 1.5;
+      margin-bottom: 14px;
+      min-height: 110px;
+    }
+
+    .btn-copy-action {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: #fff;
+      border: none;
+      font-weight: 800;
+      font-size: 13.5px;
+      padding: 12px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: transform 0.15s ease, background 0.15s ease;
+    }
+
+    .btn-copy-action:hover {
+      transform: translateY(-1px);
+    }
+
+    /* Features Grid */
+    .features-section {
+      padding: 80px 0;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .section-tag {
+      color: var(--primary);
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(28px, 4vw, 42px);
+      font-weight: 800;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+    }
+
+    .feature-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 28px;
+      transition: all 0.25s ease;
+    }
+
+    .feature-card:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--border-glow);
+      transform: translateY(-3px);
+    }
+
+    .feature-icon {
+      font-size: 32px;
+      margin-bottom: 16px;
+      display: inline-block;
+    }
+
+    .feature-title {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .feature-desc {
+      color: var(--text-muted);
+      font-size: 14.5px;
+      line-height: 1.6;
+    }
+
+    /* Footer */
+    .footer {
+      border-top: 1px solid var(--border-color);
+      padding: 40px 0;
+      margin-top: 60px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      font-size: 13.5px;
+      color: var(--text-sub);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 20px;
+    }
+
+    .footer-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .footer-links a:hover {
+      color: var(--primary);
+    }
+  </style>
+</head>
+<body>
+  <div class="ambient-glow-1"></div>
+  <div class="ambient-glow-2"></div>
+
+  <div class="container">
+    <!-- Navbar -->
+    <nav class="navbar">
+      <a href="/" class="nav-brand">
+        <span class="logo-icon">🎯</span>
+        <span>LeadSniper</span>
+      </a>
+      <div class="nav-links">
+        <a href="#features" class="nav-link">Features</a>
+        <a href="#radar-demo" class="nav-link">Live Radar</a>
+        <a href="https://github.com/ALittleExtraCode/lead-sniper" target="_blank" rel="noopener noreferrer" class="btn-github">
+          <svg height="16" width="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg>
+          <span>Star on GitHub</span>
+        </a>
+      </div>
+    </nav>
+
+    <!-- Hero -->
+    <header class="hero">
+      <div class="hero-badge">
+        <span>⚡ Zero-API Social Growth Engine</span>
+      </div>
+      <h1 class="hero-title">
+        Snip High-Intent Leads from Communities <br>
+        <span class="gradient-text">In Real Time With 1 Click.</span>
+      </h1>
+      <p class="hero-subtitle">
+        LeadSniper continuously listens to Reddit and online forums, scores customer buying intent, and crafts authentic, non-spam replies with 100% clean product links.
+      </p>
+      <div class="hero-cta-group">
+        <a href="#radar-demo" class="btn-primary">
+          <span>🚀 Try Live Radar Demo</span>
+        </a>
+        <a href="https://github.com/ALittleExtraCode/lead-sniper" target="_blank" rel="noopener noreferrer" class="btn-secondary">
+          <span>📦 Clone GitHub Repo</span>
+        </a>
+      </div>
+    </header>
+
+    <!-- Interactive Live Radar Demo Box -->
+    <section id="radar-demo" class="radar-demo-card">
+      <div class="radar-header">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span class="status-live-dot"></span>
+          <span style="font-family: var(--font-display); font-size: 18px; font-weight: 800;">Real-Time Community Radar</span>
+        </div>
+        <div class="radar-controls">
+          <label style="font-size: 12.5px; font-weight: 700; color: var(--text-muted);">Active Preset:</label>
+          <select id="demoProjectSelect" class="select-project" onchange="switchDemoProject()">
+            <option value="sunoget">SunoGet (AI Music & DAW)</option>
+            <option value="saas" selected>Micro-SaaS & Indie Product</option>
+            <option value="video">Video Editor & Shorts Auto-Caption</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="radar-grid">
+        <!-- Left: Incoming Leads -->
+        <div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <span style="font-size: 12px; font-weight: 700; color: var(--text-sub); text-transform: uppercase;">Incoming High-Intent Leads</span>
+            <span id="leadCounterBadge" style="font-size: 11px; font-family: var(--font-mono); color: var(--primary);">4 Live Leads</span>
+          </div>
+          <div class="leads-list" id="leadsContainer">
+            <!-- Leads will be injected by JavaScript -->
+          </div>
+        </div>
+
+        <!-- Right: Contextual Reply Studio -->
+        <div class="reply-studio">
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-size: 12px; font-weight: 700; color: var(--text-sub); text-transform: uppercase;">Contextual Reply Generator</span>
+              <span id="activePersonaBadge" style="font-size: 11px; color: var(--accent); font-weight: 700;">🚀 Helpful Founder</span>
+            </div>
+
+            <div class="persona-selector">
+              <button class="persona-chip active" onclick="setDemoPersona('founder')">🚀 Founder</button>
+              <button class="persona-chip" onclick="setDemoPersona('tech')">⚙️ Tech Lead</button>
+              <button class="persona-chip" onclick="setDemoPersona('creator')">🎬 Creator Peer</button>
+            </div>
+
+            <div class="reply-box" id="demoReplyText">
+              Select a live lead to generate non-spam response...
+            </div>
+          </div>
+
+          <button class="btn-copy-action" onclick="copyDemoReply()">
+            <span id="copyBtnIcon">📋</span>
+            <span id="copyBtnText">1-Click Copy Reply & Open Post</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features-section">
+      <div class="section-header">
+        <div class="section-tag">Autonomous Architecture</div>
+        <h2 class="section-title">Engineered For Organic Community Growth</h2>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">📡</div>
+          <h3 class="feature-title">Zero-API RSS Stream Harvester</h3>
+          <p class="feature-desc">
+            Directly parses live XML/Atom streams from subreddits. Completely bypasses Reddit 403 API paywalls, rate limits, and authentication blocks.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🧠</div>
+          <h3 class="feature-title">AI Intent & Sentiment Scoring</h3>
+          <p class="feature-desc">
+            Analyzes discussion topics, question patterns, and tool recommendation requests. Scores intent from HOT 🔥 to COOL ❄️ while disqualifying spam queries.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">💬</div>
+          <h3 class="feature-title">100% Clean Unbracketed URLs</h3>
+          <p class="feature-desc">
+            Strict formatting rules prevent bot-like markdown bracket traps (`[...]`, `(...)`). Replies read as genuine, helpful creator recommendations.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🚀</div>
+          <h3 class="feature-title">1-Click Anti-Ban Operator Flow</h3>
+          <p class="feature-desc">
+            Single-click copying and automatic browser dispatching keeps the human in the loop, completely eliminating captchas and anti-bot bans.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">📦</div>
+          <h3 class="feature-title">Multi-Project Workspaces</h3>
+          <p class="feature-desc">
+            Switch between SaaS tools, client agencies, or software products on the fly using simple JSON preset configurations.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">💻</div>
+          <h3 class="feature-title">Native Desktop & Web Suite</h3>
+          <p class="feature-desc">
+            Run as a local Python desktop application on macOS/Windows/Linux or deploy as a serverless edge dashboard.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div>
+        <strong>LeadSniper</strong> — Open-source Autonomous Growth Suite.
+      </div>
+      <div class="footer-links">
+        <a href="https://github.com/ALittleExtraCode/lead-sniper" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="https://github.com/ALittleExtraCode/lead-sniper/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">MIT License</a>
+        <a href="https://github.com/ALittleExtraCode/lead-sniper/issues" target="_blank" rel="noopener noreferrer">Community & Issues</a>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    // Demo Leads Data
+    const DEMO_DATA = {
+      saas: {
+        url: "https://yourapp.com",
+        leads: [
+          {
+            sub: "r/SaaS",
+            intent: "HOT",
+            title: "Looking for a tool to automate customer workflow reports?",
+            author: "EfficiencyWhich5225",
+            replies: {
+              founder: "Great point u/EfficiencyWhich5225! If you're looking to automate customer workflow reports, check out https://yourapp.com — built specifically to handle this with zero complex setup. Best of luck with the project!",
+              tech: "Hey u/EfficiencyWhich5225, for handling \"Looking for a tool to automate customer workflow reports?\", you might want to look into https://yourapp.com. Solves the core bottlenecks without requiring extra middleware.",
+              creator: "Hey u/EfficiencyWhich5225, had the exact same issue last month! Found https://yourapp.com and it streamlined the entire report generation in minutes."
+            }
+          },
+          {
+            sub: "r/SideProject",
+            intent: "HOT",
+            title: "How do you automate client dashboards without custom backend code?",
+            author: "sarah_builds",
+            replies: {
+              founder: "Hey u/sarah_builds! If you're looking to automate client dashboards, https://yourapp.com gives you direct 1-click workflows with zero custom backend needed. Hope this helps!",
+              tech: "For zero-backend client reporting u/sarah_builds, take a look at https://yourapp.com — handles the sync pipelines automatically.",
+              creator: "Nice project u/sarah_builds! Definitely check out https://yourapp.com for ready-made dashboard pipelines."
+            }
+          },
+          {
+            sub: "r/startups",
+            intent: "WARM",
+            title: "Best stack for managing remote SaaS operations in 2026?",
+            author: "dev_marcus",
+            replies: {
+              founder: "Awesome discussion u/dev_marcus! Alongside your core stack, https://yourapp.com is great for automating repetitive operations without extra team overhead.",
+              tech: "Hey u/dev_marcus, for lightweight operational automation, https://yourapp.com integrates directly into standard webhook workflows.",
+              creator: "Good list u/dev_marcus! We use https://yourapp.com on our team for fast task automations."
+            }
+          }
+        ]
+      },
+      sunoget: {
+        url: "https://www.sunoget.com/daw",
+        leads: [
+          {
+            sub: "r/SunoAI",
+            intent: "HOT",
+            title: "Is there any way to batch download all my Suno MP3s at once?",
+            author: "cyber_producer",
+            replies: {
+              founder: "Awesome post u/cyber_producer! SunoGet is 100% free and lets you batch-export your entire library as high-bitrate MP3s with ID3 tags in 1 click: https://www.sunoget.com/daw. Keep creating!",
+              tech: "Hey u/cyber_producer, you can grab the desktop DAW applet at https://www.sunoget.com/daw to batch-export all master audio directly to your local DAW folders.",
+              creator: "Hey u/cyber_producer, I use SunoGet for this! Takes 1 click to save all tracks at https://www.sunoget.com/daw."
+            }
+          },
+          {
+            sub: "r/aimusic",
+            intent: "HOT",
+            title: "How to make 9:16 vertical video visualizers for TikTok/Shorts?",
+            author: "neon_vibes",
+            replies: {
+              founder: "Awesome track u/neon_vibes! SunoGet has a built-in 60fps audio-reactive 9:16 visualizer engine completely free at https://www.sunoget.com/daw. Zero signup needed!",
+              tech: "Great mix u/neon_vibes. For 9:16 vertical video waveforms, https://www.sunoget.com/daw renders hardware-accelerated visualizers directly in browser.",
+              creator: "Sick beat u/neon_vibes! You can generate quick TikTok audio visualizers for it at https://www.sunoget.com/daw."
+            }
+          }
+        ]
+      },
+      video: {
+        url: "https://yourvideotool.com",
+        leads: [
+          {
+            sub: "r/VideoEditing",
+            intent: "HOT",
+            title: "Any free tool to auto-generate karaoke animated subtitles?",
+            author: "clip_master",
+            replies: {
+              founder: "Hey u/clip_master! If you need animated karaoke captions, https://yourvideotool.com generates synchronized subtitles in one click for free.",
+              tech: "For fast word-level subtitle alignment u/clip_master, check out https://yourvideotool.com.",
+              creator: "Nice workflow u/clip_master! I use https://yourvideotool.com for auto-captioning my Shorts."
+            }
+          }
+        ]
+      }
+    };
+
+    let activeProjectKey = "saas";
+    let activeLeadIndex = 0;
+    let activePersona = "founder";
+
+    function switchDemoProject() {
+      activeProjectKey = document.getElementById("demoProjectSelect").value;
+      activeLeadIndex = 0;
+      renderDemoLeads();
+    }
+
+    function setDemoPersona(persona) {
+      activePersona = persona;
+      document.querySelectorAll(".persona-chip").forEach(el => el.classList.remove("active"));
+      if (event && event.target) event.target.classList.add("active");
+      
+      const badgeMap = { founder: "🚀 Helpful Founder", tech: "⚙️ Tech Lead", creator: "🎬 Creator Peer" };
+      document.getElementById("activePersonaBadge").textContent = badgeMap[persona];
+      updateDemoReply();
+    }
+
+    function selectDemoLead(index) {
+      activeLeadIndex = index;
+      document.querySelectorAll(".lead-item").forEach((el, idx) => {
+        el.classList.toggle("active", idx === index);
+      });
+      updateDemoReply();
+    }
+
+    function renderDemoLeads() {
+      const project = DEMO_DATA[activeProjectKey];
+      const container = document.getElementById("leadsContainer");
+      container.innerHTML = "";
+
+      project.leads.forEach((lead, idx) => {
+        const item = document.createElement("div");
+        item.className = `lead-item ${idx === activeLeadIndex ? "active" : ""}`;
+        item.onclick = () => selectDemoLead(idx);
+
+        const badgeClass = lead.intent === "HOT" ? "lead-badge-hot" : "lead-badge-warm";
+        item.innerHTML = `
+          <div class="lead-top">
+            <span class="lead-sub">${lead.sub}</span>
+            <span class="${badgeClass}">${lead.intent} 🔥</span>
+          </div>
+          <div class="lead-title">${lead.title}</div>
+          <div style="font-size: 11px; color: #64748b;">u/${lead.author}</div>
+        `;
+        container.appendChild(item);
+      });
+
+      document.getElementById("leadCounterBadge").textContent = `${project.leads.length} Live Leads`;
+      updateDemoReply();
+    }
+
+    function updateDemoReply() {
+      const project = DEMO_DATA[activeProjectKey];
+      const lead = project.leads[activeLeadIndex] || project.leads[0];
+      if (!lead) return;
+
+      const reply = lead.replies[activePersona] || lead.replies.founder;
+      document.getElementById("demoReplyText").textContent = reply;
+    }
+
+    function copyDemoReply() {
+      const text = document.getElementById("demoReplyText").textContent.trim();
+      navigator.clipboard.writeText(text).then(() => {
+        const btnText = document.getElementById("copyBtnText");
+        const btnIcon = document.getElementById("copyBtnIcon");
+        btnText.textContent = "Copied to Clipboard!";
+        btnIcon.textContent = "✅";
+        setTimeout(() => {
+          btnText.textContent = "1-Click Copy Reply & Open Post";
+          btnIcon.textContent = "📋";
+        }, 2000);
+      });
+    }
+
+    // Initialize on load
+    document.addEventListener("DOMContentLoaded", () => {
+      renderDemoLeads();
+    });
+  </script>
+</body>
+</html>

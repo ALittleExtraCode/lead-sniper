@@ -1,0 +1,34 @@
+{
+  "id": "video_ai_tool",
+  "name": "Video & Content Creator Suite",
+  "product_url": "https://yourvideotool.com",
+  "description": "AI video captioning, auto-editing, vertical format re-framer for YouTube Shorts & TikTok.",
+  "subreddits": [
+    "VideoEditing",
+    "premiere",
+    "AfterEffects",
+    "ContentCreation",
+    "NewTubers",
+    "TikTokHelp"
+  ],
+  "keywords": [
+    "captions", "subtitles", "shorts", "reels", "tiktok", "aspect ratio", "9:16",
+    "render", "export", "auto edit", "clipping", "visualizer", "audio wave"
+  ],
+  "negative_keywords": [
+    "copyright strike", "banned account", "pirated"
+  ],
+  "features": [
+    { "name": "Auto 9:16 Re-framer", "trigger_words": ["9:16", "shorts", "reels", "tiktok", "vertical"] },
+    { "name": "Dynamic Subtitle Generator", "trigger_words": ["captions", "subtitles", "karaoke", "lyrics", "text"] },
+    { "name": "1-Click Clip Exporter", "trigger_words": ["clipping", "export", "render", "batch", "fast"] }
+  ],
+  "personas": [
+    {
+      "id": "editor_buddy",
+      "name": "🎬 Fellow Creator",
+      "prompt_tone": "creative, supportive, workflow-oriented",
+      "template": "Nice edit u/{author}! If you need to {action_phrase} quickly for \"{title}\", {url} handles vertical formatting and auto-captions in one click. Keep creating!"
+    }
+  ]
+}
