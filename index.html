@@ -49,7 +49,12 @@
       --font-mono: 'JetBrains Mono', monospace;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * { 
+      box-sizing: border-box; 
+      margin: 0; 
+      padding: 0; 
+      cursor: crosshair !important;
+    }
 
     body {
       background-color: var(--bg);
@@ -62,6 +67,52 @@
       position: relative;
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
+      cursor: crosshair !important;
+    }
+
+    /* Tactical Ambient Crosshair HUD Follower */
+    .sniper-crosshair {
+      position: fixed;
+      pointer-events: none;
+      z-index: 99999;
+      width: 32px;
+      height: 32px;
+      transform: translate(-50%, -50%);
+      transition: transform 0.04s ease-out, border-color 0.15s ease, box-shadow 0.15s ease;
+      display: none;
+    }
+
+    .sniper-crosshair::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 4px;
+      height: 4px;
+      background: var(--accent);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 6px var(--accent);
+    }
+
+    .sniper-crosshair .reticle-ring {
+      position: absolute;
+      inset: 0;
+      border: 1px dashed rgba(56, 189, 248, 0.45);
+      border-radius: 50%;
+      transition: all 0.2s ease;
+    }
+
+    .sniper-crosshair.locked .reticle-ring {
+      border-color: var(--emerald);
+      border-style: solid;
+      transform: scale(1.2) rotate(45deg);
+      box-shadow: 0 0 12px rgba(16, 185, 129, 0.5);
+    }
+
+    .sniper-crosshair.locked::before {
+      background: var(--emerald);
+      box-shadow: 0 0 8px var(--emerald);
     }
 
     /* Ambient Background Tactical Grids */
@@ -1026,6 +1077,43 @@
         renderLeads();
       }, 600);
     }
+
+    // Tactical Sniper Crosshair Follower
+    const crosshair = document.createElement('div');
+    crosshair.className = 'sniper-crosshair';
+    crosshair.innerHTML = '<div class="reticle-ring"></div>';
+    document.body.appendChild(crosshair);
+
+    let mouseX = 0, mouseY = 0;
+    let crosshairX = 0, crosshairY = 0;
+
+    window.addEventListener('mousemove', (e) => {
+      crosshair.style.display = 'block';
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    });
+
+    function updateCrosshair() {
+      crosshairX += (mouseX - crosshairX) * 0.45;
+      crosshairY += (mouseY - crosshairY) * 0.45;
+      crosshair.style.left = crosshairX + 'px';
+      crosshair.style.top = crosshairY + 'px';
+      requestAnimationFrame(updateCrosshair);
+    }
+    requestAnimationFrame(updateCrosshair);
+
+    // Target Lock on clickable elements
+    document.addEventListener('mouseover', (e) => {
+      if (e.target.closest('button, a, select, textarea, .lead-row, .tab-btn, .persona-tag-btn')) {
+        crosshair.classList.add('locked');
+      }
+    });
+
+    document.addEventListener('mouseout', (e) => {
+      if (e.target.closest('button, a, select, textarea, .lead-row, .tab-btn, .persona-tag-btn')) {
+        crosshair.classList.remove('locked');
+      }
+    });
 
     document.addEventListener("DOMContentLoaded", () => {
       renderLeads();
