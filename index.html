@@ -3,301 +3,185 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🎯 LeadSniper — Autonomous Real-Time Lead Acquisition & Community Radar</title>
-  <meta name="description" content="Acquire high-intent buyers and users from Reddit, forums, and communities in real time. Zero API keys, AI intent scoring, multi-persona response engine, and 1-click conversion.">
+  <title>LeadSniper — #1 Autonomous Community Radar & Zero-API Lead Acquisition Suite</title>
+  <meta name="description" content="Acquire high-intent buyers and users from Reddit, forums, and communities in real time. Zero API keys, AI intent scoring, multi-persona response engine, and 1-click assisted conversion.">
   <meta name="keywords" content="lead sniper, reddit lead generation, community radar, ai growth tool, saas marketing, automated outreach, reddit marketing, social listening, indie hacker tools">
   <meta name="author" content="LeadSniper">
   <link rel="canonical" href="https://leadsniper.com/">
-  
-  <!-- Open Graph / Social Meta -->
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="🎯 LeadSniper — Autonomous Community Radar & Lead Acquisition">
-  <meta property="og:description" content="Acquire high-intent customers from Reddit & communities in real time. Zero API keys, AI intent scoring, and 1-click assisted conversion.">
-  <meta property="og:image" content="https://raw.githubusercontent.com/ALittleExtraCode/lead-sniper/main/preview.png">
+  <meta name="theme-color" content="#38bdf8">
 
-  <!-- Google Fonts -->
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="LeadSniper — Autonomous Community Radar & Lead Acquisition">
+  <meta property="og:description" content="Acquire high-intent customers from Reddit & communities in real time. Zero API keys, AI intent scoring, and 1-click assisted conversion.">
+  <meta property="og:site_name" content="LeadSniper">
+
+  <!-- Google Fonts: Plus Jakarta Sans + JetBrains Mono + Outfit -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --bg-dark: #07090e;
-      --bg-card: rgba(15, 23, 42, 0.75);
-      --bg-card-hover: rgba(30, 41, 59, 0.85);
-      --border-color: rgba(255, 255, 255, 0.08);
-      --border-glow: rgba(56, 189, 248, 0.35);
-      --primary: #38bdf8;
-      --primary-glow: #0284c7;
-      --accent: #10b981;
-      --accent-orange: #f97316;
-      --accent-purple: #a855f7;
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
-      --text-sub: #64748b;
+      --bg: #07090e;
+      --card: #0e121d;
+      --card-border: #1a2233;
+      --card-hover: #161e30;
+      --card-inner: #0a0d15;
+      
+      --accent: #38bdf8;
+      --accent-glow: rgba(56, 189, 248, 0.35);
+      --accent-gradient: linear-gradient(135deg, #0284c7 0%, #38bdf8 100%);
+      
+      --emerald: #10b981;
+      --emerald-glow: rgba(16, 185, 129, 0.3);
+      --amber: #f59e0b;
+      --crimson: #ef4444;
+      --purple: #a855f7;
+      
+      --text-primary: #f1f5f9;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --text-dim: #475569;
+      
+      --font: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
       --font-display: 'Outfit', sans-serif;
-      --font-body: 'Plus Jakarta Sans', sans-serif;
       --font-mono: 'JetBrains Mono', monospace;
     }
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      background-color: var(--bg-dark);
-      color: var(--text-main);
-      font-family: var(--font-body);
-      line-height: 1.6;
-      overflow-x: hidden;
+      background-color: var(--bg);
+      color: var(--text-primary);
+      font-family: var(--font);
+      min-height: 100vh;
+      padding: 20px 16px 40px;
+      display: flex;
+      justify-content: center;
       position: relative;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
     }
 
-    /* Ambient Background Glows */
-    .ambient-glow-1 {
-      position: absolute;
-      top: -120px;
-      left: 15%;
-      width: 600px;
-      height: 600px;
-      background: radial-gradient(circle, rgba(56, 189, 248, 0.15) 0%, rgba(0, 0, 0, 0) 70%);
-      filter: blur(80px);
-      z-index: 0;
+    /* Ambient Background Tactical Grids */
+    .bg-grid-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        linear-gradient(rgba(56, 189, 248, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(56, 189, 248, 0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      z-index: -2;
       pointer-events: none;
     }
 
-    .ambient-glow-2 {
-      position: absolute;
-      top: 600px;
-      right: 10%;
-      width: 500px;
-      height: 500px;
-      background: radial-gradient(circle, rgba(16, 185, 129, 0.12) 0%, rgba(0, 0, 0, 0) 70%);
-      filter: blur(80px);
-      z-index: 0;
+    .ambient-glow-top {
+      position: fixed;
+      top: -160px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 850px;
+      height: 450px;
+      background: radial-gradient(ellipse at center, rgba(56, 189, 248, 0.12) 0%, rgba(16, 185, 129, 0.04) 45%, transparent 70%);
+      filter: blur(60px);
+      z-index: -1;
       pointer-events: none;
     }
 
     .container {
-      max-width: 1240px;
-      margin: 0 auto;
-      padding: 0 24px;
+      width: 100%;
+      max-width: 1200px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
       position: relative;
       z-index: 1;
     }
 
-    /* Navigation */
-    .navbar {
+    /* Top HUD Header */
+    .header-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 24px 0;
-      border-bottom: 1px solid var(--border-color);
-      backdrop-filter: blur(12px);
-    }
-
-    .nav-brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-family: var(--font-display);
-      font-size: 22px;
-      font-weight: 800;
-      color: var(--text-main);
-      text-decoration: none;
-    }
-
-    .nav-brand span.logo-icon {
-      font-size: 26px;
-      filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.5));
-    }
-
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 28px;
-    }
-
-    .nav-link {
-      color: var(--text-muted);
-      text-decoration: none;
-      font-size: 14px;
-      font-weight: 600;
-      transition: color 0.2s ease;
-    }
-
-    .nav-link:hover {
-      color: var(--primary);
-    }
-
-    .btn-github {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid var(--border-color);
-      color: var(--text-main);
-      padding: 8px 16px;
-      border-radius: 999px;
-      font-size: 13px;
-      font-weight: 700;
-      text-decoration: none;
-      transition: all 0.2s ease;
-    }
-
-    .btn-github:hover {
-      background: rgba(255, 255, 255, 0.12);
-      border-color: var(--primary);
-      transform: translateY(-1px);
-    }
-
-    /* Hero Section */
-    .hero {
-      text-align: center;
-      padding: 75px 0 50px 0;
-    }
-
-    .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(56, 189, 248, 0.1);
-      border: 1px solid rgba(56, 189, 248, 0.3);
-      padding: 6px 14px;
-      border-radius: 999px;
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--primary);
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-      margin-bottom: 24px;
-    }
-
-    .hero-title {
-      font-family: var(--font-display);
-      font-size: clamp(38px, 6vw, 68px);
-      font-weight: 900;
-      line-height: 1.12;
-      margin-bottom: 20px;
-      letter-spacing: -1.2px;
-    }
-
-    .hero-title span.gradient-text {
-      background: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .hero-subtitle {
-      font-size: clamp(16px, 2vw, 20px);
-      color: var(--text-muted);
-      max-width: 780px;
-      margin: 0 auto 36px auto;
-    }
-
-    .hero-cta-group {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
-
-    .btn-primary {
-      background: linear-gradient(135deg, #0284c7 0%, #2563eb 100%);
-      color: #fff;
-      font-weight: 700;
-      font-size: 15px;
-      padding: 14px 28px;
-      border-radius: 12px;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      border: none;
-      cursor: pointer;
-      box-shadow: 0 4px 20px rgba(37, 99, 235, 0.4);
-      transition: all 0.25s ease;
-    }
-
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 28px rgba(37, 99, 235, 0.6);
-    }
-
-    .btn-secondary {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid var(--border-color);
-      color: var(--text-main);
-      font-weight: 700;
-      font-size: 15px;
-      padding: 14px 24px;
-      border-radius: 12px;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      cursor: pointer;
-      transition: all 0.25s ease;
-    }
-
-    .btn-secondary:hover {
-      background: rgba(255, 255, 255, 0.1);
-      border-color: rgba(255, 255, 255, 0.2);
-    }
-
-    /* Live Interactive Demo Box */
-    .radar-demo-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 20px;
-      padding: 24px;
-      margin: 48px auto;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+      padding: 14px 20px;
+      background: rgba(14, 18, 29, 0.7);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
       backdrop-filter: blur(16px);
-      position: relative;
-    }
-
-    .radar-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
       flex-wrap: wrap;
-      gap: 12px;
-      padding-bottom: 18px;
-      border-bottom: 1px solid var(--border-color);
-      margin-bottom: 18px;
+      gap: 14px;
     }
 
-    .radar-controls {
+    .brand-group {
       display: flex;
       align-items: center;
       gap: 12px;
-      flex-wrap: wrap;
+      text-decoration: none;
     }
 
-    .select-project {
-      background: #1e293b;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      color: #f8fafc;
-      padding: 8px 14px;
-      border-radius: 8px;
-      font-size: 13px;
+    .brand-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.2), rgba(16, 185, 129, 0.2));
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      box-shadow: 0 0 16px rgba(56, 189, 248, 0.2);
+    }
+
+    .brand-title {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.3px;
+    }
+
+    .brand-tag {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--accent);
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      padding: 2px 8px;
+      border-radius: 6px;
       font-weight: 600;
-      outline: none;
-      cursor: pointer;
     }
 
-    .status-live-dot {
-      display: inline-block;
-      width: 8px;
-      height: 8px;
-      background: #10b981;
+    .header-stats {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .stat-pill {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      background: var(--card-inner);
+      border: 1px solid var(--card-border);
+      padding: 5px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-family: var(--font-mono);
+      color: var(--text-secondary);
+    }
+
+    .stat-pill .dot-live {
+      width: 7px;
+      height: 7px;
       border-radius: 50%;
-      box-shadow: 0 0 8px #10b981;
-      animation: pulseDot 1.8s infinite;
+      background: var(--emerald);
+      box-shadow: 0 0 8px var(--emerald);
+      animation: pulseDot 2s infinite;
     }
 
     @keyframes pulseDot {
@@ -305,138 +189,354 @@
       50% { opacity: 0.4; transform: scale(0.85); }
     }
 
-    .radar-grid {
-      display: grid;
-      grid-template-columns: 1.15fr 1fr;
-      gap: 20px;
+    .btn-action-nav {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      color: var(--text-primary);
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 12.5px;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      cursor: pointer;
     }
 
-    @media (max-width: 900px) {
-      .radar-grid {
+    .btn-action-nav:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* Hero Banner */
+    .hero-panel {
+      background: radial-gradient(circle at top right, rgba(56, 189, 248, 0.08) 0%, var(--card) 60%);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 34px 28px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-meta-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-family: var(--font-mono);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--accent);
+      background: rgba(56, 189, 248, 0.08);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      padding: 4px 10px;
+      border-radius: 6px;
+      margin-bottom: 14px;
+      font-weight: 600;
+    }
+
+    .hero-heading {
+      font-family: var(--font-display);
+      font-size: clamp(26px, 4vw, 42px);
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 12px;
+      letter-spacing: -0.6px;
+    }
+
+    .hero-heading span.cyan {
+      background: linear-gradient(135deg, #38bdf8 0%, #10b981 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-subtext {
+      font-size: 15px;
+      color: var(--text-secondary);
+      max-width: 740px;
+      line-height: 1.55;
+    }
+
+    /* Tab Navigation System */
+    .tabs-nav {
+      display: flex;
+      gap: 6px;
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      padding: 6px;
+      border-radius: 12px;
+      overflow-x: auto;
+    }
+
+    .tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-family: var(--font);
+      font-size: 13px;
+      font-weight: 600;
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+
+    .tab-btn:hover {
+      color: var(--text-primary);
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .tab-btn.active {
+      background: var(--card-inner);
+      color: var(--accent);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.15);
+    }
+
+    /* Tab Content Wrapper */
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    /* Radar Main Card Layout */
+    .radar-card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .radar-top-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .control-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .preset-selector {
+      background: var(--card-inner);
+      border: 1px solid var(--card-border);
+      color: var(--text-primary);
+      font-family: var(--font);
+      font-size: 13px;
+      font-weight: 600;
+      padding: 7px 14px;
+      border-radius: 8px;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .preset-selector:focus {
+      border-color: var(--accent);
+    }
+
+    /* Split Radar Layout */
+    .radar-split {
+      display: grid;
+      grid-template-columns: 1.15fr 1fr;
+      gap: 18px;
+    }
+
+    @media (max-width: 960px) {
+      .radar-split {
         grid-template-columns: 1fr;
       }
     }
 
-    /* Leads Stream Table */
-    .leads-list {
-      background: #0f172a;
-      border: 1px solid var(--border-color);
+    /* Leads Stream */
+    .stream-container {
+      background: var(--card-inner);
+      border: 1px solid var(--card-border);
       border-radius: 12px;
       overflow: hidden;
-      max-height: 380px;
-      overflow-y: auto;
-    }
-
-    .lead-item {
-      padding: 14px 16px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-      cursor: pointer;
-      transition: background 0.15s ease;
       display: flex;
       flex-direction: column;
-      gap: 6px;
     }
 
-    .lead-item:hover, .lead-item.active {
-      background: rgba(37, 99, 235, 0.15);
-      border-left: 3px solid var(--primary);
-    }
-
-    .lead-top {
+    .stream-header {
+      padding: 10px 14px;
+      background: rgba(255, 255, 255, 0.02);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
       display: flex;
       justify-content: space-between;
       align-items: center;
       font-size: 12px;
-    }
-
-    .lead-sub {
-      color: var(--primary);
-      font-weight: 700;
+      color: var(--text-secondary);
       font-family: var(--font-mono);
     }
 
-    .lead-badge-hot {
-      background: rgba(239, 68, 68, 0.2);
-      border: 1px solid rgba(239, 68, 68, 0.4);
-      color: #f87171;
-      padding: 2px 8px;
-      border-radius: 6px;
-      font-size: 10.5px;
-      font-weight: 800;
+    .stream-items {
+      max-height: 440px;
+      overflow-y: auto;
     }
 
-    .lead-badge-warm {
-      background: rgba(245, 158, 11, 0.2);
-      border: 1px solid rgba(245, 158, 11, 0.4);
-      color: #fbbf24;
-      padding: 2px 8px;
-      border-radius: 6px;
-      font-size: 10.5px;
-      font-weight: 800;
+    .lead-row {
+      padding: 12px 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
     }
 
-    .lead-title {
-      font-size: 13.5px;
+    .lead-row:hover, .lead-row.selected {
+      background: rgba(56, 189, 248, 0.08);
+      border-left: 3px solid var(--accent);
+    }
+
+    .lead-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+    }
+
+    .lead-sub-tag {
+      color: var(--accent);
+      font-family: var(--font-mono);
       font-weight: 600;
-      color: var(--text-main);
+    }
+
+    .badge-intent-hot {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.35);
+      color: #f87171;
+      padding: 2px 7px;
+      border-radius: 5px;
+      font-size: 10px;
+      font-family: var(--font-mono);
+      font-weight: 700;
+    }
+
+    .badge-intent-warm {
+      background: rgba(245, 158, 11, 0.15);
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      color: #fbbf24;
+      padding: 2px 7px;
+      border-radius: 5px;
+      font-size: 10px;
+      font-family: var(--font-mono);
+      font-weight: 700;
+    }
+
+    .lead-post-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
       line-height: 1.35;
     }
 
-    /* Reply Studio */
-    .reply-studio {
-      background: #0f172a;
-      border: 1px solid var(--border-color);
+    /* Reply Studio Panel */
+    .reply-panel {
+      background: var(--card-inner);
+      border: 1px solid var(--card-border);
       border-radius: 12px;
-      padding: 18px;
+      padding: 16px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      gap: 12px;
     }
 
-    .persona-selector {
+    .selected-lead-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 8px;
+      padding: 10px 12px;
+    }
+
+    .selected-lead-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+
+    .selected-lead-author {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+    }
+
+    .persona-bar {
       display: flex;
-      gap: 8px;
-      margin: 10px 0;
+      gap: 6px;
       flex-wrap: wrap;
     }
 
-    .persona-chip {
-      background: #1e293b;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      color: var(--text-muted);
-      padding: 5px 12px;
+    .persona-tag-btn {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--card-border);
+      color: var(--text-secondary);
+      padding: 4px 10px;
       border-radius: 6px;
-      font-size: 12px;
-      font-weight: 700;
+      font-size: 11.5px;
+      font-weight: 600;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: all 0.15s ease;
     }
 
-    .persona-chip.active {
-      background: var(--primary);
-      color: #0f172a;
-      border-color: var(--primary);
+    .persona-tag-btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-primary);
     }
 
-    .reply-box {
-      background: #1e293b;
-      border: 1px solid rgba(255, 255, 255, 0.08);
+    .persona-tag-btn.active {
+      background: rgba(56, 189, 248, 0.15);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .reply-textarea {
+      background: #06080d;
+      border: 1px solid var(--card-border);
       border-radius: 8px;
       padding: 12px;
-      font-size: 13px;
-      font-family: var(--font-body);
-      color: #f1f5f9;
+      font-size: 12.5px;
+      font-family: var(--font);
+      color: var(--text-primary);
       line-height: 1.5;
-      margin-bottom: 14px;
-      min-height: 110px;
+      min-height: 130px;
+      resize: none;
+      outline: none;
     }
 
-    .btn-copy-action {
-      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    .reply-textarea:focus {
+      border-color: rgba(56, 189, 248, 0.4);
+    }
+
+    .btn-dispatch {
+      background: linear-gradient(135deg, #059669 0%, #10b981 100%);
       color: #fff;
       border: none;
-      font-weight: 800;
-      font-size: 13.5px;
+      font-family: var(--font);
+      font-size: 13px;
+      font-weight: 700;
       padding: 12px 18px;
       border-radius: 8px;
       cursor: pointer;
@@ -444,318 +544,304 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
-      transition: transform 0.15s ease, background 0.15s ease;
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.25);
+      transition: all 0.2s ease;
     }
 
-    .btn-copy-action:hover {
+    .btn-dispatch:hover {
       transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
     }
 
-    /* Features Grid */
-    .features-section {
-      padding: 80px 0;
-    }
-
-    .section-header {
-      text-align: center;
-      margin-bottom: 50px;
-    }
-
-    .section-tag {
-      color: var(--primary);
-      font-size: 12px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 8px;
-    }
-
-    .section-title {
-      font-family: var(--font-display);
-      font-size: clamp(28px, 4vw, 42px);
-      font-weight: 800;
-    }
-
-    .features-grid {
+    /* Feature Grid Section */
+    .grid-3col {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 24px;
+      gap: 16px;
+      margin-top: 10px;
     }
 
-    .feature-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 16px;
-      padding: 28px;
-      transition: all 0.25s ease;
+    .feature-hud-card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 22px;
+      transition: border 0.2s ease;
     }
 
-    .feature-card:hover {
-      background: var(--bg-card-hover);
-      border-color: var(--border-glow);
-      transform: translateY(-3px);
+    .feature-hud-card:hover {
+      border-color: rgba(56, 189, 248, 0.3);
     }
 
-    .feature-icon {
-      font-size: 32px;
-      margin-bottom: 16px;
-      display: inline-block;
-    }
-
-    .feature-title {
-      font-family: var(--font-display);
-      font-size: 20px;
-      font-weight: 700;
+    .feature-hud-icon {
+      font-size: 24px;
       margin-bottom: 10px;
     }
 
-    .feature-desc {
-      color: var(--text-muted);
-      font-size: 14.5px;
-      line-height: 1.6;
+    .feature-hud-title {
+      font-family: var(--font-display);
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      color: var(--text-primary);
+    }
+
+    .feature-hud-desc {
+      font-size: 13.5px;
+      color: var(--text-secondary);
+      line-height: 1.5;
     }
 
     /* Footer */
-    .footer {
-      border-top: 1px solid var(--border-color);
-      padding: 40px 0;
-      margin-top: 60px;
+    .footer-bar {
+      border-top: 1px solid var(--card-border);
+      padding: 24px 0 10px 0;
+      margin-top: 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 20px;
-      font-size: 13.5px;
-      color: var(--text-sub);
+      gap: 14px;
+      font-size: 12.5px;
+      color: var(--text-muted);
     }
 
     .footer-links {
       display: flex;
-      gap: 20px;
+      gap: 18px;
     }
 
     .footer-links a {
-      color: var(--text-muted);
+      color: var(--text-secondary);
       text-decoration: none;
       transition: color 0.2s ease;
     }
 
     .footer-links a:hover {
-      color: var(--primary);
+      color: var(--accent);
     }
   </style>
 </head>
 <body>
-  <div class="ambient-glow-1"></div>
-  <div class="ambient-glow-2"></div>
+  <div class="bg-grid-overlay"></div>
+  <div class="ambient-glow-top"></div>
 
   <div class="container">
-    <!-- Navbar -->
-    <nav class="navbar">
-      <a href="/" class="nav-brand">
-        <span class="logo-icon">🎯</span>
-        <span>LeadSniper</span>
+    <!-- Top HUD Navigation -->
+    <header class="header-bar">
+      <a href="/" class="brand-group">
+        <div class="brand-icon">🎯</div>
+        <div>
+          <div class="brand-title">LeadSniper</div>
+        </div>
+        <span class="brand-tag">v1.0.0</span>
       </a>
-      <div class="nav-links">
-        <a href="#features" class="nav-link">Features</a>
-        <a href="#radar-demo" class="nav-link">Live Radar</a>
-        <a href="https://github.com/ALittleExtraCode/lead-sniper" target="_blank" rel="noopener noreferrer" class="btn-github">
-          <svg height="16" width="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg>
-          <span>Star on GitHub</span>
-        </a>
-      </div>
-    </nav>
 
-    <!-- Hero -->
-    <header class="hero">
-      <div class="hero-badge">
-        <span>⚡ Zero-API Social Growth Engine</span>
-      </div>
-      <h1 class="hero-title">
-        Snip High-Intent Leads from Communities <br>
-        <span class="gradient-text">In Real Time With 1 Click.</span>
-      </h1>
-      <p class="hero-subtitle">
-        LeadSniper continuously listens to Reddit and online forums, scores customer buying intent, and crafts authentic, non-spam replies with 100% clean product links.
-      </p>
-      <div class="hero-cta-group">
-        <a href="#radar-demo" class="btn-primary">
-          <span>🚀 Try Live Radar Demo</span>
-        </a>
-        <a href="https://github.com/ALittleExtraCode/lead-sniper" target="_blank" rel="noopener noreferrer" class="btn-secondary">
-          <span>📦 Clone GitHub Repo</span>
+      <div class="header-stats">
+        <div class="stat-pill">
+          <span class="dot-live"></span>
+          <span>RADAR: <strong>494</strong> SCANNED</span>
+        </div>
+        <div class="stat-pill">
+          <span>🎯 SNIPED: <strong>112</strong></span>
+        </div>
+        <a href="https://github.com/ALittleExtraCode/lead-sniper" target="_blank" rel="noopener noreferrer" class="btn-action-nav">
+          <svg height="14" width="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg>
+          <span>Star on GitHub</span>
         </a>
       </div>
     </header>
 
-    <!-- Interactive Live Radar Demo Box -->
-    <section id="radar-demo" class="radar-demo-card">
-      <div class="radar-header">
-        <div style="display: flex; align-items: center; gap: 10px;">
-          <span class="status-live-dot"></span>
-          <span style="font-family: var(--font-display); font-size: 18px; font-weight: 800;">Real-Time Community Radar</span>
-        </div>
-        <div class="radar-controls">
-          <label style="font-size: 12.5px; font-weight: 700; color: var(--text-muted);">Active Preset:</label>
-          <select id="demoProjectSelect" class="select-project" onchange="switchDemoProject()">
-            <option value="sunoget">SunoGet (AI Music & DAW)</option>
-            <option value="saas" selected>Micro-SaaS & Indie Product</option>
-            <option value="video">Video Editor & Shorts Auto-Caption</option>
-          </select>
-        </div>
+    <!-- Tactical Hero Panel -->
+    <section class="hero-panel">
+      <div class="hero-meta-badge">
+        <span>⚡ ZERO-API TARGET LOCK & SOCIAL RADAR</span>
       </div>
-
-      <div class="radar-grid">
-        <!-- Left: Incoming Leads -->
-        <div>
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-            <span style="font-size: 12px; font-weight: 700; color: var(--text-sub); text-transform: uppercase;">Incoming High-Intent Leads</span>
-            <span id="leadCounterBadge" style="font-size: 11px; font-family: var(--font-mono); color: var(--primary);">4 Live Leads</span>
-          </div>
-          <div class="leads-list" id="leadsContainer">
-            <!-- Leads will be injected by JavaScript -->
-          </div>
-        </div>
-
-        <!-- Right: Contextual Reply Studio -->
-        <div class="reply-studio">
-          <div>
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-              <span style="font-size: 12px; font-weight: 700; color: var(--text-sub); text-transform: uppercase;">Contextual Reply Generator</span>
-              <span id="activePersonaBadge" style="font-size: 11px; color: var(--accent); font-weight: 700;">🚀 Helpful Founder</span>
-            </div>
-
-            <div class="persona-selector">
-              <button class="persona-chip active" onclick="setDemoPersona('founder')">🚀 Founder</button>
-              <button class="persona-chip" onclick="setDemoPersona('tech')">⚙️ Tech Lead</button>
-              <button class="persona-chip" onclick="setDemoPersona('creator')">🎬 Creator Peer</button>
-            </div>
-
-            <div class="reply-box" id="demoReplyText">
-              Select a live lead to generate non-spam response...
-            </div>
-          </div>
-
-          <button class="btn-copy-action" onclick="copyDemoReply()">
-            <span id="copyBtnIcon">📋</span>
-            <span id="copyBtnText">1-Click Copy Reply & Open Post</span>
-          </button>
-        </div>
-      </div>
+      <h1 class="hero-heading">
+        Snip High-Intent Community Leads <br>
+        <span class="cyan">In Real Time With 1-Click Conversion.</span>
+      </h1>
+      <p class="hero-subtext">
+        LeadSniper continuously monitors community discussions, extracts user pain points, scores buying intent, and crafts authentic, non-spam responses with 100% clean direct links.
+      </p>
     </section>
 
-    <!-- Features Section -->
-    <section id="features" class="features-section">
-      <div class="section-header">
-        <div class="section-tag">Autonomous Architecture</div>
-        <h2 class="section-title">Engineered For Organic Community Growth</h2>
+    <!-- Navigation Tabs (SunoGet Style) -->
+    <nav class="tabs-nav">
+      <button class="tab-btn active" onclick="openTab('tab-radar')">🎯 Live Target Radar</button>
+      <button class="tab-btn" onclick="openTab('tab-features')">⚡ Architecture & Features</button>
+      <button class="tab-btn" onclick="openTab('tab-presets')">⚙️ Multi-Product Presets</button>
+      <button class="tab-btn" onclick="openTab('tab-desktop')">💻 Desktop App (.DMG / .EXE)</button>
+    </nav>
+
+    <!-- TAB 1: LIVE RADAR STUDIO -->
+    <div id="tab-radar" class="tab-content active">
+      <div class="radar-card">
+        <div class="radar-top-controls">
+          <div class="control-row">
+            <span style="font-size: 12px; font-weight: 600; color: var(--text-muted);">Active Preset:</span>
+            <select id="activePresetSelect" class="preset-selector" onchange="onPresetChange()">
+              <option value="sunoget" selected>SunoGet Studio (AI Music & DAW)</option>
+              <option value="saas">Micro-SaaS & Indie Product</option>
+              <option value="video">Video Editor & Auto-Captions</option>
+            </select>
+          </div>
+
+          <div class="control-row">
+            <span id="liveTargetLockBadge" style="font-size: 11px; font-family: var(--font-mono); color: var(--emerald);">● TARGET LOCK ACQUIRED</span>
+            <button onclick="simulateScan()" class="btn-action-nav" style="padding: 5px 12px;">⚡ Scan Feeds</button>
+          </div>
+        </div>
+
+        <div class="radar-split">
+          <!-- Left: Incoming Leads -->
+          <div class="stream-container">
+            <div class="stream-header">
+              <span>INCOMING LEADS FEED</span>
+              <span id="leadCountDisplay">3 Targets</span>
+            </div>
+            <div class="stream-items" id="leadsStreamList">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+
+          <!-- Right: Contextual Reply Studio -->
+          <div class="reply-panel">
+            <div>
+              <div class="selected-lead-card">
+                <div class="selected-lead-title" id="cardLeadTitle">Select a target from the radar...</div>
+                <div class="selected-lead-author" id="cardLeadMeta">r/-- • u/-- • Intent: --</div>
+              </div>
+
+              <div style="margin: 10px 0 6px 0; font-size: 11.5px; font-weight: 600; color: var(--text-muted);">SELECT PERSONA:</div>
+              <div class="persona-bar" id="personaButtons">
+                <button class="persona-tag-btn active" onclick="setPersona('founder')">🚀 Founder</button>
+                <button class="persona-tag-btn" onclick="setPersona('tech')">⚙️ Tech Lead</button>
+                <button class="persona-tag-btn" onclick="setPersona('creator')">🎬 Creator Peer</button>
+              </div>
+
+              <div style="margin: 10px 0 4px 0; font-size: 11.5px; font-weight: 600; color: var(--text-muted);">GENERATED REPLY (100% RAW CLEAN LINK):</div>
+              <textarea id="replyTextarea" class="reply-textarea" spellcheck="false"></textarea>
+            </div>
+
+            <button class="btn-dispatch" onclick="copyAndDispatch()">
+              <span id="btnDispatchIcon">🚀</span>
+              <span id="btnDispatchText">1-Click Copy Reply & Open Reddit Post</span>
+            </button>
+          </div>
+        </div>
       </div>
+    </div>
 
-      <div class="features-grid">
-        <div class="feature-card">
-          <div class="feature-icon">📡</div>
-          <h3 class="feature-title">Zero-API RSS Stream Harvester</h3>
-          <p class="feature-desc">
-            Directly parses live XML/Atom streams from subreddits. Completely bypasses Reddit 403 API paywalls, rate limits, and authentication blocks.
-          </p>
+    <!-- TAB 2: ARCHITECTURE & FEATURES -->
+    <div id="tab-features" class="tab-content">
+      <div class="grid-3col">
+        <div class="feature-hud-card">
+          <div class="feature-hud-icon">📡</div>
+          <h3 class="feature-hud-title">Zero-API RSS Harvester</h3>
+          <p class="feature-hud-desc">Directly parses public XML/Atom streams from subreddits. Completely bypasses Reddit 403 API paywalls, rate limits, and authentication blocks.</p>
         </div>
 
-        <div class="feature-card">
-          <div class="feature-icon">🧠</div>
-          <h3 class="feature-title">AI Intent & Sentiment Scoring</h3>
-          <p class="feature-desc">
-            Analyzes discussion topics, question patterns, and tool recommendation requests. Scores intent from HOT 🔥 to COOL ❄️ while disqualifying spam queries.
-          </p>
+        <div class="feature-hud-card">
+          <div class="feature-hud-icon">🧠</div>
+          <h3 class="feature-hud-title">AI Intent & Pain-Point Engine</h3>
+          <p class="feature-hud-desc">Detects question archetypes, tool recommendation queries, and problem statements. Scores intent from HOT 🔥 to COOL ❄️ while filtering negative keywords.</p>
         </div>
 
-        <div class="feature-card">
-          <div class="feature-icon">💬</div>
-          <h3 class="feature-title">100% Clean Unbracketed URLs</h3>
-          <p class="feature-desc">
-            Strict formatting rules prevent bot-like markdown bracket traps (`[...]`, `(...)`). Replies read as genuine, helpful creator recommendations.
-          </p>
+        <div class="feature-hud-card">
+          <div class="feature-hud-icon">💬</div>
+          <h3 class="feature-hud-title">Clean Unbracketed URLs</h3>
+          <p class="feature-hud-desc">Strict formatting prevents bot-like markdown bracket traps (`[...]`, `(...)`). Replies read as genuine, helpful creator recommendations that convert naturally.</p>
         </div>
 
-        <div class="feature-card">
-          <div class="feature-icon">🚀</div>
-          <h3 class="feature-title">1-Click Anti-Ban Operator Flow</h3>
-          <p class="feature-desc">
-            Single-click copying and automatic browser dispatching keeps the human in the loop, completely eliminating captchas and anti-bot bans.
-          </p>
+        <div class="feature-hud-card">
+          <div class="feature-hud-icon">⚡</div>
+          <h3 class="feature-hud-title">1-Click Anti-Ban Flow</h3>
+          <p class="feature-hud-desc">Single-click copying and browser dispatching keeps the human in the loop, completely eliminating captchas and anti-bot detection bans.</p>
         </div>
 
-        <div class="feature-card">
-          <div class="feature-icon">📦</div>
-          <h3 class="feature-title">Multi-Project Workspaces</h3>
-          <p class="feature-desc">
-            Switch between SaaS tools, client agencies, or software products on the fly using simple JSON preset configurations.
-          </p>
+        <div class="feature-hud-card">
+          <div class="feature-hud-icon">📦</div>
+          <h3 class="feature-hud-title">Multi-Project Workspaces</h3>
+          <p class="feature-hud-desc">Switch between SaaS tools, client agencies, or software products on the fly using simple JSON preset configurations.</p>
         </div>
 
-        <div class="feature-card">
-          <div class="feature-icon">💻</div>
-          <h3 class="feature-title">Native Desktop & Web Suite</h3>
-          <p class="feature-desc">
-            Run as a local Python desktop application on macOS/Windows/Linux or deploy as a serverless edge dashboard.
-          </p>
+        <div class="feature-hud-card">
+          <div class="feature-hud-icon">💻</div>
+          <h3 class="feature-hud-title">Native Desktop & Web App</h3>
+          <p class="feature-hud-desc">Run as a local Python desktop application on macOS/Windows/Linux with zero cloud tracking, or deploy directly to Cloudflare edge.</p>
         </div>
       </div>
-    </section>
+    </div>
+
+    <!-- TAB 3: PRESETS & KEYWORDS -->
+    <div id="tab-presets" class="tab-content">
+      <div class="radar-card">
+        <h3 style="font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--text-primary);">Configured Product Presets</h3>
+        <p style="font-size: 13.5px; color: var(--text-secondary); margin-bottom: 12px;">Add any product in 30 seconds by dropping a JSON preset into <code>presets/</code>.</p>
+        
+        <div style="background: var(--card-inner); border: 1px solid var(--card-border); border-radius: 10px; padding: 16px; font-family: var(--font-mono); font-size: 12px; color: #a5f3fc; overflow-x: auto;">
+<pre>{
+  "id": "my_new_saas",
+  "name": "My New SaaS",
+  "product_url": "https://myapp.com",
+  "subreddits": ["SaaS", "SideProject", "webdev"],
+  "keywords": ["tool", "recommend", "automate", "alternative", "how to"],
+  "negative_keywords": ["scam", "spam", "refund"],
+  "personas": [
+    {
+      "id": "founder",
+      "name": "🚀 Helpful Founder",
+      "template": "Hey u/{author}! If you're looking to {action_phrase}, check out {url}. Hope this helps!"
+    }
+  ]
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 4: DESKTOP APP -->
+    <div id="tab-desktop" class="tab-content">
+      <div class="radar-card" style="text-align: center; padding: 40px 20px;">
+        <div style="font-size: 40px; margin-bottom: 12px;">💻</div>
+        <h3 style="font-family: var(--font-display); font-size: 22px; font-weight: 700; color: var(--text-primary); margin-bottom: 8px;">Run LeadSniper as a Standalone Desktop App</h3>
+        <p style="font-size: 14px; color: var(--text-secondary); max-width: 580px; margin: 0 auto 24px auto;">
+          Full hardware-accelerated dark mode Tkinter GUI with automatic macOS clipboard copying and instant browser dispatching.
+        </p>
+
+        <div style="display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;">
+          <a href="https://github.com/ALittleExtraCode/lead-sniper" class="btn-dispatch" style="padding: 10px 20px; font-size: 13.5px; text-decoration: none;">
+            <span>📦 Clone & Run GUI (python3 gui.py)</span>
+          </a>
+        </div>
+      </div>
+    </div>
 
     <!-- Footer -->
-    <footer class="footer">
+    <footer class="footer-bar">
       <div>
-        <strong>LeadSniper</strong> — Open-source Autonomous Growth Suite.
+        <strong>LeadSniper</strong> — Open-Source Autonomous Growth & Lead Acquisition Suite.
       </div>
       <div class="footer-links">
         <a href="https://github.com/ALittleExtraCode/lead-sniper" target="_blank" rel="noopener noreferrer">GitHub</a>
         <a href="https://github.com/ALittleExtraCode/lead-sniper/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">MIT License</a>
-        <a href="https://github.com/ALittleExtraCode/lead-sniper/issues" target="_blank" rel="noopener noreferrer">Community & Issues</a>
+        <a href="https://github.com/ALittleExtraCode/lead-sniper/issues" target="_blank" rel="noopener noreferrer">Issues & Community</a>
       </div>
     </footer>
   </div>
 
   <script>
-    // Demo Leads Data
-    const DEMO_DATA = {
-      saas: {
-        url: "https://yourapp.com",
-        leads: [
-          {
-            sub: "r/SaaS",
-            intent: "HOT",
-            title: "Looking for a tool to automate customer workflow reports?",
-            author: "EfficiencyWhich5225",
-            replies: {
-              founder: "Great point u/EfficiencyWhich5225! If you're looking to automate customer workflow reports, check out https://yourapp.com — built specifically to handle this with zero complex setup. Best of luck with the project!",
-              tech: "Hey u/EfficiencyWhich5225, for handling \"Looking for a tool to automate customer workflow reports?\", you might want to look into https://yourapp.com. Solves the core bottlenecks without requiring extra middleware.",
-              creator: "Hey u/EfficiencyWhich5225, had the exact same issue last month! Found https://yourapp.com and it streamlined the entire report generation in minutes."
-            }
-          },
-          {
-            sub: "r/SideProject",
-            intent: "HOT",
-            title: "How do you automate client dashboards without custom backend code?",
-            author: "sarah_builds",
-            replies: {
-              founder: "Hey u/sarah_builds! If you're looking to automate client dashboards, https://yourapp.com gives you direct 1-click workflows with zero custom backend needed. Hope this helps!",
-              tech: "For zero-backend client reporting u/sarah_builds, take a look at https://yourapp.com — handles the sync pipelines automatically.",
-              creator: "Nice project u/sarah_builds! Definitely check out https://yourapp.com for ready-made dashboard pipelines."
-            }
-          },
-          {
-            sub: "r/startups",
-            intent: "WARM",
-            title: "Best stack for managing remote SaaS operations in 2026?",
-            author: "dev_marcus",
-            replies: {
-              founder: "Awesome discussion u/dev_marcus! Alongside your core stack, https://yourapp.com is great for automating repetitive operations without extra team overhead.",
-              tech: "Hey u/dev_marcus, for lightweight operational automation, https://yourapp.com integrates directly into standard webhook workflows.",
-              creator: "Good list u/dev_marcus! We use https://yourapp.com on our team for fast task automations."
-            }
-          }
-        ]
-      },
+    // Tab Switcher
+    function openTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      
+      document.getElementById(tabId).classList.add('active');
+      if (event && event.target) event.target.classList.add('active');
+    }
+
+    // Live Lead Presets
+    const PRESETS = {
       sunoget: {
         url: "https://www.sunoget.com/daw",
         leads: [
@@ -764,6 +850,7 @@
             intent: "HOT",
             title: "Is there any way to batch download all my Suno MP3s at once?",
             author: "cyber_producer",
+            permalink: "https://www.reddit.com/r/SunoAI/",
             replies: {
               founder: "Awesome post u/cyber_producer! SunoGet is 100% free and lets you batch-export your entire library as high-bitrate MP3s with ID3 tags in 1 click: https://www.sunoget.com/daw. Keep creating!",
               tech: "Hey u/cyber_producer, you can grab the desktop DAW applet at https://www.sunoget.com/daw to batch-export all master audio directly to your local DAW folders.",
@@ -775,10 +862,52 @@
             intent: "HOT",
             title: "How to make 9:16 vertical video visualizers for TikTok/Shorts?",
             author: "neon_vibes",
+            permalink: "https://www.reddit.com/r/aimusic/",
             replies: {
               founder: "Awesome track u/neon_vibes! SunoGet has a built-in 60fps audio-reactive 9:16 visualizer engine completely free at https://www.sunoget.com/daw. Zero signup needed!",
               tech: "Great mix u/neon_vibes. For 9:16 vertical video waveforms, https://www.sunoget.com/daw renders hardware-accelerated visualizers directly in browser.",
               creator: "Sick beat u/neon_vibes! You can generate quick TikTok audio visualizers for it at https://www.sunoget.com/daw."
+            }
+          },
+          {
+            sub: "r/Songwriting",
+            intent: "WARM",
+            title: "How can I improve my creativity & organize generated stems?",
+            author: "bunno_bb",
+            permalink: "https://www.reddit.com/r/Songwriting/",
+            replies: {
+              founder: "Great question u/bunno_bb! Running a dedicated desktop DAW workflow like https://www.sunoget.com/daw makes organizing prompts and master audio seamless.",
+              tech: "Hey u/bunno_bb, for organizing DAW project stems, https://www.sunoget.com/daw auto-formats track tags and exports cleanly.",
+              creator: "Nice work u/bunno_bb! Check out https://www.sunoget.com/daw to streamline your studio workspace."
+            }
+          }
+        ]
+      },
+      saas: {
+        url: "https://yourapp.com",
+        leads: [
+          {
+            sub: "r/SaaS",
+            intent: "HOT",
+            title: "Looking for a tool to automate customer workflow reports?",
+            author: "EfficiencyWhich5225",
+            permalink: "https://www.reddit.com/r/SaaS/",
+            replies: {
+              founder: "Great point u/EfficiencyWhich5225! If you're looking to automate customer workflow reports, check out https://yourapp.com — built specifically to handle this with zero complex setup. Best of luck with the project!",
+              tech: "Hey u/EfficiencyWhich5225, for handling customer workflow reports, you might want to look into https://yourapp.com. Solves the core bottlenecks without requiring extra middleware.",
+              creator: "Hey u/EfficiencyWhich5225, had the exact same issue last month! Found https://yourapp.com and it streamlined the entire report generation in minutes."
+            }
+          },
+          {
+            sub: "r/SideProject",
+            intent: "HOT",
+            title: "How do you automate client dashboards without custom backend code?",
+            author: "sarah_builds",
+            permalink: "https://www.reddit.com/r/SideProject/",
+            replies: {
+              founder: "Hey u/sarah_builds! If you're looking to automate client dashboards, https://yourapp.com gives you direct 1-click workflows with zero custom backend needed. Hope this helps!",
+              tech: "For zero-backend client reporting u/sarah_builds, take a look at https://yourapp.com — handles the sync pipelines automatically.",
+              creator: "Nice project u/sarah_builds! Definitely check out https://yourapp.com for ready-made dashboard pipelines."
             }
           }
         ]
@@ -791,6 +920,7 @@
             intent: "HOT",
             title: "Any free tool to auto-generate karaoke animated subtitles?",
             author: "clip_master",
+            permalink: "https://www.reddit.com/r/VideoEditing/",
             replies: {
               founder: "Hey u/clip_master! If you need animated karaoke captions, https://yourvideotool.com generates synchronized subtitles in one click for free.",
               tech: "For fast word-level subtitle alignment u/clip_master, check out https://yourvideotool.com.",
@@ -801,86 +931,104 @@
       }
     };
 
-    let activeProjectKey = "saas";
-    let activeLeadIndex = 0;
+    let activeKey = "sunoget";
+    let activeIndex = 0;
     let activePersona = "founder";
 
-    function switchDemoProject() {
-      activeProjectKey = document.getElementById("demoProjectSelect").value;
-      activeLeadIndex = 0;
-      renderDemoLeads();
+    function onPresetChange() {
+      activeKey = document.getElementById("activePresetSelect").value;
+      activeIndex = 0;
+      renderLeads();
     }
 
-    function setDemoPersona(persona) {
-      activePersona = persona;
-      document.querySelectorAll(".persona-chip").forEach(el => el.classList.remove("active"));
+    function setPersona(p) {
+      activePersona = p;
+      document.querySelectorAll(".persona-tag-btn").forEach(b => b.classList.remove("active"));
       if (event && event.target) event.target.classList.add("active");
-      
-      const badgeMap = { founder: "🚀 Helpful Founder", tech: "⚙️ Tech Lead", creator: "🎬 Creator Peer" };
-      document.getElementById("activePersonaBadge").textContent = badgeMap[persona];
-      updateDemoReply();
+      updateReplyBox();
     }
 
-    function selectDemoLead(index) {
-      activeLeadIndex = index;
-      document.querySelectorAll(".lead-item").forEach((el, idx) => {
-        el.classList.toggle("active", idx === index);
+    function selectLead(idx) {
+      activeIndex = idx;
+      document.querySelectorAll(".lead-row").forEach((r, i) => {
+        r.classList.toggle("selected", i === idx);
       });
-      updateDemoReply();
+      updateReplyBox();
     }
 
-    function renderDemoLeads() {
-      const project = DEMO_DATA[activeProjectKey];
-      const container = document.getElementById("leadsContainer");
+    function renderLeads() {
+      const p = PRESETS[activeKey];
+      const container = document.getElementById("leadsStreamList");
       container.innerHTML = "";
 
-      project.leads.forEach((lead, idx) => {
-        const item = document.createElement("div");
-        item.className = `lead-item ${idx === activeLeadIndex ? "active" : ""}`;
-        item.onclick = () => selectDemoLead(idx);
+      p.leads.forEach((lead, idx) => {
+        const row = document.createElement("div");
+        row.className = `lead-row ${idx === activeIndex ? "selected" : ""}`;
+        row.onclick = () => selectLead(idx);
 
-        const badgeClass = lead.intent === "HOT" ? "lead-badge-hot" : "lead-badge-warm";
-        item.innerHTML = `
-          <div class="lead-top">
-            <span class="lead-sub">${lead.sub}</span>
+        const badgeClass = lead.intent === "HOT" ? "badge-intent-hot" : "badge-intent-warm";
+        row.innerHTML = `
+          <div class="lead-meta">
+            <span class="lead-sub-tag">${lead.sub}</span>
             <span class="${badgeClass}">${lead.intent} 🔥</span>
           </div>
-          <div class="lead-title">${lead.title}</div>
+          <div class="lead-post-title">${lead.title}</div>
           <div style="font-size: 11px; color: #64748b;">u/${lead.author}</div>
         `;
-        container.appendChild(item);
+        container.appendChild(row);
       });
 
-      document.getElementById("leadCounterBadge").textContent = `${project.leads.length} Live Leads`;
-      updateDemoReply();
+      document.getElementById("leadCountDisplay").textContent = `${p.leads.length} Targets`;
+      updateReplyBox();
     }
 
-    function updateDemoReply() {
-      const project = DEMO_DATA[activeProjectKey];
-      const lead = project.leads[activeLeadIndex] || project.leads[0];
+    function updateReplyBox() {
+      const p = PRESETS[activeKey];
+      const lead = p.leads[activeIndex] || p.leads[0];
       if (!lead) return;
 
+      document.getElementById("cardLeadTitle").textContent = lead.title;
+      document.getElementById("cardLeadMeta").textContent = `${lead.sub} • u/${lead.author} • Intent: ${lead.intent} 🔥`;
+
       const reply = lead.replies[activePersona] || lead.replies.founder;
-      document.getElementById("demoReplyText").textContent = reply;
+      document.getElementById("replyTextarea").value = reply;
     }
 
-    function copyDemoReply() {
-      const text = document.getElementById("demoReplyText").textContent.trim();
+    function copyAndDispatch() {
+      const text = document.getElementById("replyTextarea").value.trim();
+      const p = PRESETS[activeKey];
+      const lead = p.leads[activeIndex] || p.leads[0];
+
       navigator.clipboard.writeText(text).then(() => {
-        const btnText = document.getElementById("copyBtnText");
-        const btnIcon = document.getElementById("copyBtnIcon");
-        btnText.textContent = "Copied to Clipboard!";
-        btnIcon.textContent = "✅";
+        const icon = document.getElementById("btnDispatchIcon");
+        const label = document.getElementById("btnDispatchText");
+        icon.textContent = "✅";
+        label.textContent = "Copied to Clipboard & Opened Reddit!";
+
+        if (lead && lead.permalink) {
+          window.open(lead.permalink, '_blank');
+        }
+
         setTimeout(() => {
-          btnText.textContent = "1-Click Copy Reply & Open Post";
-          btnIcon.textContent = "📋";
-        }, 2000);
+          icon.textContent = "🚀";
+          label.textContent = "1-Click Copy Reply & Open Reddit Post";
+        }, 2200);
       });
     }
 
-    // Initialize on load
+    function simulateScan() {
+      const badge = document.getElementById("liveTargetLockBadge");
+      badge.textContent = "● HARVESTING FEEDS...";
+      badge.style.color = "#f59e0b";
+      setTimeout(() => {
+        badge.textContent = "● TARGET LOCK ACQUIRED";
+        badge.style.color = "#10b981";
+        renderLeads();
+      }, 600);
+    }
+
     document.addEventListener("DOMContentLoaded", () => {
-      renderDemoLeads();
+      renderLeads();
     });
   </script>
 </body>
