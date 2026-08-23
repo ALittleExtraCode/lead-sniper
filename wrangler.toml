@@ -1,0 +1,11 @@
+name = "lead-sniper"
+compatibility_date = "2024-09-23"
+
+main = "_worker.js"
+
+[assets]
+directory = "./"
+binding = "ASSETS"
+
+[observability.logs]
+enabled = true
