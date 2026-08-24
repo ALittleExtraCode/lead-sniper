@@ -111,7 +111,6 @@
       box-shadow: 0 0 8px var(--accent);
     }
 
-    /* Sniper Scope Hair Lines */
     .sniper-crosshair .scope-hair-x {
       position: absolute;
       top: 50%;
@@ -365,7 +364,7 @@
       100% { transform: translateX(-50%); }
     }
 
-    /* Hero Banner with Sniper Scope HUD */
+    /* Hero Banner with Live Interactive Sniper Scope Canvas */
     .hero-panel {
       background: radial-gradient(circle at top right, rgba(56, 189, 248, 0.08) 0%, var(--card) 60%);
       border: 1px solid var(--card-border);
@@ -384,84 +383,41 @@
       .radar-hud-canvas-wrap { display: none; }
     }
 
-    /* Sniper Scope Reticle Canvas HUD */
+    /* Interactive Live Radar Canvas Scope */
     .radar-hud-canvas-wrap {
-      width: 150px;
-      height: 150px;
+      width: 170px;
+      height: 170px;
       position: relative;
       border-radius: 50%;
       border: 2px solid rgba(56, 189, 248, 0.4);
-      background: rgba(8, 12, 20, 0.9);
-      box-shadow: 0 0 28px rgba(56, 189, 248, 0.25), inset 0 0 20px rgba(0,0,0,0.8);
+      background: rgba(8, 12, 20, 0.95);
+      box-shadow: 0 0 32px rgba(56, 189, 248, 0.25), inset 0 0 24px rgba(0,0,0,0.9);
       display: flex;
       align-items: center;
       justify-content: center;
+      user-select: none;
     }
 
-    .scope-reticle-hair-h {
-      position: absolute;
+    #radarScopeCanvas {
       width: 100%;
-      height: 1px;
-      background: rgba(56, 189, 248, 0.3);
-      top: 50%;
-      left: 0;
-    }
-
-    .scope-reticle-hair-v {
-      position: absolute;
       height: 100%;
-      width: 1px;
-      background: rgba(56, 189, 248, 0.3);
-      left: 50%;
-      top: 0;
-    }
-
-    .scope-mrad-tick {
-      position: absolute;
-      width: 6px;
-      height: 1px;
-      background: rgba(56, 189, 248, 0.5);
-    }
-
-    .radar-sweep-line {
-      position: absolute;
-      width: 50%;
-      height: 1.5px;
-      background: linear-gradient(90deg, transparent, var(--accent));
-      top: 50%;
-      left: 50%;
-      transform-origin: 0% 0%;
-      animation: radarSweepAnim 3s linear infinite;
-      box-shadow: 0 0 10px var(--accent);
-    }
-
-    @keyframes radarSweepAnim {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-
-    .radar-hud-ring {
-      position: absolute;
-      border: 1px dashed rgba(56, 189, 248, 0.28);
       border-radius: 50%;
+      display: block;
     }
 
-    .radar-hud-ring.r1 { width: 50px; height: 50px; }
-    .radar-hud-ring.r2 { width: 100px; height: 100px; }
-
-    .radar-blip {
+    .radar-scope-label {
       position: absolute;
-      width: 6px;
-      height: 6px;
-      background: var(--emerald);
-      border-radius: 50%;
-      box-shadow: 0 0 8px var(--emerald);
-      animation: blipPulse 1.5s infinite;
-    }
-
-    @keyframes blipPulse {
-      0%, 100% { transform: scale(1); opacity: 1; }
-      50% { transform: scale(1.6); opacity: 0.4; }
+      bottom: 8px;
+      font-size: 8.5px;
+      font-family: var(--font-mono);
+      color: var(--accent);
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      pointer-events: none;
+      background: rgba(7, 9, 14, 0.85);
+      padding: 1px 6px;
+      border-radius: 4px;
+      border: 1px solid rgba(56, 189, 248, 0.25);
     }
 
     .hero-meta-badge {
@@ -1312,7 +1268,7 @@
         <div>
           <div class="brand-title">LeadSniper</div>
         </div>
-        <span class="brand-tag">PRECISION SCOPE v1.7.0</span>
+        <span class="brand-tag">PRECISION SCOPE v1.8.0</span>
       </a>
 
       <div class="header-stats">
@@ -1351,38 +1307,25 @@
       </div>
     </div>
 
-    <!-- Tactical Hero Panel with Sniper Scope Reticle Widget -->
+    <!-- Tactical Hero Panel with REAL Live Data-Driven Sniper Scope Canvas -->
     <section class="hero-panel">
       <div>
         <div class="hero-meta-badge">
-          <span>🎯 ZERO-API PRECISION SCOPE & TARGET LOCK</span>
+          <span>🎯 LIVE VARIABLE-DRIVEN SNIPER SCOPE</span>
         </div>
         <h1 class="hero-heading">
           Snip High-Intent Community Leads <br>
           <span class="cyan">In Real Time With 1-Click Conversion.</span>
         </h1>
         <p class="hero-subtext">
-          LeadSniper acts as a precision sniper scope across community discussions, locking onto exact user pain points, scoring buying intent, and crafting authentic, non-spam responses with 100% clean direct links.
+          LeadSniper acts as a precision sniper scope across community discussions, locking onto exact user pain points, plotting real targets dynamically on the scope reticle, and scoring buying intent in real time.
         </p>
       </div>
 
-      <!-- Animated Precision Sniper Scope Reticle HUD Widget -->
-      <div class="radar-hud-canvas-wrap">
-        <div class="scope-reticle-hair-h"></div>
-        <div class="scope-reticle-hair-v"></div>
-        <div class="radar-hud-ring r1"></div>
-        <div class="radar-hud-ring r2"></div>
-        <div class="radar-sweep-line"></div>
-        
-        <!-- Precision Scope Milliradian Graduation Ticks -->
-        <div class="scope-mrad-tick" style="top: 25px; left: 72px;"></div>
-        <div class="scope-mrad-tick" style="bottom: 25px; left: 72px;"></div>
-        <div class="scope-mrad-tick" style="left: 25px; top: 74px; width: 1px; height: 6px;"></div>
-        <div class="scope-mrad-tick" style="right: 25px; top: 74px; width: 1px; height: 6px;"></div>
-
-        <div class="radar-blip" style="top: 30%; left: 60%;"></div>
-        <div class="radar-blip" style="bottom: 28%; left: 38%; animation-delay: 0.8s;"></div>
-        <div style="font-size: 9px; font-family: var(--font-mono); color: var(--accent); position: absolute; bottom: 8px; font-weight: 700; letter-spacing: 0.5px;">SCOPE LOCKED</div>
+      <!-- Real Dynamic HTML5 Canvas Sniper Scope HUD -->
+      <div class="radar-hud-canvas-wrap" id="radarScopeContainer" title="Click any blip to lock target">
+        <canvas id="radarScopeCanvas" width="340" height="340"></canvas>
+        <div class="radar-scope-label" id="scopeStatusText">SCOPE: 3 TARGETS</div>
       </div>
     </section>
 
@@ -1998,6 +1941,7 @@
           {
             sub: "r/SaaS",
             intent: "HOT",
+            score: 88,
             title: "Looking for a tool to automate customer workflow reports?",
             author: "EfficiencyWhich5225",
             permalink: "https://www.reddit.com/r/SaaS/",
@@ -2010,6 +1954,7 @@
           {
             sub: "r/SideProject",
             intent: "HOT",
+            score: 92,
             title: "How do you automate client dashboards without custom backend code?",
             author: "sarah_builds",
             permalink: "https://www.reddit.com/r/SideProject/",
@@ -2022,6 +1967,7 @@
           {
             sub: "r/webdev",
             intent: "WARM",
+            score: 58,
             title: "What is your stack for background job processing in 2026?",
             author: "dev_marcus",
             permalink: "https://www.reddit.com/r/webdev/",
@@ -2040,6 +1986,7 @@
           {
             sub: "r/shopify",
             intent: "HOT",
+            score: 94,
             title: "How can I automatically recover abandoned carts via WhatsApp or SMS?",
             author: "store_grower",
             permalink: "https://www.reddit.com/r/shopify/",
@@ -2052,6 +1999,7 @@
           {
             sub: "r/ecommerce",
             intent: "HOT",
+            score: 86,
             title: "Best tool to sync inventory across Shopify, TikTok Shop, and Amazon?",
             author: "omni_seller",
             permalink: "https://www.reddit.com/r/ecommerce/",
@@ -2070,6 +2018,7 @@
           {
             sub: "r/forhire",
             intent: "HOT",
+            score: 95,
             title: "[Hiring] Need a developer to build automated dashboard & Stripe billing",
             author: "founder_scale",
             permalink: "https://www.reddit.com/r/forhire/",
@@ -2082,6 +2031,7 @@
           {
             sub: "r/freelance",
             intent: "WARM",
+            score: 62,
             title: "How do you automate client onboarding contracts and invoice reminders?",
             author: "design_nomad",
             permalink: "https://www.reddit.com/r/freelance/",
@@ -2100,6 +2050,7 @@
           {
             sub: "r/ChatGPT",
             intent: "HOT",
+            score: 91,
             title: "How to connect GPT-4 to Google Sheets to auto-research leads?",
             author: "growth_hacker99",
             permalink: "https://www.reddit.com/r/ChatGPT/",
@@ -2112,6 +2063,7 @@
           {
             sub: "r/nocode",
             intent: "HOT",
+            score: 84,
             title: "Best tool to build custom AI customer support agents for clients?",
             author: "nocode_builder",
             permalink: "https://www.reddit.com/r/nocode/",
@@ -2130,6 +2082,7 @@
           {
             sub: "r/VideoEditing",
             intent: "HOT",
+            score: 89,
             title: "Any free tool to auto-generate karaoke animated subtitles?",
             author: "clip_master",
             permalink: "https://www.reddit.com/r/VideoEditing/",
@@ -2148,6 +2101,7 @@
           {
             sub: "r/smallbusiness",
             intent: "HOT",
+            score: 93,
             title: "How can I get more Google 5-star reviews from past customers automatically?",
             author: "plumbing_owner",
             permalink: "https://www.reddit.com/r/smallbusiness/",
@@ -2226,8 +2180,8 @@
         row.onclick = () => selectLead(idx);
 
         const badgeClass = lead.intent === "HOT" ? "badge-intent-hot" : "badge-intent-warm";
-        const score = lead.intent === "HOT" ? "88%" : "54%";
-        const snipedStatus = lead.sniped ? `<span style="color: var(--emerald); font-size: 10px; font-weight: 700;">🎯 SNIPED</span>` : `<span class="${badgeClass}">${lead.intent} 🔥 ${score}</span>`;
+        const score = lead.score || (lead.intent === "HOT" ? 88 : 54);
+        const snipedStatus = lead.sniped ? `<span style="color: var(--emerald); font-size: 10px; font-weight: 700;">🎯 SNIPED</span>` : `<span class="${badgeClass}">${lead.intent} 🔥 ${score}%</span>`;
 
         row.innerHTML = `
           <div class="lead-meta">
@@ -2240,6 +2194,9 @@
         container.appendChild(row);
       });
 
+      const countEl = document.getElementById('scopeStatusText');
+      if (countEl) countEl.textContent = `SCOPE: ${filtered.length} TARGET${filtered.length === 1 ? '' : 'S'}`;
+
       updateReplyBox();
     }
 
@@ -2248,8 +2205,9 @@
       const lead = p.leads[activeIndex] || p.leads[0];
       if (!lead) return;
 
+      const score = lead.score || (lead.intent === "HOT" ? 88 : 54);
       document.getElementById("cardLeadTitle").textContent = lead.title;
-      document.getElementById("cardLeadMeta").textContent = `${lead.sub} • u/${lead.author} • Intent: ${lead.intent} 🔥`;
+      document.getElementById("cardLeadMeta").textContent = `${lead.sub} • u/${lead.author} • Intent: ${lead.intent} 🔥 (${score}%)`;
 
       const reply = lead.replies[activePersona] || lead.replies.founder;
       document.getElementById("replyTextarea").value = reply;
@@ -2300,11 +2258,12 @@
 
     function exportLeadsCsv() {
       const p = PRESETS[activeKey];
-      let csv = "Subreddit,Author,Intent,Title,Permalink,RecommendedReply\n";
+      let csv = "Subreddit,Author,Intent,Score,Title,Permalink,RecommendedReply\n";
       p.leads.forEach(l => {
         const cleanTitle = `"${l.title.replace(/"/g, '""')}"`;
         const cleanReply = `"${(l.replies[activePersona] || l.replies.founder).replace(/"/g, '""')}"`;
-        csv += `${l.sub},${l.author},${l.intent},${cleanTitle},${l.permalink},${cleanReply}\n`;
+        const score = l.score || (l.intent === "HOT" ? 88 : 54);
+        csv += `${l.sub},${l.author},${l.intent},${score}%,${cleanTitle},${l.permalink},${cleanReply}\n`;
       });
 
       const blob = new Blob([csv], { type: 'text/csv' });
@@ -2338,6 +2297,7 @@
       p.leads.unshift({
         sub: `r/${sub}`,
         intent: "HOT",
+        score: 93,
         title: `What is the best workflow tool to solve bottlenecks in r/${sub}?`,
         author: "live_prospect",
         permalink: `https://www.reddit.com/r/${sub}/`,
@@ -2582,15 +2542,201 @@
 
     // Target Lock on clickable elements
     document.addEventListener('mouseover', (e) => {
-      if (e.target.closest('button, a, select, textarea, .lead-row, .tab-btn, .persona-tag-btn, input, .faq-header, .theme-dot, .proof-card, .platform-pill-btn, .brand-icon-img')) {
+      if (e.target.closest('button, a, select, textarea, .lead-row, .tab-btn, .persona-tag-btn, input, .faq-header, .theme-dot, .proof-card, .platform-pill-btn, .brand-icon-img, .radar-hud-canvas-wrap')) {
         crosshair.classList.add('locked');
       }
     });
 
     document.addEventListener('mouseout', (e) => {
-      if (e.target.closest('button, a, select, textarea, .lead-row, .tab-btn, .persona-tag-btn, input, .faq-header, .theme-dot, .proof-card, .platform-pill-btn, .brand-icon-img')) {
+      if (e.target.closest('button, a, select, textarea, .lead-row, .tab-btn, .persona-tag-btn, input, .faq-header, .theme-dot, .proof-card, .platform-pill-btn, .brand-icon-img, .radar-hud-canvas-wrap')) {
         crosshair.classList.remove('locked');
       }
+    });
+
+    // ==========================================
+    // REAL LIVE VARIABLE-DRIVEN RADAR SCOPE ENGINE
+    // ==========================================
+    const radarCanvas = document.getElementById('radarScopeCanvas');
+    const ctx = radarCanvas.getContext('2d');
+    let radarAngle = 0;
+
+    function drawRealRadarScope() {
+      const w = radarCanvas.width;
+      const h = radarCanvas.height;
+      const cx = w / 2;
+      const cy = h / 2;
+      const maxR = (w / 2) - 12;
+
+      ctx.clearRect(0, 0, w, h);
+
+      // 1. Background scope circle
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(cx, cy, maxR, 0, Math.PI * 2);
+      ctx.fillStyle = '#06090f';
+      ctx.fill();
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = 'rgba(56, 189, 248, 0.4)';
+      ctx.stroke();
+
+      // 2. Range Rings (Distance = Intent Tiers)
+      const ringRadii = [maxR * 0.35, maxR * 0.65, maxR * 0.92];
+      ringRadii.forEach((r, idx) => {
+        ctx.beginPath();
+        ctx.arc(cx, cy, r, 0, Math.PI * 2);
+        ctx.strokeStyle = idx === 0 ? 'rgba(56, 189, 248, 0.35)' : 'rgba(56, 189, 248, 0.18)';
+        ctx.lineWidth = 1;
+        ctx.setLineDash([4, 4]);
+        ctx.stroke();
+        ctx.setLineDash([]);
+      });
+
+      // 3. Sniper Scope Hairlines (Crosshairs)
+      ctx.beginPath();
+      ctx.moveTo(cx - maxR, cy);
+      ctx.lineTo(cx + maxR, cy);
+      ctx.moveTo(cx, cy - maxR);
+      ctx.lineTo(cx, cy + maxR);
+      ctx.strokeStyle = 'rgba(56, 189, 248, 0.22)';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+
+      // 4. Milliradian Ticks on Hairlines
+      const tickSpacing = maxR / 5;
+      for (let i = 1; i <= 4; i++) {
+        // Horizontal ticks
+        ctx.beginPath();
+        ctx.moveTo(cx + i * tickSpacing, cy - 3);
+        ctx.lineTo(cx + i * tickSpacing, cy + 3);
+        ctx.moveTo(cx - i * tickSpacing, cy - 3);
+        ctx.lineTo(cx - i * tickSpacing, cy + 3);
+        // Vertical ticks
+        ctx.moveTo(cx - 3, cy + i * tickSpacing);
+        ctx.lineTo(cx + 3, cy + i * tickSpacing);
+        ctx.moveTo(cx - 3, cy - i * tickSpacing);
+        ctx.lineTo(cx + 3, cy - i * tickSpacing);
+        ctx.strokeStyle = 'rgba(56, 189, 248, 0.45)';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+      }
+
+      // 5. Sweep Line & Phosphor Glow Wedge
+      radarAngle = (radarAngle + 0.022) % (Math.PI * 2);
+
+      ctx.save();
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.arc(cx, cy, maxR, radarAngle - 0.35, radarAngle, false);
+      ctx.closePath();
+      const sweepGrad = ctx.createRadialGradient(cx, cy, 0, cx, cy, maxR);
+      sweepGrad.addColorStop(0, 'rgba(56, 189, 248, 0)');
+      sweepGrad.addColorStop(0.5, 'rgba(56, 189, 248, 0.08)');
+      sweepGrad.addColorStop(1, 'rgba(56, 189, 248, 0.25)');
+      ctx.fillStyle = sweepGrad;
+      ctx.fill();
+
+      // Sharp sweep line
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.lineTo(cx + Math.cos(radarAngle) * maxR, cy + Math.sin(radarAngle) * maxR);
+      ctx.strokeStyle = '#38bdf8';
+      ctx.lineWidth = 2;
+      ctx.shadowColor = '#38bdf8';
+      ctx.shadowBlur = 8;
+      ctx.stroke();
+      ctx.restore();
+
+      // 6. REAL VARIABLE-DRIVEN LEAD BLIPS
+      // Each lead is plotted based on actual score and index position
+      const p = PRESETS[activeKey];
+      if (p && p.leads) {
+        p.leads.forEach((lead, idx) => {
+          // Angle derived from index position across 360 deg
+          const totalLeads = p.leads.length;
+          const leadAngle = (idx / totalLeads) * (Math.PI * 2) - 0.7;
+
+          // Distance from center: higher score = closer to bullseye
+          const score = lead.score || (lead.intent === 'HOT' ? 88 : 54);
+          // Distance mapped from score (100% score -> radius 35px from center; 40% score -> radius 130px)
+          const blipDist = maxR * (1 - (score / 130));
+
+          const bx = cx + Math.cos(leadAngle) * blipDist;
+          const by = cy + Math.sin(leadAngle) * blipDist;
+
+          // Store coordinates for click detection
+          lead._screenX = bx;
+          lead._screenY = by;
+
+          // Sweep hit illumination check
+          let angleDiff = (radarAngle - leadAngle) % (Math.PI * 2);
+          if (angleDiff < 0) angleDiff += Math.PI * 2;
+          const isSweptRecently = angleDiff < 0.6;
+
+          const isSelected = (idx === activeIndex);
+
+          // Draw Target Blip
+          ctx.save();
+          ctx.beginPath();
+          const blipRadius = isSelected ? 8 : (lead.intent === 'HOT' ? 6 : 4.5);
+          ctx.arc(bx, by, blipRadius, 0, Math.PI * 2);
+
+          if (lead.sniped) {
+            ctx.fillStyle = '#10b981';
+            ctx.shadowColor = '#10b981';
+          } else if (lead.intent === 'HOT') {
+            ctx.fillStyle = isSweptRecently || isSelected ? '#38bdf8' : 'rgba(56, 189, 248, 0.75)';
+            ctx.shadowColor = '#38bdf8';
+          } else {
+            ctx.fillStyle = '#fbbf24';
+            ctx.shadowColor = '#fbbf24';
+          }
+
+          ctx.shadowBlur = isSelected ? 16 : (isSweptRecently ? 12 : 5);
+          ctx.fill();
+
+          // Selection lock ring
+          if (isSelected) {
+            ctx.beginPath();
+            ctx.arc(bx, by, 14, 0, Math.PI * 2);
+            ctx.strokeStyle = '#38bdf8';
+            ctx.lineWidth = 1.5;
+            ctx.setLineDash([3, 3]);
+            ctx.stroke();
+
+            // Label tag on scope
+            ctx.font = '600 9px "JetBrains Mono", monospace';
+            ctx.fillStyle = '#f1f5f9';
+            ctx.fillText(`${lead.sub}`, bx + 16, by + 3);
+          }
+
+          ctx.restore();
+        });
+      }
+
+      ctx.restore();
+      requestAnimationFrame(drawRealRadarScope);
+    }
+
+    // Click on real radar scope canvas to select lead
+    radarCanvas.addEventListener('click', (e) => {
+      const rect = radarCanvas.getBoundingClientRect();
+      const scaleX = radarCanvas.width / rect.width;
+      const scaleY = radarCanvas.height / rect.height;
+      const clickX = (e.clientX - rect.left) * scaleX;
+      const clickY = (e.clientY - rect.top) * scaleY;
+
+      const p = PRESETS[activeKey];
+      if (!p || !p.leads) return;
+
+      p.leads.forEach((lead, idx) => {
+        if (lead._screenX !== undefined && lead._screenY !== undefined) {
+          const dist = Math.hypot(clickX - lead._screenX, clickY - lead._screenY);
+          if (dist < 22) {
+            selectLead(idx);
+            showToast('🎯', `Scope Locked: ${lead.sub} (${lead.author})`);
+          }
+        }
+      });
     });
 
     document.addEventListener("DOMContentLoaded", () => {
@@ -2598,6 +2744,7 @@
       updateCalculator();
       syncBuilderJson();
       runSandboxAnalysis();
+      drawRealRadarScope();
     });
   </script>
 </body>
