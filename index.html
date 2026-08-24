@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LeadSniper — Autonomous Community Radar & Real-Time Lead Acquisition Suite</title>
-  <meta name="description" content="Acquire high-intent buyers, clients, and active users from Reddit, HackerNews, ProductHunt, and IndieHackers in real time. Zero API keys, AI intent scoring, multi-persona response engine, and 1-click assisted conversion.">
-  <meta name="keywords" content="lead sniper, reddit lead generation, community radar, ai growth tool, saas marketing, automated outreach, reddit marketing, social listening, indie hacker tools, client acquisition">
+  <title>LeadSniper — Autonomous Sniper Scope & Real-Time Lead Acquisition Suite</title>
+  <meta name="description" content="Snip high-intent buyers, clients, and active users from Reddit, HackerNews, ProductHunt, and communities in real time. Zero API keys, AI intent scoring, multi-persona response engine, and 1-click conversion.">
+  <meta name="keywords" content="lead sniper, sniper scope lead generation, community radar, ai growth tool, saas marketing, automated outreach, reddit marketing, social listening, indie hacker tools, client acquisition">
   <meta name="author" content="LeadSniper Team">
   <link rel="canonical" href="https://leadsniper.com/">
   <meta name="theme-color" content="#38bdf8">
@@ -17,15 +17,15 @@
 
   <!-- Open Graph -->
   <meta property="og:type" content="website">
-  <meta property="og:title" content="LeadSniper — Autonomous Community Radar & Lead Acquisition Suite">
-  <meta property="og:description" content="Acquire high-intent customers from Reddit & communities in real time. Zero API keys, AI intent scoring, and 1-click assisted conversion.">
+  <meta property="og:title" content="LeadSniper — Precision Community Scope & Lead Acquisition Suite">
+  <meta property="og:description" content="Snip high-intent customers from Reddit & communities in real time. Zero API keys, AI intent scoring, and 1-click assisted conversion.">
   <meta property="og:site_name" content="LeadSniper">
   <meta property="og:url" content="https://lead-sniper.christophercohen1992.workers.dev/">
   <meta property="og:image" content="https://lead-sniper.christophercohen1992.workers.dev/assets/icon-512.png">
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="LeadSniper — Autonomous Community Radar">
+  <meta name="twitter:title" content="LeadSniper — Precision Community Scope">
   <meta name="twitter:description" content="Zero-API real-time social listening, buying intent scoring, and 1-click conversion engine for founders, creators, and agencies.">
   <meta name="twitter:image" content="https://lead-sniper.christophercohen1992.workers.dev/assets/icon-512.png">
 
@@ -86,13 +86,13 @@
       cursor: crosshair !important;
     }
 
-    /* Tactical Ambient Crosshair HUD Follower */
+    /* Precision Tactical Sniper Scope Reticle Follower */
     .sniper-crosshair {
       position: fixed;
       pointer-events: none;
       z-index: 99999;
-      width: 32px;
-      height: 32px;
+      width: 36px;
+      height: 36px;
       transform: translate(-50%, -50%);
       transition: transform 0.04s ease-out, border-color 0.15s ease, box-shadow 0.15s ease;
       display: none;
@@ -108,13 +108,34 @@
       background: var(--accent);
       border-radius: 50%;
       transform: translate(-50%, -50%);
-      box-shadow: 0 0 6px var(--accent);
+      box-shadow: 0 0 8px var(--accent);
+    }
+
+    /* Sniper Scope Hair Lines */
+    .sniper-crosshair .scope-hair-x {
+      position: absolute;
+      top: 50%;
+      left: -6px;
+      right: -6px;
+      height: 1px;
+      background: rgba(56, 189, 248, 0.4);
+      transform: translateY(-50%);
+    }
+
+    .sniper-crosshair .scope-hair-y {
+      position: absolute;
+      left: 50%;
+      top: -6px;
+      bottom: -6px;
+      width: 1px;
+      background: rgba(56, 189, 248, 0.4);
+      transform: translateX(-50%);
     }
 
     .sniper-crosshair .reticle-ring {
       position: absolute;
       inset: 0;
-      border: 1px dashed rgba(56, 189, 248, 0.45);
+      border: 1px dashed rgba(56, 189, 248, 0.55);
       border-radius: 50%;
       transition: all 0.2s ease;
     }
@@ -122,13 +143,19 @@
     .sniper-crosshair.locked .reticle-ring {
       border-color: var(--emerald);
       border-style: solid;
-      transform: scale(1.25) rotate(45deg);
-      box-shadow: 0 0 14px rgba(16, 185, 129, 0.5);
+      transform: scale(1.3) rotate(45deg);
+      box-shadow: 0 0 16px rgba(16, 185, 129, 0.6);
+    }
+
+    .sniper-crosshair.locked .scope-hair-x,
+    .sniper-crosshair.locked .scope-hair-y {
+      background: var(--emerald);
+      box-shadow: 0 0 6px var(--emerald);
     }
 
     .sniper-crosshair.locked::before {
       background: var(--emerald);
-      box-shadow: 0 0 8px var(--emerald);
+      box-shadow: 0 0 10px var(--emerald);
     }
 
     /* Ambient Background Tactical Grids */
@@ -338,7 +365,7 @@
       100% { transform: translateX(-50%); }
     }
 
-    /* Hero Banner with Radar Sweep HUD */
+    /* Hero Banner with Sniper Scope HUD */
     .hero-panel {
       background: radial-gradient(circle at top right, rgba(56, 189, 248, 0.08) 0%, var(--card) 60%);
       border: 1px solid var(--card-border);
@@ -357,29 +384,55 @@
       .radar-hud-canvas-wrap { display: none; }
     }
 
+    /* Sniper Scope Reticle Canvas HUD */
     .radar-hud-canvas-wrap {
-      width: 140px;
-      height: 140px;
+      width: 150px;
+      height: 150px;
       position: relative;
       border-radius: 50%;
-      border: 1px solid rgba(56, 189, 248, 0.3);
-      background: rgba(10, 13, 21, 0.8);
-      box-shadow: 0 0 24px rgba(56, 189, 248, 0.15);
+      border: 2px solid rgba(56, 189, 248, 0.4);
+      background: rgba(8, 12, 20, 0.9);
+      box-shadow: 0 0 28px rgba(56, 189, 248, 0.25), inset 0 0 20px rgba(0,0,0,0.8);
       display: flex;
       align-items: center;
       justify-content: center;
     }
 
+    .scope-reticle-hair-h {
+      position: absolute;
+      width: 100%;
+      height: 1px;
+      background: rgba(56, 189, 248, 0.3);
+      top: 50%;
+      left: 0;
+    }
+
+    .scope-reticle-hair-v {
+      position: absolute;
+      height: 100%;
+      width: 1px;
+      background: rgba(56, 189, 248, 0.3);
+      left: 50%;
+      top: 0;
+    }
+
+    .scope-mrad-tick {
+      position: absolute;
+      width: 6px;
+      height: 1px;
+      background: rgba(56, 189, 248, 0.5);
+    }
+
     .radar-sweep-line {
       position: absolute;
       width: 50%;
-      height: 1px;
+      height: 1.5px;
       background: linear-gradient(90deg, transparent, var(--accent));
       top: 50%;
       left: 50%;
       transform-origin: 0% 0%;
       animation: radarSweepAnim 3s linear infinite;
-      box-shadow: 0 0 8px var(--accent);
+      box-shadow: 0 0 10px var(--accent);
     }
 
     @keyframes radarSweepAnim {
@@ -389,12 +442,12 @@
 
     .radar-hud-ring {
       position: absolute;
-      border: 1px dashed rgba(56, 189, 248, 0.25);
+      border: 1px dashed rgba(56, 189, 248, 0.28);
       border-radius: 50%;
     }
 
-    .radar-hud-ring.r1 { width: 45px; height: 45px; }
-    .radar-hud-ring.r2 { width: 90px; height: 90px; }
+    .radar-hud-ring.r1 { width: 50px; height: 50px; }
+    .radar-hud-ring.r2 { width: 100px; height: 100px; }
 
     .radar-blip {
       position: absolute;
@@ -1248,24 +1301,24 @@
   <!-- HUD Toast Container -->
   <div id="hudToast" class="hud-toast">
     <span id="toastIcon">🎯</span>
-    <span id="toastMsg">Target Acquired</span>
+    <span id="toastMsg">Target Locked in Scope</span>
   </div>
 
   <div class="container">
     <!-- Top HUD Header -->
     <header class="header-bar">
       <a href="/" class="brand-group">
-        <img src="/assets/icon-192.png" alt="LeadSniper Radar Icon" class="brand-icon-img">
+        <img src="/assets/icon-192.png" alt="LeadSniper Scope Logo" class="brand-icon-img">
         <div>
           <div class="brand-title">LeadSniper</div>
         </div>
-        <span class="brand-tag">v1.7.0</span>
+        <span class="brand-tag">PRECISION SCOPE v1.7.0</span>
       </a>
 
       <div class="header-stats">
         <div class="stat-pill">
           <span class="dot-live"></span>
-          <span>RADAR: <strong>494</strong> SCANNED</span>
+          <span>SCOPE RADAR: <strong>494</strong> SCANNED</span>
         </div>
         <div class="stat-pill">
           <span>🎯 SNIPED: <strong id="snipedCounterVal">112</strong></span>
@@ -1284,43 +1337,52 @@
           <span id="soundLabel">Audio ON</span>
         </button>
         <div class="stat-pill" style="border-color: rgba(16, 185, 129, 0.3); color: var(--emerald); font-weight: 700;">
-          <span style="color: var(--emerald);">⚡</span> ENGINE ACTIVE
+          <span style="color: var(--emerald);">⚡</span> SCOPE LOCKED
         </div>
       </div>
     </header>
 
     <!-- Live Ticker Marquee -->
     <div class="live-ticker-bar">
-      <div class="ticker-tag">🔴 LIVE RADAR</div>
+      <div class="ticker-tag">🎯 SCOPE STREAM</div>
       <div class="ticker-marquee-inner" id="tickerMarquee">
         <span>⚡ r/SaaS: "Looking for a tool to automate customer workflow reports" (88% 🔥 HOT) • 🎯 r/shopify: "How can I automatically recover abandoned carts via WhatsApp?" (88% 🔥 HOT) • ⚡ r/forhire: "[Hiring] Need a developer to build automated dashboard & Stripe billing" (88% 🔥 HOT) • 🧠 r/ChatGPT: "How to connect GPT-4 to Google Sheets to auto-research leads?" (88% 🔥 HOT) • 🎬 r/VideoEditing: "Any free tool to auto-generate karaoke animated subtitles?" (88% 🔥 HOT) • 🏪 r/smallbusiness: "How can I get more Google 5-star reviews from past customers?" (88% 🔥 HOT) • &nbsp;&nbsp;</span>
         <span>⚡ r/SaaS: "Looking for a tool to automate customer workflow reports" (88% 🔥 HOT) • 🎯 r/shopify: "How can I automatically recover abandoned carts via WhatsApp?" (88% 🔥 HOT) • ⚡ r/forhire: "[Hiring] Need a developer to build automated dashboard & Stripe billing" (88% 🔥 HOT) • 🧠 r/ChatGPT: "How to connect GPT-4 to Google Sheets to auto-research leads?" (88% 🔥 HOT) • 🎬 r/VideoEditing: "Any free tool to auto-generate karaoke animated subtitles?" (88% 🔥 HOT) • 🏪 r/smallbusiness: "How can I get more Google 5-star reviews from past customers?" (88% 🔥 HOT) • &nbsp;&nbsp;</span>
       </div>
     </div>
 
-    <!-- Tactical Hero Panel with Radar Sweep Widget -->
+    <!-- Tactical Hero Panel with Sniper Scope Reticle Widget -->
     <section class="hero-panel">
       <div>
         <div class="hero-meta-badge">
-          <span>⚡ ZERO-API TARGET LOCK & SOCIAL RADAR</span>
+          <span>🎯 ZERO-API PRECISION SCOPE & TARGET LOCK</span>
         </div>
         <h1 class="hero-heading">
           Snip High-Intent Community Leads <br>
           <span class="cyan">In Real Time With 1-Click Conversion.</span>
         </h1>
         <p class="hero-subtext">
-          LeadSniper continuously monitors community discussions, extracts user pain points, scores buying intent, and crafts authentic, non-spam responses with 100% clean direct links for any business or creator.
+          LeadSniper acts as a precision sniper scope across community discussions, locking onto exact user pain points, scoring buying intent, and crafting authentic, non-spam responses with 100% clean direct links.
         </p>
       </div>
 
-      <!-- Animated Radar Canvas Sweep HUD Widget -->
+      <!-- Animated Precision Sniper Scope Reticle HUD Widget -->
       <div class="radar-hud-canvas-wrap">
+        <div class="scope-reticle-hair-h"></div>
+        <div class="scope-reticle-hair-v"></div>
         <div class="radar-hud-ring r1"></div>
         <div class="radar-hud-ring r2"></div>
         <div class="radar-sweep-line"></div>
-        <div class="radar-blip" style="top: 28%; left: 62%;"></div>
-        <div class="radar-blip" style="bottom: 25%; left: 35%; animation-delay: 0.8s;"></div>
-        <div style="font-size: 9px; font-family: var(--font-mono); color: var(--accent); position: absolute; bottom: 8px; font-weight: 600;">ACTIVE SCAN</div>
+        
+        <!-- Precision Scope Milliradian Graduation Ticks -->
+        <div class="scope-mrad-tick" style="top: 25px; left: 72px;"></div>
+        <div class="scope-mrad-tick" style="bottom: 25px; left: 72px;"></div>
+        <div class="scope-mrad-tick" style="left: 25px; top: 74px; width: 1px; height: 6px;"></div>
+        <div class="scope-mrad-tick" style="right: 25px; top: 74px; width: 1px; height: 6px;"></div>
+
+        <div class="radar-blip" style="top: 30%; left: 60%;"></div>
+        <div class="radar-blip" style="bottom: 28%; left: 38%; animation-delay: 0.8s;"></div>
+        <div style="font-size: 9px; font-family: var(--font-mono); color: var(--accent); position: absolute; bottom: 8px; font-weight: 700; letter-spacing: 0.5px;">SCOPE LOCKED</div>
       </div>
     </section>
 
@@ -1342,7 +1404,7 @@
       <div class="radar-card">
         <!-- Community Multi-Platform Switcher -->
         <div class="platform-pills">
-          <span style="font-size: 11px; font-family: var(--font-mono); color: var(--text-muted); align-self: center;">SOURCE RADAR:</span>
+          <span style="font-size: 11px; font-family: var(--font-mono); color: var(--text-muted); align-self: center;">SCOPE RADAR:</span>
           <button class="platform-pill-btn active" onclick="setPlatform('reddit', this)">🔴 Reddit (Public RSS)</button>
           <button class="platform-pill-btn" onclick="setPlatform('hn', this)">🔶 HackerNews (Ask HN)</button>
           <button class="platform-pill-btn" onclick="setPlatform('ph', this)">🐱 ProductHunt</button>
@@ -1368,7 +1430,7 @@
           <div class="control-row">
             <button id="autopilotBtn" onclick="toggleAutoPilot()" class="btn-action-nav" style="padding: 5px 10px; border-color: rgba(56, 189, 248, 0.4); color: var(--accent);">▶️ Auto-Pilot Demo</button>
             <button onclick="exportLeadsCsv()" class="btn-action-nav" style="padding: 5px 10px; border-color: rgba(16, 185, 129, 0.3); color: var(--emerald);">📥 Export CSV</button>
-            <span id="liveTargetLockBadge" style="font-size: 11px; font-family: var(--font-mono); color: var(--emerald);">● TARGET LOCK ACQUIRED</span>
+            <span id="liveTargetLockBadge" style="font-size: 11px; font-family: var(--font-mono); color: var(--emerald);">● SCOPE LOCK ACQUIRED</span>
             <button onclick="simulateScan()" class="btn-action-nav" style="padding: 5px 12px;">⚡ Live Scan</button>
           </div>
         </div>
@@ -1804,7 +1866,7 @@
     <footer class="footer-bar">
       <div style="display: flex; align-items: center; gap: 8px;">
         <img src="/assets/icon-192.png" alt="LeadSniper Logo" style="width: 18px; height: 18px; border-radius: 4px;">
-        <span><strong>LeadSniper</strong> — Autonomous Real-Time Lead Acquisition & Community Radar. © 2026 LeadSniper. All Rights Reserved.</span>
+        <span><strong>LeadSniper</strong> — Precision Sniper Scope & Real-Time Community Lead Acquisition. © 2026 LeadSniper. All Rights Reserved.</span>
       </div>
       <div class="footer-links">
         <a href="#tab-radar" onclick="openTab('tab-radar')">Live Radar</a>
@@ -1830,7 +1892,7 @@
     function setTheme(accentColor) {
       document.documentElement.style.setProperty('--accent', accentColor);
       document.documentElement.style.setProperty('--accent-glow', `${accentColor}55`);
-      showToast('🎨', `HUD Accent Updated`);
+      showToast('🎨', `HUD Scope Accent Updated`);
       playTargetLockChime();
     }
 
@@ -1854,7 +1916,7 @@
       activePlatform = plat;
       document.querySelectorAll('.platform-pill-btn').forEach(b => b.classList.remove('active'));
       el.classList.add('active');
-      showToast('📡', `Connected to ${plat.toUpperCase()} Community Feed`);
+      showToast('🎯', `Scope Locked to ${plat.toUpperCase()} Feed`);
       renderLeads();
       playTargetLockChime();
     }
@@ -1867,7 +1929,7 @@
         btn.style.background = "rgba(239, 68, 68, 0.2)";
         btn.style.borderColor = "var(--crimson)";
         btn.style.color = "#f87171";
-        showToast('⚡', 'Auto-Pilot Mode Activated');
+        showToast('🎯', 'Auto-Pilot Scope Engaged');
         runAutoPilotCycle();
       } else {
         btn.textContent = "▶️ Auto-Pilot Demo";
@@ -2109,7 +2171,7 @@
       activeIndex = 0;
       renderLeads();
       playTargetLockChime();
-      showToast('🎯', `Workspace Switched: ${PRESETS[activeKey].name}`);
+      showToast('🎯', `Scope Locked: ${PRESETS[activeKey].name}`);
     }
 
     function setPersona(p) {
@@ -2154,7 +2216,7 @@
       });
 
       if (filtered.length === 0) {
-        container.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--text-muted); font-size: 12px;">No targets matching filter/search.</div>';
+        container.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--text-muted); font-size: 12px;">No targets matching scope filter.</div>';
         return;
       }
 
@@ -2202,7 +2264,7 @@
         const icon = document.getElementById("btnDispatchIcon");
         const label = document.getElementById("btnDispatchText");
         icon.textContent = "✅";
-        label.textContent = "Copied to Clipboard & Opened Reddit!";
+        label.textContent = "Target Sniped & Post Opened!";
         playTargetLockChime();
 
         // Increment sniped counter
@@ -2213,7 +2275,7 @@
           renderLeads();
         }
 
-        showToast('🚀', 'Reply Copied! Opening Reddit Post...');
+        showToast('🎯', 'Reply Copied! Opening Reddit Post...');
 
         // Confetti burst animation
         if (typeof confetti === 'function') {
@@ -2256,15 +2318,15 @@
 
     function simulateScan() {
       const badge = document.getElementById("liveTargetLockBadge");
-      badge.textContent = "● HARVESTING FEEDS...";
+      badge.textContent = "● SCANNING SCOPE...";
       badge.style.color = "#f59e0b";
-      showToast('📡', 'Scanning live subreddit streams...');
+      showToast('🎯', 'Scanning scope reticle across streams...');
       setTimeout(() => {
-        badge.textContent = "● TARGET LOCK ACQUIRED";
+        badge.textContent = "● SCOPE LOCK ACQUIRED";
         badge.style.color = "#10b981";
         renderLeads();
         playTargetLockChime();
-        showToast('🎯', 'Target Lock Acquired: Live Leads Ready');
+        showToast('🎯', 'Target Lock Acquired in Sniper Scope');
       }, 500);
     }
 
@@ -2288,7 +2350,7 @@
       activeIndex = 0;
       renderLeads();
       playTargetLockChime();
-      showToast('🔍', `Scanned and added r/${sub}`);
+      showToast('🔍', `Targeting r/${sub} in Sniper Scope`);
     }
 
     function applyCustomProduct() {
@@ -2306,7 +2368,7 @@
 
       updateReplyBox();
       playTargetLockChime();
-      showToast('🛠️', `Injected "${name}" into live studio!`);
+      showToast('🎯', `Targeting "${name}" in live sniper scope!`);
     }
 
     // Intent Sandbox Logic
@@ -2388,7 +2450,7 @@
         id: id,
         name: name,
         product_url: url,
-        description: `Lead acquisition workspace for ${name}`,
+        description: `Precision sniper scope workspace for ${name}`,
         subreddits: subs,
         keywords: kws,
         negative_keywords: ["scam", "refund", "banned", "spam"],
@@ -2490,10 +2552,14 @@
       }
     });
 
-    // Tactical Sniper Crosshair Follower
+    // Precision Sniper Scope Crosshair Reticle Follower
     const crosshair = document.createElement('div');
     crosshair.className = 'sniper-crosshair';
-    crosshair.innerHTML = '<div class="reticle-ring"></div>';
+    crosshair.innerHTML = `
+      <div class="scope-hair-x"></div>
+      <div class="scope-hair-y"></div>
+      <div class="reticle-ring"></div>
+    `;
     document.body.appendChild(crosshair);
 
     let mouseX = 0, mouseY = 0;
