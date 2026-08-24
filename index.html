@@ -54,6 +54,7 @@
       --amber: #f59e0b;
       --crimson: #ef4444;
       --purple: #a855f7;
+      --gold: #ffdd00;
       
       --text-primary: #f1f5f9;
       --text-secondary: #94a3b8;
@@ -281,6 +282,29 @@
     @keyframes pulseDot {
       0%, 100% { opacity: 1; transform: scale(1); }
       50% { opacity: 0.4; transform: scale(0.85); }
+    }
+
+    .coffee-btn-header {
+      background: linear-gradient(135deg, rgba(255, 221, 0, 0.15) 0%, rgba(245, 158, 11, 0.2) 100%);
+      border: 1px solid rgba(255, 221, 0, 0.4);
+      color: #ffdd00;
+      padding: 5px 12px;
+      border-radius: 7px;
+      font-size: 12px;
+      font-weight: 700;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      box-shadow: 0 0 12px rgba(255, 221, 0, 0.15);
+    }
+
+    .coffee-btn-header:hover {
+      background: linear-gradient(135deg, rgba(255, 221, 0, 0.3) 0%, rgba(245, 158, 11, 0.35) 100%);
+      transform: translateY(-1px);
+      box-shadow: 0 0 18px rgba(255, 221, 0, 0.35);
+      color: #fff;
     }
 
     .theme-picker {
@@ -1027,6 +1051,45 @@
       color: var(--emerald);
     }
 
+    /* Partner Perks Grid */
+    .perks-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 14px;
+    }
+
+    .perk-card {
+      background: var(--card-inner);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 12px;
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.2s ease;
+    }
+
+    .perk-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 20px rgba(56, 189, 248, 0.2);
+    }
+
+    .perk-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 10px;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 5px;
+      width: fit-content;
+    }
+
     /* Feature Grid Section */
     .grid-3col {
       display: grid;
@@ -1237,6 +1300,7 @@
     .footer-links {
       display: flex;
       gap: 18px;
+      flex-wrap: wrap;
     }
 
     .footer-links a {
@@ -1279,6 +1343,12 @@
         <div class="stat-pill">
           <span>🎯 SNIPED: <strong id="snipedCounterVal">112</strong></span>
         </div>
+
+        <!-- Buy Me A Coffee Direct Header Button -->
+        <a href="https://buymeacoffee.com/sunoget" target="_blank" rel="noopener noreferrer" class="coffee-btn-header" title="Support LeadSniper on Buy Me A Coffee">
+          <span>☕</span>
+          <span>Buy Me A Coffee</span>
+        </a>
         
         <!-- Theme Accent Switcher -->
         <div class="theme-picker" title="Switch HUD Accent">
@@ -1333,6 +1403,7 @@
     <nav class="tabs-nav">
       <button class="tab-btn active" onclick="openTab('tab-radar')">🎯 Live Target Radar</button>
       <button class="tab-btn" onclick="openTab('tab-sandbox')">🧠 Intent Sandbox</button>
+      <button class="tab-btn" onclick="openTab('tab-perks')">🎁 Creator Perks & Affiliates</button>
       <button class="tab-btn" onclick="openTab('tab-proof')">🏆 Case Studies & Proof</button>
       <button class="tab-btn" onclick="openTab('tab-builder')">🛠️ Preset Builder & Export</button>
       <button class="tab-btn" onclick="openTab('tab-comparison')">⚔️ Anti-Spam Playbook</button>
@@ -1512,7 +1583,96 @@
       </div>
     </div>
 
-    <!-- TAB 3: PROOF & CASE STUDIES -->
+    <!-- TAB 3: CREATOR & OPERATOR PERKS (AFFILIATES & COFFEE) -->
+    <div id="tab-perks" class="tab-content">
+      <div class="radar-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+          <div>
+            <h3 style="font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px;">🎁 Exclusive Operator & Creator Perks</h3>
+            <p style="font-size: 13px; color: var(--text-secondary);">Verified partner discounts and resources for founders, operators, audio artists, and creators.</p>
+          </div>
+          <a href="https://buymeacoffee.com/sunoget" target="_blank" rel="noopener noreferrer" class="coffee-btn-header" style="padding: 8px 16px; font-size: 13px;">
+            <span>☕ Buy Me A Coffee (Support LeadSniper)</span>
+          </a>
+        </div>
+
+        <div class="perks-grid" style="margin-top: 10px;">
+          <!-- DistroKid VIP -->
+          <a href="https://distrokid.com/vip/seven/7915403" target="_blank" rel="sponsored noopener noreferrer" class="perk-card">
+            <div>
+              <div class="perk-badge" style="background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.35); color: #60a5fa;">🚀 DISTROKID VIP</div>
+              <div style="font-weight: 700; font-size: 15px; margin: 8px 0 4px 0; color: var(--text-primary);">7% Discount on Music Releases</div>
+              <p style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.5;">Distribute unlimited songs and albums to Spotify, Apple Music, TikTok, and Amazon. Keep 100% of your royalties.</p>
+            </div>
+            <div style="font-size: 11px; font-family: var(--font-mono); color: var(--accent); font-weight: 700; display: flex; align-items: center; gap: 4px;">
+              Claim 7% VIP Discount ➔
+            </div>
+          </a>
+
+          <!-- Ditto Music -->
+          <a href="https://vrlps.co/8ys4ze9/cp" target="_blank" rel="sponsored noopener noreferrer" class="perk-card">
+            <div>
+              <div class="perk-badge" style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.35); color: #34d399;">🌍 DITTO MUSIC</div>
+              <div style="font-weight: 700; font-size: 15px; margin: 8px 0 4px 0; color: var(--text-primary);">30-Day Free Distribution Trial</div>
+              <p style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.5;">Unlimited global music distribution to 160+ digital platforms with chart registration and playlist pitching.</p>
+            </div>
+            <div style="font-size: 11px; font-family: var(--font-mono); color: var(--emerald); font-weight: 700; display: flex; align-items: center; gap: 4px;">
+              Start 30-Day Free Trial ➔
+            </div>
+          </a>
+
+          <!-- TikTok for Business Partner -->
+          <a href="https://getstartedtiktok.partnerlinks.io/y495h3j0km77" target="_blank" rel="sponsored noopener noreferrer" class="perk-card">
+            <div>
+              <div class="perk-badge" style="background: rgba(219, 39, 119, 0.15); border: 1px solid rgba(219, 39, 119, 0.35); color: #f472b6;">📱 TIKTOK FOR BUSINESS</div>
+              <div style="font-weight: 700; font-size: 15px; margin: 8px 0 4px 0; color: var(--text-primary);">Official Partner Ad Credits</div>
+              <p style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.5;">Scale your product or audio releases on TikTok with matched ad spend credits and creator studio tools.</p>
+            </div>
+            <div style="font-size: 11px; font-family: var(--font-mono); color: #f472b6; font-weight: 700; display: flex; align-items: center; gap: 4px;">
+              Claim TikTok Ad Perks ➔
+            </div>
+          </a>
+
+          <!-- ElevenLabs AI Audio -->
+          <a href="https://try.elevenlabs.io/46gaktevtmp9" target="_blank" rel="sponsored noopener noreferrer" class="perk-card">
+            <div>
+              <div class="perk-badge" style="background: rgba(6, 182, 212, 0.15); border: 1px solid rgba(6, 182, 212, 0.35); color: #22d3ee;">🎙️ ELEVENLABS AI</div>
+              <div style="font-weight: 700; font-size: 15px; margin: 8px 0 4px 0; color: var(--text-primary);">Hyper-Realistic AI Voice & Audio</div>
+              <p style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.5;">Synthesize human-quality voiceovers and audio clones for video demos, automated podcasts, and game audio.</p>
+            </div>
+            <div style="font-size: 11px; font-family: var(--font-mono); color: #22d3ee; font-weight: 700; display: flex; align-items: center; gap: 4px;">
+              Try ElevenLabs Free ➔
+            </div>
+          </a>
+
+          <!-- Studio Pro Headphones -->
+          <a href="https://www.amazon.co.uk/s?k=studio+headphones&tag=sunoget-21" target="_blank" rel="sponsored noopener noreferrer" class="perk-card">
+            <div>
+              <div class="perk-badge" style="background: rgba(249, 115, 22, 0.15); border: 1px solid rgba(249, 115, 22, 0.35); color: #fb923c;">🎧 PRO AUDIO GEAR</div>
+              <div style="font-weight: 700; font-size: 15px; margin: 8px 0 4px 0; color: var(--text-primary);">Curated Studio Headphones</div>
+              <p style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.5;">Top-rated flat frequency response studio reference monitors and audio gear for music mastering and editing.</p>
+            </div>
+            <div style="font-size: 11px; font-family: var(--font-mono); color: #fb923c; font-weight: 700; display: flex; align-items: center; gap: 4px;">
+              View Gear Deals ➔
+            </div>
+          </a>
+
+          <!-- Buy Me a Coffee Card -->
+          <a href="https://buymeacoffee.com/sunoget" target="_blank" rel="noopener noreferrer" class="perk-card" style="border-color: rgba(255, 221, 0, 0.35); background: radial-gradient(circle at top right, rgba(255, 221, 0, 0.08), var(--card-inner));">
+            <div>
+              <div class="perk-badge" style="background: rgba(255, 221, 0, 0.15); border: 1px solid rgba(255, 221, 0, 0.4); color: #ffdd00;">☕ BUY ME A COFFEE</div>
+              <div style="font-weight: 700; font-size: 15px; margin: 8px 0 4px 0; color: var(--text-primary);">Support Independent R&D</div>
+              <p style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.5;">Support high-speed edge hosting and zero-API radar development. 1-click coffee support via Apple Pay, Card, or PayPal.</p>
+            </div>
+            <div style="font-size: 11px; font-family: var(--font-mono); color: #ffdd00; font-weight: 700; display: flex; align-items: center; gap: 4px;">
+              Buy a Coffee (Support Us) ➔
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 4: PROOF & CASE STUDIES -->
     <div id="tab-proof" class="tab-content">
       <div class="radar-card">
         <h3 style="font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px;">🏆 Real-World Founder Case Studies</h3>
@@ -1549,7 +1709,7 @@
       </div>
     </div>
 
-    <!-- TAB 4: PRESET BUILDER & EXPORT -->
+    <!-- TAB 5: PRESET BUILDER & EXPORT -->
     <div id="tab-builder" class="tab-content">
       <div class="radar-card">
         <h3 style="font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px;">🛠️ Interactive Preset Builder & JSON Exporter</h3>
@@ -1601,7 +1761,7 @@
       </div>
     </div>
 
-    <!-- TAB 5: SPAM VS SNIPER COMPARISON -->
+    <!-- TAB 6: SPAM VS SNIPER COMPARISON -->
     <div id="tab-comparison" class="tab-content">
       <div class="radar-card">
         <h3 style="font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px;">⚔️ The Anti-Spam Battleplan</h3>
@@ -1648,7 +1808,7 @@
       </div>
     </div>
 
-    <!-- TAB 6: ARCHITECTURE & FEATURES -->
+    <!-- TAB 7: ARCHITECTURE & FEATURES -->
     <div id="tab-features" class="tab-content">
       <div class="grid-3col">
         <div class="feature-hud-card">
@@ -1689,7 +1849,7 @@
       </div>
     </div>
 
-    <!-- TAB 7: CONVERSION CALCULATOR -->
+    <!-- TAB 8: CONVERSION CALCULATOR -->
     <div id="tab-calculator" class="tab-content">
       <div class="radar-card">
         <h3 style="font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px;">🎯 Organic Lead Acquisition & ROI Estimator</h3>
@@ -1740,7 +1900,7 @@
       </div>
     </div>
 
-    <!-- TAB 8: FAQ & SUPPORT -->
+    <!-- TAB 9: FAQ & SUPPORT -->
     <div id="tab-faq" class="tab-content">
       <div class="radar-card">
         <h3 style="font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px;">❓ Frequently Asked Questions & Operational Help</h3>
@@ -1788,7 +1948,7 @@
       </div>
     </div>
 
-    <!-- TAB 9: DESKTOP APP -->
+    <!-- TAB 10: DESKTOP APP -->
     <div id="tab-desktop" class="tab-content">
       <div class="radar-card" style="text-align: center; padding: 40px 20px;">
         <img src="/assets/icon-512.png" alt="LeadSniper App Icon" style="width: 88px; height: 88px; border-radius: 22px; border: 1px solid rgba(56, 189, 248, 0.4); box-shadow: 0 0 30px rgba(56, 189, 248, 0.35); margin-bottom: 16px; display: inline-block;">
@@ -1814,6 +1974,8 @@
       <div class="footer-links">
         <a href="#tab-radar" onclick="openTab('tab-radar')">Live Radar</a>
         <a href="#tab-sandbox" onclick="openTab('tab-sandbox')">Intent Sandbox</a>
+        <a href="#tab-perks" onclick="openTab('tab-perks')">🎁 Partner Perks</a>
+        <a href="https://buymeacoffee.com/sunoget" target="_blank" rel="noopener noreferrer" style="color: #ffdd00;">☕ Buy Me A Coffee</a>
         <a href="#tab-proof" onclick="openTab('tab-proof')">Case Studies</a>
         <a href="#tab-builder" onclick="openTab('tab-builder')">Preset Builder</a>
         <a href="#tab-comparison" onclick="openTab('tab-comparison')">Anti-Spam Playbook</a>
@@ -2542,13 +2704,13 @@
 
     // Target Lock on clickable elements
     document.addEventListener('mouseover', (e) => {
-      if (e.target.closest('button, a, select, textarea, .lead-row, .tab-btn, .persona-tag-btn, input, .faq-header, .theme-dot, .proof-card, .platform-pill-btn, .brand-icon-img, .radar-hud-canvas-wrap')) {
+      if (e.target.closest('button, a, select, textarea, .lead-row, .tab-btn, .persona-tag-btn, input, .faq-header, .theme-dot, .proof-card, .platform-pill-btn, .brand-icon-img, .radar-hud-canvas-wrap, .perk-card, .coffee-btn-header')) {
         crosshair.classList.add('locked');
       }
     });
 
     document.addEventListener('mouseout', (e) => {
-      if (e.target.closest('button, a, select, textarea, .lead-row, .tab-btn, .persona-tag-btn, input, .faq-header, .theme-dot, .proof-card, .platform-pill-btn, .brand-icon-img, .radar-hud-canvas-wrap')) {
+      if (e.target.closest('button, a, select, textarea, .lead-row, .tab-btn, .persona-tag-btn, input, .faq-header, .theme-dot, .proof-card, .platform-pill-btn, .brand-icon-img, .radar-hud-canvas-wrap, .perk-card, .coffee-btn-header')) {
         crosshair.classList.remove('locked');
       }
     });
@@ -2612,7 +2774,7 @@
         ctx.lineTo(cx - i * tickSpacing, cy + 3);
         // Vertical ticks
         ctx.moveTo(cx - 3, cy + i * tickSpacing);
-        ctx.lineTo(cx + 3, cy + i * tickSpacing);
+        ctx.lineTo(ctx + 3, cy + i * tickSpacing);
         ctx.moveTo(cx - 3, cy - i * tickSpacing);
         ctx.lineTo(cx + 3, cy - i * tickSpacing);
         ctx.strokeStyle = 'rgba(56, 189, 248, 0.45)';
