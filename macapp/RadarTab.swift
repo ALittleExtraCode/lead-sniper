@@ -23,6 +23,7 @@ final class RadarTab: NSView, NSTableViewDataSource, NSTableViewDelegate, Primar
     private let countdown = NSTextField.themed("", size: 10.5, color: Theme.textMuted)
     private var ticker: Timer?
     private var nextCheck: Date?
+    private var dismissButton: NSButton?
 
     private let postTitle = NSTextField(wrappingLabelWithString: "")
     private let postMeta = NSTextField.themed("", size: 10.5, color: Theme.textMuted)
@@ -268,12 +269,18 @@ final class RadarTab: NSView, NSTableViewDataSource, NSTableViewDelegate, Primar
         openButton.target = self
         openButton.action = #selector(openThread)
 
+        let dismissButton = NSButton(title: L.t(.notRelevant), target: self, action: #selector(toggleDismiss))
+        dismissButton.isBordered = false
+        dismissButton.font = .systemFont(ofSize: 11, weight: .semibold)
+        dismissButton.contentTintColor = Theme.textMuted
+        self.dismissButton = dismissButton
+
         let exportButton = NSButton(title: L.t(.exportLeads), target: self, action: #selector(exportLeads))
         exportButton.isBordered = false
         exportButton.font = .systemFont(ofSize: 11, weight: .semibold)
         exportButton.contentTintColor = Theme.accent
 
-        let actions = NSStackView(views: [copyButton, openButton, exportButton, NSView()])
+        let actions = NSStackView(views: [copyButton, openButton, dismissButton, exportButton, NSView()])
         actions.orientation = .horizontal
         actions.spacing = 12
         actions.alignment = .centerY
@@ -466,6 +473,7 @@ final class RadarTab: NSView, NSTableViewDataSource, NSTableViewDelegate, Primar
             gapLabel.stringValue = ""
             copyButton.isEnabled = false
             openButton.isHidden = true
+            dismissButton?.isHidden = true
             return
         }
         postTitle.stringValue = lead.post.title
@@ -482,6 +490,19 @@ final class RadarTab: NSView, NSTableViewDataSource, NSTableViewDelegate, Primar
         })
 
         openButton.isHidden = false
+        dismissButton?.isHidden = false
+        dismissButton?.title = lead.isDismissed ? L.t(.putBack) : L.t(.notRelevant)
+
+        // Looked at and rejected: no draft, and say so. It stays visible rather
+        // than vanishing, because a list that silently loses rows is one nobody
+        // trusts.
+        if lead.isDismissed {
+            draft = nil
+            editor.string = ""
+            gapLabel.stringValue = L.t(.dismissedNote)
+            copyButton.isEnabled = false
+            return
+        }
 
         // Already replied to: say so, and do not offer a draft. The same thread
         // comes back in every sweep while it is on the front page.
@@ -544,6 +565,55 @@ final class RadarTab: NSView, NSTableViewDataSource, NSTableViewDelegate, Primar
         openThread()
     }
 
+    /// Says no to a lead, or takes it back.
+    ///
+    /// Reversible on purpose. A keystroke that cannot be undone is one people
+    /// are careful with, and careful is slow -- which defeats the point of a
+    /// list you are meant to work down quickly.
+    @objc private func toggleDismiss() {
+        let row = table.selectedRow
+        guard let lead = leads[safe: row] else { return }
+        if lead.isDismissed {
+            radar.restore(lead.post.id)
+            leads[row].isDismissed = false
+        } else {
+            radar.dismiss(lead.post.id)
+            leads[row].isDismissed = true
+        }
+        table.reloadData()
+        showSelection(leads[safe: row])
+
+        // Straight on to the next one. The whole reason for a keyboard shortcut
+        // is not having to aim at anything between decisions.
+        if leads[row].isDismissed, row + 1 < leads.count {
+            table.selectRowIndexes([row + 1], byExtendingSelection: false)
+            showSelection(leads[safe: row + 1])
+        }
+    }
+
+    /// D dismisses, U undoes, Return opens the thread.
+    ///
+    /// The arrow keys already move the selection, so the only thing missing was
+    /// a way to decide without reaching for the mouse.
+    override func keyDown(with event: NSEvent) {
+        // Never while something is being typed: "d" belongs to the editor.
+        if let responder = window?.firstResponder,
+           responder is NSTextView || responder is NSTextField {
+            super.keyDown(with: event)
+            return
+        }
+        switch event.charactersIgnoringModifiers?.lowercased() {
+        case "d", "u":
+            toggleDismiss()
+        case "\r":
+            openThread()
+        default:
+            super.keyDown(with: event)
+        }
+    }
+
+    override var acceptsFirstResponder: Bool { true }
+
     @objc private func exportLeads() {
         guard !leads.isEmpty, let workspace = workspaces.active else {
             statusLabel.stringValue = L.t(.nothingToExport)
@@ -579,10 +649,13 @@ final class RadarTab: NSView, NSTableViewDataSource, NSTableViewDelegate, Primar
         let cell = NSView(frame: NSRect(x: 0, y: 0, width: width, height: tableView.rowHeight))
         cell.autoresizingMask = [.width]
 
+        let bandText = lead.isDismissed ? L.t(.dismissed)
+                     : lead.isAnswered ? L.t(.answered)
+                     : Self.bandName(lead.verdict.band)
         let band = NSTextField.themed(
-            lead.isAnswered ? L.t(.answered) : Self.bandName(lead.verdict.band),
-            size: 9.5,
-            color: lead.isAnswered ? Theme.cool : Self.bandColour(lead.verdict.band))
+            bandText, size: 9.5,
+            color: (lead.isDismissed || lead.isAnswered) ? Theme.cool
+                                                         : Self.bandColour(lead.verdict.band))
         band.font = .systemFont(ofSize: 9.5, weight: .bold)
 
         let meta = NSTextField.themed("r/\(lead.post.source) · \(Self.ago(lead.post.posted))",
@@ -596,9 +669,9 @@ final class RadarTab: NSView, NSTableViewDataSource, NSTableViewDelegate, Primar
         // enough on a dark ground; on paper a semibold line still pulls the eye
         // first, so an already-handled thread outshouted a live one.
         title.font = .systemFont(ofSize: 11.5,
-                                 weight: lead.isAnswered ? .regular
+                                 weight: (lead.isAnswered || lead.isDismissed) ? .regular
                                        : (lead.isNew ? .semibold : .regular))
-        title.textColor = lead.isAnswered ? Theme.textMuted : Theme.textPrimary
+        title.textColor = (lead.isAnswered || lead.isDismissed) ? Theme.textMuted : Theme.textPrimary
         title.preferredMaxLayoutWidth = width - 22
         title.cell?.wraps = true
         title.cell?.truncatesLastVisibleLine = true

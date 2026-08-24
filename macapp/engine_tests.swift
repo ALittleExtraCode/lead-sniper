@@ -883,5 +883,58 @@ for (name, title, body) in [("empty", "", ""), ("whitespace", "   ", "\n\t"),
           "  and nothing is drafted for it")
 }
 
+
+// ─────────────────────────────────────────────────────────────────────────────
+print("\n[26] the list takes no for an answer")
+
+// Without this a thread you read and rejected comes back in the next sweep, and
+// the one after, for as long as it is on the front page — so working down a
+// list of twenty means rejecting the same six every half hour.
+let noStore = UserDefaults(suiteName: "leadsniper.tests.no")!
+noStore.removePersistentDomain(forName: "leadsniper.tests.no")
+let judge = Radar(store: noStore)
+
+let sweptOnce = await judge.sweep(Fixtures.workspace, now: Fixtures.now,
+    fetch: { _ in .posts(Feed.parse(Fixtures.atomData, source: "")) }, wait: { _ in })
+check(sweptOnce.leads.allSatisfy { !$0.isDismissed }, "nothing is dismissed to begin with")
+
+let rejected = sweptOnce.leads[0].post.id
+judge.dismiss(rejected)
+check(judge.hasDismissed(rejected), "saying no is recorded")
+
+let sweptAgain = await judge.sweep(Fixtures.workspace, now: Fixtures.now,
+    fetch: { _ in .posts(Feed.parse(Fixtures.atomData, source: "")) }, wait: { _ in })
+let cameBack = sweptAgain.leads.first { $0.post.id == rejected }
+check(cameBack?.isDismissed == true, "and it comes back marked rather than clean")
+check(sweptAgain.leads.last?.post.id == rejected,
+      "sinking to the bottom rather than vanishing, so a mistake is still visible")
+
+// Reversible: a keystroke that cannot be undone is one people are careful with,
+// and careful is slow.
+judge.restore(rejected)
+check(!judge.hasDismissed(rejected), "and it can be put back")
+
+// It survives a restart, and is separate from having answered.
+judge.dismiss(rejected)
+let reopened2 = Radar(store: noStore)
+check(reopened2.hasDismissed(rejected), "the decision survives a restart")
+check(!reopened2.hasAnswered(rejected), "and is not confused with having replied")
+check(reopened2.recall().first { $0.post.id == rejected }?.isDismissed == true,
+      "a restored list remembers it too")
+
+// Dismissed sinks below answered, which sinks below live leads.
+var mixed = sweptAgain.leads
+if mixed.count >= 2 {
+    judge.markAnswered(mixed[1].post.id)
+    let ordered = await judge.sweep(Fixtures.workspace, now: Fixtures.now,
+        fetch: { _ in .posts(Feed.parse(Fixtures.atomData, source: "")) }, wait: { _ in })
+    let live = ordered.leads.filter { !$0.isAnswered && !$0.isDismissed }
+    let done = ordered.leads.filter { $0.isAnswered && !$0.isDismissed }
+    let gone = ordered.leads.filter { $0.isDismissed }
+    let order = live.map { _ in 0 } + done.map { _ in 1 } + gone.map { _ in 2 }
+    check(order == order.sorted(), "live, then answered, then not-relevant")
+}
+noStore.removePersistentDomain(forName: "leadsniper.tests.no")
+
 print(failures == 0 ? "\nAll engine tests passed." : "\n\(failures) FAILURE(S)")
 exit(failures == 0 ? 0 : 1)

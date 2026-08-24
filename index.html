@@ -593,6 +593,8 @@
       font-size: 11px;
       color: var(--text-secondary);
       font-family: var(--font-mono);
+      flex-wrap: wrap;
+      gap: 6px;
     }
 
     .filter-pills {
@@ -616,6 +618,24 @@
       background: rgba(56, 189, 248, 0.15);
       border-color: var(--accent);
       color: var(--accent);
+    }
+
+    .search-input-stream {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: var(--text-primary);
+      padding: 4px 8px;
+      font-size: 11px;
+      font-family: var(--font-mono);
+      border-radius: 5px;
+      outline: none;
+      width: 100%;
+      margin: 6px 12px;
+      width: calc(100% - 24px);
+    }
+
+    .search-input-stream:focus {
+      border-color: var(--accent);
     }
 
     .stream-items {
@@ -1304,6 +1324,7 @@
           </div>
 
           <div class="control-row">
+            <button id="autopilotBtn" onclick="toggleAutoPilot()" class="btn-action-nav" style="padding: 5px 10px; border-color: rgba(56, 189, 248, 0.4); color: var(--accent);">▶️ Auto-Pilot Demo</button>
             <button onclick="exportLeadsCsv()" class="btn-action-nav" style="padding: 5px 10px; border-color: rgba(16, 185, 129, 0.3); color: var(--emerald);">📥 Export CSV</button>
             <span id="liveTargetLockBadge" style="font-size: 11px; font-family: var(--font-mono); color: var(--emerald);">● TARGET LOCK ACQUIRED</span>
             <button onclick="simulateScan()" class="btn-action-nav" style="padding: 5px 12px;">⚡ Live Scan</button>
@@ -1321,6 +1342,9 @@
                 <button class="filter-pill-btn" onclick="filterLeads('WARM', this)">⚡ WARM</button>
               </div>
             </div>
+
+            <input type="text" id="searchLeadsInput" class="search-input-stream" placeholder="🔍 Filter targets by keyword..." oninput="onSearchLeads()">
+
             <div class="stream-items" id="leadsStreamList">
               <!-- Rendered via JS -->
             </div>
@@ -1755,6 +1779,9 @@
   <script>
     let soundEnabled = true;
     let snipedCount = 112;
+    let autoPilotActive = false;
+    let autoPilotTimer = null;
+    let searchTerm = "";
 
     function setTheme(accentColor) {
       document.documentElement.style.setProperty('--accent', accentColor);
@@ -1777,6 +1804,45 @@
       document.getElementById('soundLabel').textContent = soundEnabled ? 'Audio ON' : 'Audio OFF';
       showToast(soundEnabled ? '🔊' : '🔇', `Sound alerts ${soundEnabled ? 'Enabled' : 'Muted'}`);
       if (soundEnabled) playTargetLockChime();
+    }
+
+    function toggleAutoPilot() {
+      autoPilotActive = !autoPilotActive;
+      const btn = document.getElementById('autopilotBtn');
+      if (autoPilotActive) {
+        btn.textContent = "⏹️ Stop Auto-Pilot";
+        btn.style.background = "rgba(239, 68, 68, 0.2)";
+        btn.style.borderColor = "var(--crimson)";
+        btn.style.color = "#f87171";
+        showToast('⚡', 'Auto-Pilot Mode Activated');
+        runAutoPilotCycle();
+      } else {
+        btn.textContent = "▶️ Auto-Pilot Demo";
+        btn.style.background = "";
+        btn.style.borderColor = "rgba(56, 189, 248, 0.4)";
+        btn.style.color = "var(--accent)";
+        if (autoPilotTimer) clearTimeout(autoPilotTimer);
+        showToast('⏹️', 'Auto-Pilot Paused');
+      }
+      playTargetLockChime();
+    }
+
+    function runAutoPilotCycle() {
+      if (!autoPilotActive) return;
+      const p = PRESETS[activeKey];
+      activeIndex = (activeIndex + 1) % p.leads.length;
+      selectLead(activeIndex);
+      
+      autoPilotTimer = setTimeout(() => {
+        if (!autoPilotActive) return;
+        copyAndDispatch();
+        autoPilotTimer = setTimeout(runAutoPilotCycle, 3500);
+      }, 2500);
+    }
+
+    function onSearchLeads() {
+      searchTerm = document.getElementById('searchLeadsInput').value.trim().toLowerCase();
+      renderLeads();
     }
 
     // Tab Switcher
@@ -2023,13 +2089,19 @@
       container.innerHTML = "";
 
       const filtered = p.leads.filter(l => {
-        if (activeFilter === "HOT") return l.intent === "HOT";
-        if (activeFilter === "WARM") return l.intent === "WARM";
+        if (activeFilter === "HOT" && l.intent !== "HOT") return false;
+        if (activeFilter === "WARM" && l.intent !== "WARM") return false;
+        if (searchTerm) {
+          const matchTitle = l.title.toLowerCase().includes(searchTerm);
+          const matchSub = l.sub.toLowerCase().includes(searchTerm);
+          const matchAuthor = l.author.toLowerCase().includes(searchTerm);
+          if (!matchTitle && !matchSub && !matchAuthor) return false;
+        }
         return true;
       });
 
       if (filtered.length === 0) {
-        container.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--text-muted); font-size: 12px;">No targets matching filter.</div>';
+        container.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--text-muted); font-size: 12px;">No targets matching filter/search.</div>';
         return;
       }
 

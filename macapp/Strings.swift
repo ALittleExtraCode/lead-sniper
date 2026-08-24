@@ -46,6 +46,7 @@ enum L {
         case notAPreset, presetTooNew, presetUnusable
         case exportLeads, exportedLeads, nothingToExport
         case nextCheckMinutes, nextCheckSeconds, checkingNow
+        case notRelevant, putBack, dismissed, dismissedNote, keyboardHint
     }
 
     static func t(_ key: Key) -> String { english[key] ?? "" }
@@ -185,6 +186,12 @@ enum L {
         .notAPreset: "That is not a LeadSniper workspace file.",
         .presetTooNew: "That file was made by a newer version (%@). Update LeadSniper first.",
         .presetUnusable: "That file is missing %@, so it would import into something that cannot sweep.",
+
+        .notRelevant: "Not relevant (D)",
+        .putBack: "Put back (U)",
+        .dismissed: "NOT RELEVANT",
+        .dismissedNote: "Set aside. It will keep appearing in sweeps — the thread is still on the front page — but it stays marked and stays at the bottom. Press U to put it back.",
+        .keyboardHint: "↑↓ to move · D not relevant · Return to open the thread",
 
         .nextCheckMinutes: "next in %@ min",
         .nextCheckSeconds: "next in %@s",
