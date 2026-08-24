@@ -936,5 +936,65 @@ if mixed.count >= 2 {
 }
 noStore.removePersistentDomain(forName: "leadsniper.tests.no")
 
+
+// ─────────────────────────────────────────────────────────────────────────────
+print("\n[27] rejections teach the filter, carefully")
+
+// A rejection is the most useful signal this app gets and it was being thrown
+// away. Somebody working down a list says, several times a day, exactly which
+// posts look right and are not.
+func rejected(_ title: String, _ n: Int) -> [Feed.Post] {
+    (0..<n).map { i in
+        Feed.Post(id: "rej-\(title)-\(i)", source: "SaaS", title: title,
+                  body: "", author: "a", link: nil, posted: Fixtures.now)
+    }
+}
+
+var watcher = Fixtures.workspace     // watches export, download, backup, library, batch, bulk
+let invoices = rejected("Best invoice generator for freelancers", 4)
+let common = Scout.whyRejected(invoices, against: watcher)
+check(common.contains { $0.phrase == "invoice generator" },
+      "a phrase in four rejections is offered: \(common.map(\.phrase))")
+
+// One rejection is not a pattern. Rejecting a single post about invoicing does
+// not mean invoicing is never relevant.
+check(Scout.whyRejected(rejected("Best invoice generator for freelancers", 1),
+                        against: watcher).isEmpty,
+      "one rejection teaches nothing")
+check(Scout.whyRejected(rejected("Best invoice generator for freelancers", 2),
+                        against: watcher).isEmpty,
+      "and neither do two")
+
+// The dangerous case: never offer to block a word the customer is watching for.
+// Somebody rejecting four posts containing their own keyword has a scoring
+// problem, and blocking it would switch the product off.
+let ownWords = rejected("Bulk export of invoices to a spreadsheet", 5)
+let risky = Scout.whyRejected(ownWords, against: watcher)
+check(!risky.contains { $0.phrase.contains("export") },
+      "never offers to block a watched word: \(risky.map(\.phrase))")
+check(!risky.contains { $0.phrase.contains("bulk") }, "nor another one")
+
+// Nor something already refused.
+watcher.negativeTerms = watcher.negativeTerms + ["invoice generator"]
+check(!Scout.whyRejected(invoices, against: watcher).contains { $0.phrase == "invoice generator" },
+      "and does not suggest what is already refused")
+
+// The posts are kept and forgotten with the decision.
+let learnStore = UserDefaults(suiteName: "leadsniper.tests.learn")!
+learnStore.removePersistentDomain(forName: "leadsniper.tests.learn")
+let learner = Radar(store: learnStore)
+let sample = Radar.Lead(post: invoices[0],
+                        verdict: Score.judge(posts[0], against: Fixtures.workspace, now: Fixtures.now),
+                        isNew: true)
+learner.dismiss(sample)
+check(learner.rejectedPosts().count == 1, "a rejected post is kept to learn from")
+check(learner.rejectedPosts().first?.title == invoices[0].title, "with its title intact")
+check(Radar(store: learnStore).rejectedPosts().count == 1, "and survives a restart")
+
+// Undoing a mistake must not leave the wrong lesson behind.
+learner.restore(sample.post.id)
+check(learner.rejectedPosts().isEmpty, "putting it back removes it from the learning set")
+learnStore.removePersistentDomain(forName: "leadsniper.tests.learn")
+
 print(failures == 0 ? "\nAll engine tests passed." : "\n\(failures) FAILURE(S)")
 exit(failures == 0 ? 0 : 1)

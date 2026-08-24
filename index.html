@@ -10,17 +10,24 @@
   <link rel="canonical" href="https://leadsniper.com/">
   <meta name="theme-color" content="#38bdf8">
 
+  <!-- Favicon & App Icons -->
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="shortcut icon" href="/favicon.png">
+  <link rel="apple-touch-icon" href="/assets/icon-192.png">
+
   <!-- Open Graph -->
   <meta property="og:type" content="website">
   <meta property="og:title" content="LeadSniper — Autonomous Community Radar & Lead Acquisition Suite">
   <meta property="og:description" content="Acquire high-intent customers from Reddit & communities in real time. Zero API keys, AI intent scoring, and 1-click assisted conversion.">
   <meta property="og:site_name" content="LeadSniper">
-  <meta property="og:url" content="https://leadsniper.com/">
+  <meta property="og:url" content="https://lead-sniper.christophercohen1992.workers.dev/">
+  <meta property="og:image" content="https://lead-sniper.christophercohen1992.workers.dev/assets/icon-512.png">
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="LeadSniper — Autonomous Community Radar">
   <meta name="twitter:description" content="Zero-API real-time social listening, buying intent scoring, and 1-click conversion engine for founders, creators, and agencies.">
+  <meta name="twitter:image" content="https://lead-sniper.christophercohen1992.workers.dev/assets/icon-512.png">
 
   <!-- Canvas Confetti -->
   <script defer src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
@@ -179,21 +186,22 @@
     .brand-group {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
       text-decoration: none;
     }
 
-    .brand-icon {
-      width: 36px;
-      height: 36px;
-      border-radius: 9px;
-      background: linear-gradient(135deg, rgba(56, 189, 248, 0.2), rgba(16, 185, 129, 0.2));
+    .brand-icon-img {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
       border: 1px solid rgba(56, 189, 248, 0.4);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
-      box-shadow: 0 0 14px rgba(56, 189, 248, 0.2);
+      box-shadow: 0 0 16px rgba(56, 189, 248, 0.3);
+      display: block;
+      transition: transform 0.2s ease;
+    }
+
+    .brand-icon-img:hover {
+      transform: scale(1.08) rotate(3deg);
     }
 
     .brand-title {
@@ -1247,11 +1255,11 @@
     <!-- Top HUD Header -->
     <header class="header-bar">
       <a href="/" class="brand-group">
-        <div class="brand-icon">🎯</div>
+        <img src="/assets/icon-192.png" alt="LeadSniper Radar Icon" class="brand-icon-img">
         <div>
           <div class="brand-title">LeadSniper</div>
         </div>
-        <span class="brand-tag">v1.6.0</span>
+        <span class="brand-tag">v1.7.0</span>
       </a>
 
       <div class="header-stats">
@@ -1778,7 +1786,7 @@
     <!-- TAB 9: DESKTOP APP -->
     <div id="tab-desktop" class="tab-content">
       <div class="radar-card" style="text-align: center; padding: 40px 20px;">
-        <div style="font-size: 40px; margin-bottom: 12px;">💻</div>
+        <img src="/assets/icon-512.png" alt="LeadSniper App Icon" style="width: 88px; height: 88px; border-radius: 22px; border: 1px solid rgba(56, 189, 248, 0.4); box-shadow: 0 0 30px rgba(56, 189, 248, 0.35); margin-bottom: 16px; display: inline-block;">
         <h3 style="font-family: var(--font-display); font-size: 22px; font-weight: 700; color: var(--text-primary); margin-bottom: 8px;">Run LeadSniper as a Standalone Desktop App</h3>
         <p style="font-size: 14px; color: var(--text-secondary); max-width: 580px; margin: 0 auto 24px auto;">
           Full hardware-accelerated dark mode Tkinter GUI with automatic macOS clipboard copying and instant browser dispatching.
@@ -1794,8 +1802,9 @@
 
     <!-- Footer -->
     <footer class="footer-bar">
-      <div>
-        <strong>LeadSniper</strong> — Autonomous Real-Time Lead Acquisition & Community Radar. © 2026 LeadSniper. All Rights Reserved.
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <img src="/assets/icon-192.png" alt="LeadSniper Logo" style="width: 18px; height: 18px; border-radius: 4px;">
+        <span><strong>LeadSniper</strong> — Autonomous Real-Time Lead Acquisition & Community Radar. © 2026 LeadSniper. All Rights Reserved.</span>
       </div>
       <div class="footer-links">
         <a href="#tab-radar" onclick="openTab('tab-radar')">Live Radar</a>
@@ -2507,13 +2516,13 @@
 
     // Target Lock on clickable elements
     document.addEventListener('mouseover', (e) => {
-      if (e.target.closest('button, a, select, textarea, .lead-row, .tab-btn, .persona-tag-btn, input, .faq-header, .theme-dot, .proof-card, .platform-pill-btn')) {
+      if (e.target.closest('button, a, select, textarea, .lead-row, .tab-btn, .persona-tag-btn, input, .faq-header, .theme-dot, .proof-card, .platform-pill-btn, .brand-icon-img')) {
         crosshair.classList.add('locked');
       }
     });
 
     document.addEventListener('mouseout', (e) => {
-      if (e.target.closest('button, a, select, textarea, .lead-row, .tab-btn, .persona-tag-btn, input, .faq-header, .theme-dot, .proof-card, .platform-pill-btn')) {
+      if (e.target.closest('button, a, select, textarea, .lead-row, .tab-btn, .persona-tag-btn, input, .faq-header, .theme-dot, .proof-card, .platform-pill-btn, .brand-icon-img')) {
         crosshair.classList.remove('locked');
       }
     });

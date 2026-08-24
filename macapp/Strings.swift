@@ -47,6 +47,7 @@ enum L {
         case exportLeads, exportedLeads, nothingToExport
         case nextCheckMinutes, nextCheckSeconds, checkingNow
         case notRelevant, putBack, dismissed, dismissedNote, keyboardHint
+        case rejectedPattern
     }
 
     static func t(_ key: Key) -> String { english[key] ?? "" }
@@ -187,6 +188,7 @@ enum L {
         .presetTooNew: "That file was made by a newer version (%@). Update LeadSniper first.",
         .presetUnusable: "That file is missing %@, so it would import into something that cannot sweep.",
 
+        .rejectedPattern: "The ones you have rejected keep saying %@ — add those to \"Never show me\" in Setup and they will stop appearing.",
         .notRelevant: "Not relevant (D)",
         .putBack: "Put back (U)",
         .dismissed: "NOT RELEVANT",

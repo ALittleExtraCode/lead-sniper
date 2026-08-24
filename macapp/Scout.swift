@@ -84,6 +84,41 @@ enum Scout {
             }
     }
 
+    /// What the posts you rejected have in common.
+    ///
+    /// The other direction of the same counting. `read` finds phrases you are
+    /// not watching for and should be; this finds phrases that keep turning up
+    /// in things you said no to, which are candidates for "never show me".
+    ///
+    /// Two guards, because a suggestion that costs you real leads is worse than
+    /// no suggestion at all:
+    ///
+    ///   · a phrase has to appear in several rejections, not one. Rejecting a
+    ///     single post about invoicing does not mean invoicing is never relevant.
+    ///   · a phrase you are actively watching for is never offered, however
+    ///     often it appears. Somebody who rejects four posts containing their
+    ///     own keyword has a scoring problem, not a filtering one, and adding
+    ///     it to the blocklist would switch the product off.
+    static func whyRejected(_ rejected: [Feed.Post], against workspace: Workspace,
+                            minimum: Int = 3, limit: Int = 8) -> [Finding] {
+        guard rejected.count >= minimum else { return [] }
+        let watched = Set(workspace.terms.map { $0.lowercased() })
+        let refused = Set(workspace.negativeTerms.map { $0.lowercased() })
+
+        return read(rejected, against: workspace, minimum: minimum)
+            .filter { finding in
+                // Not something you watch for, and not already refused.
+                guard !finding.known, !refused.contains(finding.phrase) else { return false }
+                // Nor a phrase containing a word you watch for: rejecting posts
+                // about "music library backup" must not offer to block "music".
+                let words = finding.phrase.split(separator: " ").map(String.init)
+                return !words.contains { watched.contains($0) }
+                    && !watched.contains { $0.contains(finding.phrase) }
+            }
+            .prefix(limit)
+            .map { $0 }
+    }
+
     /// The ones worth offering to add.
     static func suggestions(_ findings: [Finding], limit: Int = 12) -> [Finding] {
         Array(findings.filter { !$0.known }.prefix(limit))

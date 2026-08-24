@@ -584,8 +584,11 @@ final class RadarTab: NSView, NSTableViewDataSource, NSTableViewDelegate, Primar
             radar.restore(lead.post.id)
             leads[row].isDismissed = false
         } else {
-            radar.dismiss(lead.post.id)
+            // The whole lead, not just the id: the post is what the radar
+            // learns from.
+            radar.dismiss(lead)
             leads[row].isDismissed = true
+            offerNegatives()
         }
         table.reloadData()
         showSelection(leads[safe: row])
@@ -596,6 +599,21 @@ final class RadarTab: NSView, NSTableViewDataSource, NSTableViewDelegate, Primar
             table.selectRowIndexes([row + 1], byExtendingSelection: false)
             showSelection(leads[safe: row + 1])
         }
+    }
+
+    /// What the rejections have in common, offered once there are enough of them.
+    ///
+    /// Suggested rather than applied. Adding a word to "never show me" silently,
+    /// on the app's own initiative, would mean leads disappearing for a reason
+    /// nobody was told about -- which is the worst failure this product can
+    /// have, because it is invisible.
+    private func offerNegatives() {
+        guard let workspace = workspaces.active else { return }
+        let common = Scout.whyRejected(radar.rejectedPosts(), against: workspace)
+        guard !common.isEmpty else { return }
+        statusLabel.stringValue = String(format: L.t(.rejectedPattern),
+                                         common.prefix(3).map { "\"\($0.phrase)\"" }
+                                             .joined(separator: ", "))
     }
 
     /// D dismisses, U undoes, Return opens the thread.

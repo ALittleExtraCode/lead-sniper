@@ -78,6 +78,8 @@ final class Radar {
     private static let seenKey = "seenPosts"
     private static let answeredKey = "answeredPosts"
     private static let dismissedKey = "dismissedPosts"
+    private static let rejectedKey = "rejectedPostBodies"
+    private static let rejectedLimit = 60
 
     init(store: UserDefaults = .standard) {
         self.store = store
@@ -91,11 +93,47 @@ final class Radar {
         store.set(Array(dismissed), forKey: Self.dismissedKey)
     }
 
+    /// Dismissing a lead, and keeping the post so the radar can learn from it.
+    ///
+    /// A rejection is the most useful signal this app ever gets and it was being
+    /// thrown away. Somebody working down a list is telling you, several times a
+    /// day, exactly which posts look right and are not -- and the words those
+    /// posts have in common are the words that should have been in "never show
+    /// me" from the start.
+    func dismiss(_ lead: Lead) {
+        dismiss(lead.post.id)
+        var kept = rejectedPosts()
+        kept.removeAll { $0.id == lead.post.id }
+        kept.insert(lead.post, at: 0)
+        // Bounded. Only recent rejections say anything about what you are
+        // watching for now -- the terms change, and so does what is a mistake.
+        if kept.count > Self.rejectedLimit { kept = Array(kept.prefix(Self.rejectedLimit)) }
+        if let data = try? JSONEncoder().encode(kept) {
+            store.set(data, forKey: Self.rejectedKey)
+        }
+    }
+
+    func rejectedPosts() -> [Feed.Post] {
+        guard let data = store.data(forKey: Self.rejectedKey),
+              let posts = try? JSONDecoder().decode([Feed.Post].self, from: data)
+        else { return [] }
+        return posts
+    }
+
+    func forgetRejected() { store.removeObject(forKey: Self.rejectedKey) }
+
     /// Undone, because a keystroke that cannot be taken back is a keystroke
     /// people are careful with, and careful is slow.
     func restore(_ id: String) {
         dismissed.remove(id)
         store.set(Array(dismissed), forKey: Self.dismissedKey)
+        // Taken out of the learning set too, or undoing a mistake still teaches
+        // the radar the wrong lesson.
+        var kept = rejectedPosts()
+        kept.removeAll { $0.id == id }
+        if let data = try? JSONEncoder().encode(kept) {
+            store.set(data, forKey: Self.rejectedKey)
+        }
     }
 
     func hasDismissed(_ id: String) -> Bool { dismissed.contains(id) }
