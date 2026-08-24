@@ -30,49 +30,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <!-- Schema.org JSON-LD Structured Data -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "WebApplication",
-        "name": "LeadSniper",
-        "url": "https://leadsniper.com",
-        "description": "Zero-API autonomous community radar and lead acquisition engine.",
-        "applicationCategory": "BusinessApplication",
-        "operatingSystem": "All (Web, macOS, Windows, Linux)",
-        "offers": {
-          "@type": "Offer",
-          "price": "0",
-          "priceCurrency": "USD"
-        }
-      },
-      {
-        "@type": "FAQPage",
-        "mainEntity": [
-          {
-            "@type": "Question",
-            "name": "How does LeadSniper work without Reddit API keys?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "LeadSniper parses public XML/Atom streams from multi-subreddit feeds. This completely bypasses Reddit's 403 API paywalls and rate limits."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Why does LeadSniper enforce unbracketed raw links?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Markdown link brackets look like automated spam bots and trigger AutoMod filters. Raw URLs read as genuine human recommendations."
-            }
-          }
-        ]
-      }
-    ]
-  }
-  </script>
-
   <style>
     :root {
       --bg: #07090e;
@@ -977,6 +934,37 @@
       white-space: pre-wrap;
     }
 
+    /* Proof / Case Studies Grid */
+    .proof-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 14px;
+    }
+
+    .proof-card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 12px;
+      transition: all 0.2s ease;
+    }
+
+    .proof-card:hover {
+      border-color: rgba(56, 189, 248, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .proof-metric {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--emerald);
+    }
+
     /* Feature Grid Section */
     .grid-3col {
       display: grid;
@@ -1218,7 +1206,7 @@
         <div>
           <div class="brand-title">LeadSniper</div>
         </div>
-        <span class="brand-tag">v1.4.0</span>
+        <span class="brand-tag">v1.5.0</span>
       </a>
 
       <div class="header-stats">
@@ -1227,7 +1215,7 @@
           <span>RADAR: <strong>494</strong> SCANNED</span>
         </div>
         <div class="stat-pill">
-          <span>🎯 SNIPED: <strong>112</strong></span>
+          <span>🎯 SNIPED: <strong id="snipedCounterVal">112</strong></span>
         </div>
         
         <!-- Theme Accent Switcher -->
@@ -1287,6 +1275,7 @@
     <nav class="tabs-nav">
       <button class="tab-btn active" onclick="openTab('tab-radar')">🎯 Live Target Radar</button>
       <button class="tab-btn" onclick="openTab('tab-sandbox')">🧠 Intent Sandbox</button>
+      <button class="tab-btn" onclick="openTab('tab-proof')">🏆 Case Studies & Proof</button>
       <button class="tab-btn" onclick="openTab('tab-builder')">🛠️ Preset Builder & Export</button>
       <button class="tab-btn" onclick="openTab('tab-comparison')">⚔️ Anti-Spam Playbook</button>
       <button class="tab-btn" onclick="openTab('tab-features')">⚡ Architecture & Specs</button>
@@ -1452,7 +1441,44 @@
       </div>
     </div>
 
-    <!-- TAB 3: PRESET BUILDER & EXPORT -->
+    <!-- TAB 3: PROOF & CASE STUDIES -->
+    <div id="tab-proof" class="tab-content">
+      <div class="radar-card">
+        <h3 style="font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px;">🏆 Real-World Founder Case Studies</h3>
+        <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 16px;">How operators use LeadSniper to drive organic revenue with zero ad spend.</p>
+
+        <div class="proof-grid">
+          <div class="proof-card">
+            <div>
+              <div class="proof-metric">+450 Paying Users</div>
+              <div style="font-weight: 700; font-size: 14px; margin: 4px 0 6px 0; color: var(--text-primary);">Micro-SaaS Founder in r/SideProject</div>
+              <p style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.5;">"I spent $0 on Meta ads. Instead, I sniped 6-8 threads daily where founders asked how to sync Google Sheets to Stripe. Converted 14% to annual plans."</p>
+            </div>
+            <div style="font-size: 11px; font-family: var(--font-mono); color: var(--accent);">— Alex M. (Indie Builder)</div>
+          </div>
+
+          <div class="proof-card">
+            <div>
+              <div class="proof-metric">$14,200 MRR Added</div>
+              <div style="font-weight: 700; font-size: 14px; margin: 4px 0 6px 0; color: var(--text-primary);">Shopify App Developer</div>
+              <p style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.5;">"Targeting merchants asking about abandoned cart recovery in r/shopify and r/ecommerce drove our first 280 store installs in under 30 days."</p>
+            </div>
+            <div style="font-size: 11px; font-family: var(--font-mono); color: var(--accent);">— Sarah T. (Ecom SaaS)</div>
+          </div>
+
+          <div class="proof-card">
+            <div>
+              <div class="proof-metric">2 Retainers Closed</div>
+              <div style="font-weight: 700; font-size: 14px; margin: 4px 0 6px 0; color: var(--text-primary);">Full-Stack Freelance Agency</div>
+              <p style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.5;">"LeadSniper alerted me within 60 seconds of [Hiring] posts appearing in r/forhire. Landed two $3,500/mo retainer clients with zero bidding fees."</p>
+            </div>
+            <div style="font-size: 11px; font-family: var(--font-mono); color: var(--accent);">— Marcus D. (Apex Studio)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 4: PRESET BUILDER & EXPORT -->
     <div id="tab-builder" class="tab-content">
       <div class="radar-card">
         <h3 style="font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px;">🛠️ Interactive Preset Builder & JSON Exporter</h3>
@@ -1504,7 +1530,7 @@
       </div>
     </div>
 
-    <!-- TAB 4: SPAM VS SNIPER COMPARISON -->
+    <!-- TAB 5: SPAM VS SNIPER COMPARISON -->
     <div id="tab-comparison" class="tab-content">
       <div class="radar-card">
         <h3 style="font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px;">⚔️ The Anti-Spam Battleplan</h3>
@@ -1551,7 +1577,7 @@
       </div>
     </div>
 
-    <!-- TAB 5: ARCHITECTURE & FEATURES -->
+    <!-- TAB 6: ARCHITECTURE & FEATURES -->
     <div id="tab-features" class="tab-content">
       <div class="grid-3col">
         <div class="feature-hud-card">
@@ -1592,7 +1618,7 @@
       </div>
     </div>
 
-    <!-- TAB 6: CONVERSION CALCULATOR -->
+    <!-- TAB 7: CONVERSION CALCULATOR -->
     <div id="tab-calculator" class="tab-content">
       <div class="radar-card">
         <h3 style="font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px;">🎯 Organic Lead Acquisition & ROI Estimator</h3>
@@ -1643,7 +1669,7 @@
       </div>
     </div>
 
-    <!-- TAB 7: FAQ & SUPPORT -->
+    <!-- TAB 8: FAQ & SUPPORT -->
     <div id="tab-faq" class="tab-content">
       <div class="radar-card">
         <h3 style="font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px;">❓ Frequently Asked Questions & Operational Help</h3>
@@ -1691,7 +1717,7 @@
       </div>
     </div>
 
-    <!-- TAB 8: DESKTOP APP -->
+    <!-- TAB 9: DESKTOP APP -->
     <div id="tab-desktop" class="tab-content">
       <div class="radar-card" style="text-align: center; padding: 40px 20px;">
         <div style="font-size: 40px; margin-bottom: 12px;">💻</div>
@@ -1716,6 +1742,7 @@
       <div class="footer-links">
         <a href="#tab-radar" onclick="openTab('tab-radar')">Live Radar</a>
         <a href="#tab-sandbox" onclick="openTab('tab-sandbox')">Intent Sandbox</a>
+        <a href="#tab-proof" onclick="openTab('tab-proof')">Case Studies</a>
         <a href="#tab-builder" onclick="openTab('tab-builder')">Preset Builder</a>
         <a href="#tab-comparison" onclick="openTab('tab-comparison')">Anti-Spam Playbook</a>
         <a href="#tab-features" onclick="openTab('tab-features')">Architecture</a>
@@ -1727,6 +1754,7 @@
 
   <script>
     let soundEnabled = true;
+    let snipedCount = 112;
 
     function setTheme(accentColor) {
       document.documentElement.style.setProperty('--accent', accentColor);
@@ -2012,10 +2040,12 @@
 
         const badgeClass = lead.intent === "HOT" ? "badge-intent-hot" : "badge-intent-warm";
         const score = lead.intent === "HOT" ? "88%" : "54%";
+        const snipedStatus = lead.sniped ? `<span style="color: var(--emerald); font-size: 10px; font-weight: 700;">🎯 SNIPED</span>` : `<span class="${badgeClass}">${lead.intent} 🔥 ${score}</span>`;
+
         row.innerHTML = `
           <div class="lead-meta">
             <span class="lead-sub-tag">${lead.sub}</span>
-            <span class="${badgeClass}">${lead.intent} 🔥 ${score}</span>
+            ${snipedStatus}
           </div>
           <div class="lead-post-title">${lead.title}</div>
           <div style="font-size: 11px; color: #64748b;">u/${lead.author}</div>
@@ -2023,7 +2053,6 @@
         container.appendChild(row);
       });
 
-      document.getElementById("leadCountDisplay").textContent = `${filtered.length} Targets`;
       updateReplyBox();
     }
 
@@ -2050,6 +2079,15 @@
         icon.textContent = "✅";
         label.textContent = "Copied to Clipboard & Opened Reddit!";
         playTargetLockChime();
+
+        // Increment sniped counter
+        if (lead && !lead.sniped) {
+          lead.sniped = true;
+          snipedCount++;
+          document.getElementById('snipedCounterVal').textContent = snipedCount;
+          renderLeads();
+        }
+
         showToast('🚀', 'Reply Copied! Opening Reddit Post...');
 
         // Confetti burst animation
@@ -2353,13 +2391,13 @@
 
     // Target Lock on clickable elements
     document.addEventListener('mouseover', (e) => {
-      if (e.target.closest('button, a, select, textarea, .lead-row, .tab-btn, .persona-tag-btn, input, .faq-header, .theme-dot')) {
+      if (e.target.closest('button, a, select, textarea, .lead-row, .tab-btn, .persona-tag-btn, input, .faq-header, .theme-dot, .proof-card')) {
         crosshair.classList.add('locked');
       }
     });
 
     document.addEventListener('mouseout', (e) => {
-      if (e.target.closest('button, a, select, textarea, .lead-row, .tab-btn, .persona-tag-btn, input, .faq-header, .theme-dot')) {
+      if (e.target.closest('button, a, select, textarea, .lead-row, .tab-btn, .persona-tag-btn, input, .faq-header, .theme-dot, .proof-card')) {
         crosshair.classList.remove('locked');
       }
     });

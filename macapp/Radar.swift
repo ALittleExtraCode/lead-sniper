@@ -41,6 +41,8 @@ final class Radar {
         var isNew: Bool
         /// A reply has already been copied for this one.
         var isAnswered: Bool = false
+        /// Looked at, and decided against.
+        var isDismissed: Bool = false
     }
 
     /// True while a sweep is in flight.
@@ -64,15 +66,39 @@ final class Radar {
     /// for as long as it is on the front page.
     private var answered: Set<String> = []
 
+    /// Posts the customer has looked at and said no to.
+    ///
+    /// Without this the list has no way of taking "no" for an answer: a thread
+    /// you read and rejected comes back in the next sweep, and the one after
+    /// that, for as long as it is on the front page. Working down a list of
+    /// twenty means rejecting the same six every half hour.
+    private var dismissed: Set<String> = []
+
     private let store: UserDefaults
     private static let seenKey = "seenPosts"
     private static let answeredKey = "answeredPosts"
+    private static let dismissedKey = "dismissedPosts"
 
     init(store: UserDefaults = .standard) {
         self.store = store
         seen = Set(store.stringArray(forKey: Self.seenKey) ?? [])
         answered = Set(store.stringArray(forKey: Self.answeredKey) ?? [])
+        dismissed = Set(store.stringArray(forKey: Self.dismissedKey) ?? [])
     }
+
+    func dismiss(_ id: String) {
+        dismissed.insert(id)
+        store.set(Array(dismissed), forKey: Self.dismissedKey)
+    }
+
+    /// Undone, because a keystroke that cannot be taken back is a keystroke
+    /// people are careful with, and careful is slow.
+    func restore(_ id: String) {
+        dismissed.remove(id)
+        store.set(Array(dismissed), forKey: Self.dismissedKey)
+    }
+
+    func hasDismissed(_ id: String) -> Bool { dismissed.contains(id) }
 
     /// The last sweep, kept.
     ///
@@ -98,6 +124,7 @@ final class Radar {
         return saved.map { lead in
             var updated = lead
             updated.isAnswered = answered.contains(lead.post.id)
+            updated.isDismissed = dismissed.contains(lead.post.id)
             updated.isNew = false        // seen once already, by definition
             return updated
         }
@@ -221,6 +248,9 @@ final class Radar {
         // already replied to is not a lead any more, but it is not deleted
         // either -- seeing it there is how you remember you handled it.
         result.leads.sort { left, right in
+            // Dismissed sink furthest: they are not leads any more, but deleting
+            // them outright would leave no way to notice a mistake.
+            if left.isDismissed != right.isDismissed { return !left.isDismissed }
             if left.isAnswered != right.isAnswered { return !left.isAnswered }
             if left.isNew != right.isNew { return left.isNew }
             return left.verdict.total > right.verdict.total
