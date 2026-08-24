@@ -931,10 +931,9 @@
           <span id="soundIcon">🔊</span>
           <span id="soundLabel">Audio ON</span>
         </button>
-        <a href="https://github.com/ALittleExtraCode/lead-sniper" target="_blank" rel="noopener noreferrer" class="btn-action-nav">
-          <svg height="14" width="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg>
-          <span>Star on GitHub</span>
-        </a>
+        <div class="stat-pill" style="border-color: rgba(16, 185, 129, 0.3); color: var(--emerald); font-weight: 700;">
+          <span style="color: var(--emerald);">🔒</span> PROPRIETARY SUITE
+        </div>
       </div>
     </header>
 
@@ -1247,8 +1246,8 @@
         </p>
 
         <div style="display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;">
-          <a href="https://github.com/ALittleExtraCode/lead-sniper" class="btn-dispatch" style="padding: 10px 20px; font-size: 13.5px; text-decoration: none;">
-            <span>📦 Clone & Run GUI (python3 gui.py)</span>
+          <a href="/site/dist/LeadSniper.dmg" class="btn-dispatch" style="padding: 10px 20px; font-size: 13.5px; text-decoration: none;">
+            <span>📥 Download Desktop App (.DMG)</span>
           </a>
         </div>
       </div>
@@ -1257,13 +1256,14 @@
     <!-- Footer -->
     <footer class="footer-bar">
       <div>
-        <strong>LeadSniper</strong> — Open-Source Autonomous Growth & Lead Acquisition Suite.
+        <strong>LeadSniper</strong> — Proprietary Autonomous Growth & Lead Acquisition Suite. © 2026 LeadSniper. All Rights Reserved.
       </div>
       <div class="footer-links">
-        <a href="https://github.com/ALittleExtraCode/lead-sniper" target="_blank" rel="noopener noreferrer">GitHub</a>
-        <a href="https://github.com/ALittleExtraCode/lead-sniper/blob/main/AGENT_GUIDE.md" target="_blank" rel="noopener noreferrer">Agent Guide</a>
-        <a href="https://github.com/ALittleExtraCode/lead-sniper/blob/main/GROWTH_PLAYBOOK.md" target="_blank" rel="noopener noreferrer">Growth Playbook</a>
-        <a href="https://github.com/ALittleExtraCode/lead-sniper/issues" target="_blank" rel="noopener noreferrer">Issues & Community</a>
+        <a href="#tab-radar" onclick="openTab('tab-radar')">Live Radar</a>
+        <a href="#tab-builder" onclick="openTab('tab-builder')">Preset Builder</a>
+        <a href="#tab-features" onclick="openTab('tab-features')">Architecture</a>
+        <a href="#tab-calculator" onclick="openTab('tab-calculator')">Growth Calculator</a>
+        <a href="#tab-faq" onclick="openTab('tab-faq')">FAQ & Support</a>
       </div>
     </footer>
   </div>

@@ -410,7 +410,7 @@ final class RadarTab: NSView, NSTableViewDataSource, NSTableViewDelegate, Primar
     /// evidence was the list quietly changing. An interval picker that says
     /// "Every half hour" with nothing behind it asks to be trusted; a number
     /// counting down can be checked.
-    private func armCountdown() {
+    func armCountdown() {
         ticker?.invalidate()
         guard watch.interval != .off else {
             nextCheck = nil
@@ -620,6 +620,14 @@ final class RadarTab: NSView, NSTableViewDataSource, NSTableViewDelegate, Primar
     func tableViewSelectionDidChange(_ notification: Notification) {
         table.reloadData()
         showSelection(leads[safe: table.selectedRow])
+    }
+
+    /// For the render harness: mid-sweep, with the bar part way.
+    func showSweepingForTest(_ progress: Double) {
+        meter.show(progress)
+        sweepButton.isEnabled = false
+        statusLabel.stringValue = "Reading the feeds…"
+        armCountdown()
     }
 
     /// For the render harness: puts leads on screen without a sweep.
