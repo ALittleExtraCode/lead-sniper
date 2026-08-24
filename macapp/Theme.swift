@@ -697,3 +697,110 @@ final class Meter: NSView {
         }
     }
 }
+
+
+/// The four steps, shown where the app would otherwise be empty.
+///
+/// Built to fill the space rather than float over it. A modal that explains an
+/// app is a modal people dismiss without reading and then never see again; the
+/// empty state is where somebody is already looking, already wondering what to
+/// do, and it is going to be replaced by real content the moment they do it.
+///
+/// Each step carries a real example in the app's own chips, because "it finds
+/// the communities" means nothing next to seeing r/selfhosted sitting there.
+final class Guide: NSView {
+    struct Step {
+        let title: String
+        let detail: String
+        /// Shown as chips underneath, in the app's own style.
+        let examples: [String]
+        /// The one that is the current thing to do, drawn lit.
+        var isNext = false
+    }
+
+    private let stack = NSStackView()
+
+    init(steps: [Step]) {
+        super.init(frame: .zero)
+        stack.orientation = .vertical
+        stack.alignment = .leading
+        stack.spacing = 18
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(stack)
+        NSLayoutConstraint.activate([
+            stack.topAnchor.constraint(equalTo: topAnchor),
+            stack.leadingAnchor.constraint(equalTo: leadingAnchor),
+            stack.trailingAnchor.constraint(equalTo: trailingAnchor),
+            stack.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor),
+        ])
+        stack.setViews(steps.enumerated().map { build($0.offset + 1, $0.element) }, in: .leading)
+        reveal()
+    }
+    required init?(coder: NSCoder) { fatalError() }
+
+    private func build(_ number: Int, _ step: Step) -> NSView {
+        let badge = NSTextField.themed("\(number)", size: 11, color: .white)
+        badge.font = .systemFont(ofSize: 11, weight: .bold)
+        badge.alignment = .center
+        badge.wantsLayer = true
+        badge.layer?.backgroundColor = (step.isNext ? Theme.accent : Theme.cool).cgColor
+        badge.layer?.cornerRadius = 11
+        badge.translatesAutoresizingMaskIntoConstraints = false
+        badge.widthAnchor.constraint(equalToConstant: 22).isActive = true
+        badge.heightAnchor.constraint(equalToConstant: 22).isActive = true
+
+        let title = NSTextField.themed(step.title, size: 13, color: Theme.textPrimary)
+        title.font = .systemFont(ofSize: 13, weight: .semibold)
+
+        let detail = NSTextField(wrappingLabelWithString: step.detail)
+        detail.font = .systemFont(ofSize: 11.5)
+        detail.textColor = Theme.textSecond
+        detail.preferredMaxLayoutWidth = 400
+
+        let words = NSStackView(views: [title, detail])
+        words.orientation = .vertical
+        words.alignment = .leading
+        words.spacing = 3
+
+        if !step.examples.isEmpty {
+            let chips = FlowStack()
+            chips.translatesAutoresizingMaskIntoConstraints = false
+            chips.setViews(step.examples.map { text in
+                let chip = ToggleChip()
+                chip.title = text
+                chip.isLit = step.isNext
+                chip.isEnabled = false
+                return chip
+            })
+            words.addArrangedSubview(chips)
+            chips.widthAnchor.constraint(equalToConstant: 400).isActive = true
+        }
+
+        let row = NSStackView(views: [badge, words])
+        row.orientation = .horizontal
+        row.alignment = .top
+        row.spacing = 12
+        return row
+    }
+
+    /// A gentle stagger, once.
+    ///
+    /// The only animation in the app, and it earns its place: it walks the eye
+    /// down the steps in order, which is the order they happen in. 60ms apart,
+    /// so it reads as one movement rather than four.
+    private func reveal() {
+        for (index, view) in stack.arrangedSubviews.enumerated() {
+            view.alphaValue = 0
+            view.wantsLayer = true
+            view.layer?.setAffineTransform(CGAffineTransform(translationX: 0, y: -6))
+            NSAnimationContext.runAnimationGroup { context in
+                context.duration = 0.28
+                context.timingFunction = CAMediaTimingFunction(name: .easeOut)
+                DispatchQueue.main.asyncAfter(deadline: .now() + Double(index) * 0.06) {
+                    view.animator().alphaValue = 1
+                    view.layer?.setAffineTransform(.identity)
+                }
+            }
+        }
+    }
+}

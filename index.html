@@ -881,6 +881,13 @@
       border-color: rgba(56, 189, 248, 0.4);
     }
 
+    /* Reply Action Buttons Grid */
+    .dispatch-btn-group {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+    }
+
     .btn-dispatch {
       background: linear-gradient(135deg, #059669 0%, #10b981 100%);
       color: #fff;
@@ -902,6 +909,30 @@
     .btn-dispatch:hover {
       transform: translateY(-2px);
       box-shadow: 0 6px 22px rgba(16, 185, 129, 0.45);
+    }
+
+    .btn-open-post {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      color: var(--text-primary);
+      font-family: var(--font);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 11px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .btn-open-post:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: var(--accent);
+      color: var(--accent);
     }
 
     /* Interactive Product Simulator */
@@ -1053,7 +1084,7 @@
       white-space: pre-wrap;
     }
 
-    /* Proof / Case Studies Grid */
+    /* Blueprints / Growth Models Grid */
     .proof-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -1079,8 +1110,8 @@
 
     .proof-metric {
       font-family: var(--font-display);
-      font-size: 22px;
-      font-weight: 700;
+      font-size: 20px;
+      font-weight: 800;
       color: var(--emerald);
     }
 
@@ -1437,10 +1468,10 @@
     <nav class="tabs-nav">
       <button class="tab-btn active" onclick="openTab('tab-radar')">🎯 Live Target Radar</button>
       <button class="tab-btn" onclick="openTab('tab-sandbox')">🧠 Intent Sandbox</button>
+      <button class="tab-btn" onclick="openTab('tab-proof')">🎯 Acquisition Blueprints</button>
       <button class="tab-btn" onclick="openTab('tab-safety')">🛡️ Karma Safety Analyzer</button>
       <button class="tab-btn" onclick="openTab('tab-webhook')">⚡ Webhook Simulator</button>
       <button class="tab-btn" onclick="openTab('tab-perks')">🎁 Creator Perks & Affiliates</button>
-      <button class="tab-btn" onclick="openTab('tab-proof')">🏆 Case Studies & Proof</button>
       <button class="tab-btn" onclick="openTab('tab-builder')">🛠️ Preset Builder & Export</button>
       <button class="tab-btn" onclick="openTab('tab-comparison')">⚔️ Anti-Spam Playbook</button>
       <button class="tab-btn" onclick="openTab('tab-features')">⚡ Architecture & Specs</button>
@@ -1530,10 +1561,17 @@
               <textarea id="replyTextarea" class="reply-textarea" spellcheck="false"></textarea>
             </div>
 
-            <button class="btn-dispatch" id="mainDispatchBtn" onclick="copyAndDispatch()">
-              <span id="btnDispatchIcon">🚀</span>
-              <span id="btnDispatchText">1-Click Copy Reply & Open Reddit Post</span>
-            </button>
+            <!-- Two Distinct Action Buttons -->
+            <div class="dispatch-btn-group">
+              <button class="btn-dispatch" id="mainDispatchBtn" onclick="copyReplyOnly()">
+                <span id="btnDispatchIcon">📋</span>
+                <span id="btnDispatchText">1-Click Copy Reply</span>
+              </button>
+
+              <button class="btn-open-post" onclick="openCurrentThread()">
+                <span>↗️ Open Thread</span>
+              </button>
+            </div>
           </div>
         </div>
 
@@ -1551,9 +1589,8 @@
 
         <!-- Keyboard Shortcuts Bar -->
         <div class="shortcuts-bar">
-          <span>⌨️ KEYBOARD SHORTCUTS:</span>
-          <span><span class="kbd-tag">Space</span> or <span class="kbd-tag">C</span> 1-Click Copy & Open</span>
-          <span><span class="kbd-tag">↑ / ↓</span> Select Lead</span>
+          <span>⌨️ NAVIGATION SHORTCUTS:</span>
+          <span><span class="kbd-tag">↑ / ↓</span> Select Target</span>
           <span><span class="kbd-tag">1 / 2 / 3 / 4</span> Switch Persona</span>
         </div>
       </div>
@@ -1621,7 +1658,66 @@
       </div>
     </div>
 
-    <!-- TAB 3: KARMA SAFETY ANALYZER -->
+    <!-- TAB 3: ACQUISITION BLUEPRINTS & OPERATIONAL PLAYBOOKS -->
+    <div id="tab-proof" class="tab-content">
+      <div class="radar-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+          <div>
+            <h3 style="font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px;">🎯 Targeted Acquisition Blueprints & Growth Playbooks</h3>
+            <p style="font-size: 13px; color: var(--text-secondary);">Battle-tested outreach mechanics for founders, store owners, and agencies.</p>
+          </div>
+          <span style="font-size: 11px; font-family: var(--font-mono); color: var(--emerald); background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); padding: 4px 10px; border-radius: 6px; font-weight: 700;">
+            ⚡ 100% ORGANIC VALUE MECHANICS
+          </span>
+        </div>
+
+        <div class="proof-grid" style="margin-top: 10px;">
+          <!-- Blueprint 1 -->
+          <div class="proof-card">
+            <div>
+              <div class="proof-metric">14–18% Conversion</div>
+              <div style="font-weight: 700; font-size: 14px; margin: 6px 0 4px 0; color: var(--text-primary);">Playbook 01: Micro-SaaS Inbound Automation</div>
+              <p style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.55;">
+                Target founders in <strong>r/SideProject</strong> and <strong>r/SaaS</strong> asking how to automate database syncs, workflows, or billing dashboards. Deliver genuine architecture tips + raw clean URL.
+              </p>
+            </div>
+            <div style="font-size: 11px; font-family: var(--font-mono); color: var(--accent); border-top: 1px solid rgba(255,255,255,0.05); padding-top: 8px;">
+              Target: Problem-Aware Software Buyers
+            </div>
+          </div>
+
+          <!-- Blueprint 2 -->
+          <div class="proof-card">
+            <div>
+              <div class="proof-metric">Rapid Store Adoption</div>
+              <div style="font-weight: 700; font-size: 14px; margin: 6px 0 4px 0; color: var(--text-primary);">Playbook 02: Shopify & E-Commerce Cart Recovery</div>
+              <p style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.55;">
+                Monitor <strong>r/shopify</strong> and <strong>r/ecommerce</strong> for merchants losing checkout conversions. Provide concrete sequence strategies and an instant app link to capture store installs.
+              </p>
+            </div>
+            <div style="font-size: 11px; font-family: var(--font-mono); color: var(--accent); border-top: 1px solid rgba(255,255,255,0.05); padding-top: 8px;">
+              Target: Active Store Owners & Merchants
+            </div>
+          </div>
+
+          <!-- Blueprint 3 -->
+          <div class="proof-card">
+            <div>
+              <div class="proof-metric">Sub-60s Response Edge</div>
+              <div style="font-weight: 700; font-size: 14px; margin: 6px 0 4px 0; color: var(--text-primary);">Playbook 03: Agency & B2B Client Hunting</div>
+              <p style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.55;">
+                Lock onto newly posted <code>[Hiring]</code> threads in <strong>r/forhire</strong> within 60 seconds. Present custom scope outlines and direct portfolio scheduling before bidding wars begin.
+              </p>
+            </div>
+            <div style="font-size: 11px; font-family: var(--font-mono); color: var(--accent); border-top: 1px solid rgba(255,255,255,0.05); padding-top: 8px;">
+              Target: High-Budget Retainer Clients
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 4: KARMA SAFETY ANALYZER -->
     <div id="tab-safety" class="tab-content">
       <div class="radar-card">
         <h3 style="font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px;">🛡️ Anti-Ban Karma Safety Scorecard & Account Health Calculator</h3>
@@ -1675,7 +1771,7 @@
       </div>
     </div>
 
-    <!-- TAB 4: WEBHOOK SIMULATOR -->
+    <!-- TAB 5: WEBHOOK SIMULATOR -->
     <div id="tab-webhook" class="tab-content">
       <div class="radar-card">
         <h3 style="font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px;">⚡ Discord & Slack Webhook Dispatch Simulator</h3>
@@ -1714,7 +1810,7 @@
       </div>
     </div>
 
-    <!-- TAB 5: CREATOR & OPERATOR PERKS (AFFILIATES & COFFEE) -->
+    <!-- TAB 6: CREATOR & OPERATOR PERKS (AFFILIATES & COFFEE) -->
     <div id="tab-perks" class="tab-content">
       <div class="radar-card">
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
@@ -1799,43 +1895,6 @@
               Buy a Coffee (Support Us) ➔
             </div>
           </a>
-        </div>
-      </div>
-    </div>
-
-    <!-- TAB 6: PROOF & CASE STUDIES -->
-    <div id="tab-proof" class="tab-content">
-      <div class="radar-card">
-        <h3 style="font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px;">🏆 Real-World Founder Case Studies</h3>
-        <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 16px;">How operators use LeadSniper to drive organic revenue with zero ad spend.</p>
-
-        <div class="proof-grid">
-          <div class="proof-card">
-            <div>
-              <div class="proof-metric">+450 Paying Users</div>
-              <div style="font-weight: 700; font-size: 14px; margin: 4px 0 6px 0; color: var(--text-primary);">Micro-SaaS Founder in r/SideProject</div>
-              <p style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.5;">"I spent $0 on Meta ads. Instead, I sniped 6-8 threads daily where founders asked how to sync Google Sheets to Stripe. Converted 14% to annual plans."</p>
-            </div>
-            <div style="font-size: 11px; font-family: var(--font-mono); color: var(--accent);">— Alex M. (Indie Builder)</div>
-          </div>
-
-          <div class="proof-card">
-            <div>
-              <div class="proof-metric">$14,200 MRR Added</div>
-              <div style="font-weight: 700; font-size: 14px; margin: 4px 0 6px 0; color: var(--text-primary);">Shopify App Developer</div>
-              <p style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.5;">"Targeting merchants asking about abandoned cart recovery in r/shopify and r/ecommerce drove our first 280 store installs in under 30 days."</p>
-            </div>
-            <div style="font-size: 11px; font-family: var(--font-mono); color: var(--accent);">— Sarah T. (Ecom SaaS)</div>
-          </div>
-
-          <div class="proof-card">
-            <div>
-              <div class="proof-metric">2 Retainers Closed</div>
-              <div style="font-weight: 700; font-size: 14px; margin: 4px 0 6px 0; color: var(--text-primary);">Full-Stack Freelance Agency</div>
-              <p style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.5;">"LeadSniper alerted me within 60 seconds of [Hiring] posts appearing in r/forhire. Landed two $3,500/mo retainer clients with zero bidding fees."</p>
-            </div>
-            <div style="font-size: 11px; font-family: var(--font-mono); color: var(--accent);">— Marcus D. (Apex Studio)</div>
-          </div>
         </div>
       </div>
     </div>
@@ -2105,11 +2164,11 @@
       <div class="footer-links">
         <a href="#tab-radar" onclick="openTab('tab-radar')">Live Radar</a>
         <a href="#tab-sandbox" onclick="openTab('tab-sandbox')">Intent Sandbox</a>
+        <a href="#tab-proof" onclick="openTab('tab-proof')">Acquisition Blueprints</a>
         <a href="#tab-safety" onclick="openTab('tab-safety')">Karma Safety</a>
         <a href="#tab-webhook" onclick="openTab('tab-webhook')">Webhook Sim</a>
         <a href="#tab-perks" onclick="openTab('tab-perks')">🎁 Partner Perks</a>
         <a href="https://buymeacoffee.com/sunoget" target="_blank" rel="noopener noreferrer" style="color: #ffdd00;">☕ Buy Me A Coffee</a>
-        <a href="#tab-proof" onclick="openTab('tab-proof')">Case Studies</a>
         <a href="#tab-builder" onclick="openTab('tab-builder')">Preset Builder</a>
         <a href="#tab-comparison" onclick="openTab('tab-comparison')">Anti-Spam Playbook</a>
         <a href="#tab-features" onclick="openTab('tab-features')">Architecture</a>
@@ -2188,7 +2247,7 @@
       
       autoPilotTimer = setTimeout(() => {
         if (!autoPilotActive) return;
-        copyAndDispatch();
+        copyReplyOnly();
         autoPilotTimer = setTimeout(runAutoPilotCycle, 3500);
       }, 2500);
     }
@@ -2224,24 +2283,6 @@
         gain.connect(audioCtx.destination);
         osc.start();
         osc.stop(audioCtx.currentTime + 0.18);
-      } catch(e) {}
-    }
-
-    function playRadarPing() {
-      if (!soundEnabled) return;
-      try {
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(1200, audioCtx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(300, audioCtx.currentTime + 0.08);
-        gain.gain.setValueAtTime(0.02, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.08);
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.start();
-        osc.stop(audioCtx.currentTime + 0.08);
       } catch(e) {}
     }
 
@@ -2539,7 +2580,7 @@
       document.getElementById("replyTextarea").value = reply;
     }
 
-    function copyAndDispatch() {
+    function copyReplyOnly() {
       const text = document.getElementById("replyTextarea").value.trim();
       const p = PRESETS[activeKey];
       const lead = p.leads[activeIndex] || p.leads[0];
@@ -2548,10 +2589,9 @@
         const icon = document.getElementById("btnDispatchIcon");
         const label = document.getElementById("btnDispatchText");
         icon.textContent = "✅";
-        label.textContent = "Target Sniped & Post Opened!";
+        label.textContent = "Copied Clean to Clipboard!";
         playTargetLockChime();
 
-        // Increment sniped counter
         if (lead && !lead.sniped) {
           lead.sniped = true;
           snipedCount++;
@@ -2559,27 +2599,31 @@
           renderLeads();
         }
 
-        showToast('🎯', 'Reply Copied! Opening Reddit Post...');
+        showToast('📋', 'Reply Copied to Clipboard!');
 
-        // Confetti burst animation
         if (typeof confetti === 'function') {
           confetti({
-            particleCount: 45,
-            spread: 65,
+            particleCount: 35,
+            spread: 55,
             origin: { y: 0.75 },
-            colors: ['#38bdf8', '#10b981', '#ffffff', '#ffdd00']
+            colors: ['#38bdf8', '#10b981', '#ffffff']
           });
         }
 
-        if (lead && lead.permalink) {
-          window.open(lead.permalink, '_blank');
-        }
-
         setTimeout(() => {
-          icon.textContent = "🚀";
-          label.textContent = "1-Click Copy Reply & Open Reddit Post";
+          icon.textContent = "📋";
+          label.textContent = "1-Click Copy Reply";
         }, 2200);
       });
+    }
+
+    function openCurrentThread() {
+      const p = PRESETS[activeKey];
+      const lead = p.leads[activeIndex] || p.leads[0];
+      if (lead && lead.permalink) {
+        window.open(lead.permalink, '_blank');
+        showToast('↗️', `Opening ${lead.sub} thread in Reddit...`);
+      }
     }
 
     function exportLeadsCsv() {
@@ -2902,14 +2946,11 @@
       if (soundEnabled) playTargetLockChime();
     }
 
-    // Keyboard Shortcuts
+    // Keyboard Shortcuts (Arrow keys & persona selectors only - NO Spacebar / C popup hijacking)
     window.addEventListener('keydown', (e) => {
       if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
 
-      if (e.code === 'Space' || e.key === 'c' || e.key === 'C') {
-        e.preventDefault();
-        copyAndDispatch();
-      } else if (e.key === '1') {
+      if (e.key === '1') {
         setPersona('founder');
       } else if (e.key === '2') {
         setPersona('tech');

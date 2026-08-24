@@ -53,9 +53,14 @@ final class FindTab: NSView, PrimaryAction {
     func performPrimaryAction() { find() }
 
     private func load() {
-        guard let workspace = workspaces.active else { return }
-        if companyField.stringValue.isEmpty { companyField.stringValue = workspace.name }
-        if describeField.stringValue.isEmpty { describeField.stringValue = workspace.summary }
+        // The workspace is optional; deriving is not. This used to return early
+        // when there was no workspace -- which on a fresh install is always --
+        // so `derive` never ran, `updateReady` never ran, and the Find button
+        // kept the enabled look it was born with on a completely empty form.
+        if let workspace = workspaces.active {
+            if companyField.stringValue.isEmpty { companyField.stringValue = workspace.name }
+            if describeField.stringValue.isEmpty { describeField.stringValue = workspace.summary }
+        }
         if phrases.isEmpty { derive() }
     }
 
@@ -211,9 +216,23 @@ final class FindTab: NSView, PrimaryAction {
     }
 
     private func showEmpty() {
-        resultsStack.setViews([
-            NSTextField.themed(L.t(.nothingFoundYet), size: 11, color: Theme.textMuted)
-        ], in: .leading)
+        // The space where results will go is where somebody is already looking
+        // and already wondering what to do, so it explains rather than sitting
+        // blank. It is replaced by real results the moment there are any.
+        let described = !describeField.stringValue.trimmingCharacters(in: .whitespaces).isEmpty
+        let guide = Guide(steps: [
+            .init(title: L.t(.guide1), detail: L.t(.guide1Detail),
+                  examples: ["batch export my whole music library"], isNext: !described),
+            .init(title: L.t(.guide2), detail: L.t(.guide2Detail),
+                  examples: ["batch export", "music library"], isNext: described),
+            .init(title: L.t(.guide3), detail: L.t(.guide3Detail),
+                  examples: ["r/selfhosted", "r/musichoarder", "r/DataHoarder"]),
+            .init(title: L.t(.guide4), detail: L.t(.guide4Detail),
+                  examples: ["HOT · in the title · export", "posted · within the hour"]),
+        ])
+        guide.translatesAutoresizingMaskIntoConstraints = false
+        guide.widthAnchor.constraint(equalToConstant: 560).isActive = true
+        resultsStack.setViews([guide], in: .leading)
     }
 
     // MARK: - Finding
@@ -221,8 +240,11 @@ final class FindTab: NSView, PrimaryAction {
     /// Works out the phrases and puts them on screen. Does not search.
     @objc private func derive() {
         let described = describeField.stringValue.trimmingCharacters(in: .whitespaces)
-        guard !described.isEmpty else { return }
-        show(phrases: Discover.phrases(from: described))
+        // Empty is a state to show, not a reason to return. Bailing here meant
+        // `show` never ran, so `updateReady` never ran, so the Find button kept
+        // the enabled look it was born with -- solid and inviting, with nothing
+        // behind it. On an empty field it is now visibly disabled.
+        show(phrases: described.isEmpty ? [] : Discover.phrases(from: described))
     }
 
     private func show(phrases found: [String]) {

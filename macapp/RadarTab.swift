@@ -149,7 +149,6 @@ final class RadarTab: NSView, NSTableViewDataSource, NSTableViewDelegate, Primar
 
         emptyLabel.lineBreakMode = .byWordWrapping
         emptyLabel.maximumNumberOfLines = 0
-        emptyLabel.alignment = .center
         emptyLabel.translatesAutoresizingMaskIntoConstraints = false
 
         // Shortcuts nobody is told about are shortcuts nobody uses.
@@ -191,9 +190,9 @@ final class RadarTab: NSView, NSTableViewDataSource, NSTableViewDelegate, Primar
             listScroll.leadingAnchor.constraint(equalTo: left.leadingAnchor),
             listScroll.trailingAnchor.constraint(equalTo: left.trailingAnchor),
             listScroll.bottomAnchor.constraint(equalTo: left.bottomAnchor),
-            emptyLabel.centerXAnchor.constraint(equalTo: listScroll.centerXAnchor),
-            emptyLabel.centerYAnchor.constraint(equalTo: listScroll.centerYAnchor),
-            emptyLabel.widthAnchor.constraint(equalTo: listScroll.widthAnchor, constant: -60),
+            emptyLabel.topAnchor.constraint(equalTo: listScroll.topAnchor, constant: 8),
+            emptyLabel.leadingAnchor.constraint(equalTo: listScroll.leadingAnchor),
+            emptyLabel.widthAnchor.constraint(equalTo: listScroll.widthAnchor, constant: -8),
         ])
 
         // ---- right: the post, and the reply --------------------------------

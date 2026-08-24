@@ -50,6 +50,8 @@ enum L {
         case notRelevant, putBack, dismissed, dismissedNote, keyboardHint
         case rejectedPattern
         case menuFindPlaces, languageChanged, languageRelaunch, relaunchNow, later
+        case guide1, guide1Detail, guide2, guide2Detail
+        case guide3, guide3Detail, guide4, guide4Detail
     }
 
     static let languages: [(code: String, name: String)] = [
@@ -242,6 +244,15 @@ enum L {
         .notAPreset: "That is not a LeadSniper workspace file.",
         .presetTooNew: "That file was made by a newer version (%@). Update LeadSniper first.",
         .presetUnusable: "That file is missing %@, so it would import into something that cannot sweep.",
+
+        .guide1: "Say what you make",
+        .guide1Detail: "One sentence, in plain words — the way you would say it to somebody in a pub. Not a tagline.",
+        .guide2: "It pulls out what to search",
+        .guide2Detail: "Pairs of words, because that is the size that finds people. One word finds everything and means nothing.",
+        .guide3: "It finds where those people are",
+        .guide3Detail: "Searches each phrase and reports which communities the results came from. No list to compile — it works them out for whatever you sell.",
+        .guide4: "Then it watches, and tells you why",
+        .guide4Detail: "Every half hour. Each lead shows the exact words that matched, and a draft you have to put in your own words before it will let you copy it.",
 
         .menuFindPlaces: "Find Where They Talk",
         .languageChanged: "Language changed",
