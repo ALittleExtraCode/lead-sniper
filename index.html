@@ -2954,10 +2954,102 @@
       };
     }
 
-    function initDynamicLeads() {
-      const platList = (PLATFORM_DATA[activePlatform] && PLATFORM_DATA[activePlatform][activeKey]) || PLATFORM_DATA.reddit.saas;
-      const ws = WORKSPACES[activeKey];
+    function scoreIntent(title, body) {
+      const text = `${title} ${body}`.toLowerCase();
+      let score = 35;
+      if (/how (?:do|can|to)|looking for|recommend|best tool|alternative|what is the best|need recommendations|any software|struggling with|how to automate/i.test(text)) {
+        score += 35;
+      }
+      if (/automate|tool|software|dashboard|cart|stripe|billing|leads|onboarding|pipeline|zapier|sync|review|inventory|postgres|sheets/i.test(text)) {
+        score += 20;
+      }
+      if (/\[hiring\]|willing to pay|budget|hire/i.test(text)) {
+        score += 25;
+      }
+      score = Math.min(score, 97);
+      return {
+        score: score,
+        intent: score >= 65 ? "HOT" : "WARM"
+      };
+    }
 
+    function timeAgo(utcSeconds) {
+      if (!utcSeconds) return "just now";
+      const now = Math.floor(Date.now() / 1000);
+      const diff = Math.max(0, now - utcSeconds);
+      if (diff < 60) return "just now";
+      if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
+      if (diff < 86400) return `${Math.floor(diff / 3600)}h ago`;
+      return `${Math.floor(diff / 86400)}d ago`;
+    }
+
+    const WORKSPACE_SUBS = {
+      saas: "SaaS+SideProject+startups+webdev",
+      ecom: "shopify+ecommerce+FulfillmentByAmazon",
+      agency: "forhire+freelance+AgencyGrowth",
+      ai_tools: "ChatGPT+nocode+OpenAI",
+      video: "VideoEditing+AfterEffects",
+      local_biz: "smallbusiness+sweatystartup"
+    };
+
+    async function initDynamicLeads(isLiveScan = false) {
+      const ws = WORKSPACES[activeKey];
+      const subParam = WORKSPACE_SUBS[activeKey] || "SaaS+SideProject";
+      const badge = document.getElementById("liveTargetLockBadge");
+      if (badge) {
+        badge.textContent = "● CONNECTING LIVE FEED...";
+        badge.style.color = "#f59e0b";
+      }
+
+      // Try fetching 100% REAL LIVE data from Cloudflare Edge Worker API
+      try {
+        let apiUrl = `/api/reddit?sub=${subParam}`;
+        if (activePlatform === 'hn') apiUrl = `/api/hn`;
+
+        const resp = await fetch(apiUrl);
+        if (resp.ok) {
+          const data = await resp.json();
+          if (data && data.posts && data.posts.length > 0) {
+            dynamicLeads = data.posts.map((p, idx) => {
+              const scored = scoreIntent(p.title, p.body);
+              const lead = {
+                sub: p.sub || "r/community",
+                intent: scored.intent,
+                score: scored.score,
+                title: p.title,
+                body: p.body || p.title,
+                author: p.author || "u/prospect",
+                time: timeAgo(p.created_utc),
+                karma: (p.score ? p.score * 12 + 400 : Math.floor(Math.random() * 2000) + 400),
+                age: "2 yrs",
+                permalink: p.permalink || p.url || "https://www.reddit.com",
+                angle: (idx / data.posts.length) * (Math.PI * 2) - 0.7,
+                driftSpeed: (Math.random() * 0.003 + 0.001) * (idx % 2 === 0 ? 1 : -1)
+              };
+              lead.replies = generateRepliesForLead(lead, ws);
+              return lead;
+            });
+
+            if (badge) {
+              badge.textContent = `● LIVE STREAM (${dynamicLeads.length} TARGETS)`;
+              badge.style.color = "#10b981";
+            }
+
+            scannedTotal = Math.max(scannedTotal, 500 + dynamicLeads.length);
+            document.getElementById('scannedTotalVal').textContent = scannedTotal;
+
+            renderLeads();
+            updateWebhookPreview();
+            if (isLiveScan) showToast('🟢', `Pulled ${dynamicLeads.length} Real Live Submissions!`);
+            return;
+          }
+        }
+      } catch (err) {
+        // Smooth fallback for offline / static previews
+      }
+
+      // Fallback to local high-intent curated feeds
+      const platList = (PLATFORM_DATA[activePlatform] && PLATFORM_DATA[activePlatform][activeKey]) || PLATFORM_DATA.reddit.saas;
       dynamicLeads = platList.map((item, idx) => {
         const lead = { ...item };
         lead.permalink = item.link || "https://www.reddit.com";
@@ -2965,11 +3057,18 @@
         lead.replies = generateRepliesForLead(lead, ws);
         lead.karma = item.karma || Math.floor(Math.random() * 2000) + 400;
         lead.age = item.age || "2 yrs";
-        // Dynamic scope angle & drift
         lead.angle = (idx / platList.length) * (Math.PI * 2) - 0.7;
         lead.driftSpeed = (Math.random() * 0.003 + 0.001) * (idx % 2 === 0 ? 1 : -1);
         return lead;
       });
+
+      if (badge) {
+        badge.textContent = `● SCOPE LOCK ACQUIRED (${dynamicLeads.length} TARGETS)`;
+        badge.style.color = "#10b981";
+      }
+
+      renderLeads();
+      updateWebhookPreview();
     }
 
     function setPlatform(plat, el) {
@@ -3243,87 +3342,72 @@
     }
 
     // Dynamic Live Lead Ingestion Engine
-    function simulateScan() {
+    async function simulateScan() {
       const badge = document.getElementById("liveTargetLockBadge");
-      badge.textContent = "● SCANNING SCOPE...";
-      badge.style.color = "#f59e0b";
-      showToast('🎯', 'Scanning live stream for high-intent queries...');
+      if (badge) {
+        badge.textContent = "● SCANNING LIVE REDDIT STREAM...";
+        badge.style.color = "#f59e0b";
+      }
+      showToast('🎯', 'Scanning live stream for real-time submissions...');
 
-      setTimeout(() => {
-        badge.textContent = "● SCOPE LOCK ACQUIRED";
-        badge.style.color = "#10b981";
-
-        // Generate and inject a fresh high-intent lead with full body
-        injectFreshLiveLead();
-
-        scannedTotal += Math.floor(Math.random() * 4) + 2;
-        document.getElementById('scannedTotalVal').textContent = scannedTotal;
-
-        playTargetLockChime();
-        showToast('🎯', 'New High-Intent Target Locked in Scope!');
-      }, 450);
+      await initDynamicLeads(true);
+      playTargetLockChime();
     }
 
-    function injectFreshLiveLead() {
-      const ws = WORKSPACES[activeKey];
-      const authors = ["@alex_builds", "@prospect_dan", "@sarah_scale", "@mike_dev", "@ecom_king", "@growth_ninja", "@builder_kai", "@solo_maker"];
-      const randAuthor = authors[Math.floor(Math.random() * authors.length)];
-
-      const templates = [
-        {
-          title: `Looking for an automated tool to streamline ${ws.name} workflows in 2026`,
-          body: `Hi all! We are expanding our operations and our current manual process for ${ws.name} is creating big delays for our team. Looking for turnkey software that can automate this with zero complex backend setup. Any recommendations?`
-        },
-        {
-          title: `How do you handle bottlenecks in ${ws.name} without manual code?`,
-          body: `We are spending too much time manually synchronizing data and onboarding clients. Looking for a tool that gives us out-of-the-box automation and clean reporting.`
-        },
-        {
-          title: `What is the best alternative to Zapier for syncing ${ws.name} pipelines?`,
-          body: `Zapier costs are getting out of hand with all our multi-step tasks. Looking for dedicated tools that handle ${ws.name} workflows natively.`
-        },
-        {
-          title: `[Hiring] Need a developer / tool to automate ${ws.name} and client portals`,
-          body: `Budget: $2,500 - $4,500. Looking for someone or a proven software stack to set up our automated ${ws.name} portal.`
-        }
-      ];
-
-      const chosen = templates[Math.floor(Math.random() * templates.length)];
-      const randScore = Math.floor(Math.random() * 10) + 88; // 88 - 97%
-      const prefix = activePlatform === 'hn' ? 'Ask HN' : (activePlatform === 'ph' ? 'ProductHunt' : (activePlatform === 'ih' ? 'IndieHackers' : 'r/SaaS'));
-
-      const newLead = {
-        sub: prefix,
-        intent: "HOT",
-        score: randScore,
-        title: chosen.title,
-        body: chosen.body,
-        author: randAuthor,
-        time: "just now",
-        karma: Math.floor(Math.random() * 2500) + 500,
-        age: "1.5 yrs",
-        permalink: "https://www.reddit.com",
-        angle: Math.random() * Math.PI * 2,
-        driftSpeed: (Math.random() * 0.004 + 0.001)
-      };
-
-      newLead.replies = generateRepliesForLead(newLead, ws);
-
-      dynamicLeads.unshift(newLead);
-      if (dynamicLeads.length > 8) dynamicLeads.pop();
-
-      activeIndex = 0;
-      renderLeads();
-      updateWebhookPreview();
-    }
-
-    function scanCustomSub() {
+    async function scanCustomSub() {
       const sub = document.getElementById("customSubInput").value.trim().replace(/^r\//, '');
       if (!sub) return;
 
-      const ws = WORKSPACES[activeKey];
-      const customSubTitle = `What is the best workflow tool to solve operational bottlenecks in r/${sub}?`;
+      const badge = document.getElementById("liveTargetLockBadge");
+      if (badge) {
+        badge.textContent = `● SCANNING r/${sub}...`;
+        badge.style.color = "#f59e0b";
+      }
+      showToast('🔍', `Connecting to live r/${sub} stream...`);
 
+      const ws = WORKSPACES[activeKey];
+      try {
+        const resp = await fetch(`/api/reddit?sub=${encodeURIComponent(sub)}`);
+        if (resp.ok) {
+          const data = await resp.json();
+          if (data && data.posts && data.posts.length > 0) {
+            dynamicLeads = data.posts.map((p, idx) => {
+              const scored = scoreIntent(p.title, p.body);
+              const lead = {
+                sub: p.sub || `r/${sub}`,
+                intent: scored.intent,
+                score: scored.score,
+                title: p.title,
+                body: p.body || p.title,
+                author: p.author || "u/prospect",
+                time: timeAgo(p.created_utc),
+                karma: (p.score ? p.score * 12 + 400 : Math.floor(Math.random() * 2000) + 400),
+                age: "2 yrs",
+                permalink: p.permalink || p.url || `https://www.reddit.com/r/${sub}/`,
+                angle: (idx / data.posts.length) * (Math.PI * 2) - 0.7,
+                driftSpeed: (Math.random() * 0.003 + 0.001)
+              };
+              lead.replies = generateRepliesForLead(lead, ws);
+              return lead;
+            });
+
+            if (badge) {
+              badge.textContent = `● LIVE STREAM (r/${sub} • ${dynamicLeads.length} POSTS)`;
+              badge.style.color = "#10b981";
+            }
+
+            activeIndex = 0;
+            renderLeads();
+            updateWebhookPreview();
+            playTargetLockChime();
+            showToast('🟢', `Loaded ${dynamicLeads.length} live posts from r/${sub}!`);
+            return;
+          }
+        }
+      } catch (e) {}
+
+      // Fallback
+      const customSubTitle = `What is the best workflow tool to solve operational bottlenecks in r/${sub}?`;
       const newLead = {
         sub: `r/${sub}`,
         intent: "HOT",
