@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LeadSniper — #1 Autonomous Community Radar & Zero-API Lead Acquisition Suite</title>
-  <meta name="description" content="Acquire high-intent buyers and active users from Reddit, communities, and forums in real time. Zero API keys, AI intent scoring, multi-persona response engine, and 1-click assisted conversion.">
-  <meta name="keywords" content="lead sniper, reddit lead generation, community radar, ai growth tool, saas marketing, automated outreach, reddit marketing, social listening, indie hacker tools, sunoget growth">
+  <title>LeadSniper — Autonomous Community Radar & Real-Time Lead Acquisition Suite</title>
+  <meta name="description" content="Acquire high-intent buyers, clients, and active users from Reddit, communities, and forums in real time. Zero API keys, AI intent scoring, multi-persona response engine, and 1-click assisted conversion.">
+  <meta name="keywords" content="lead sniper, reddit lead generation, community radar, ai growth tool, saas marketing, automated outreach, reddit marketing, social listening, indie hacker tools, client acquisition">
   <meta name="author" content="LeadSniper Team">
   <link rel="canonical" href="https://leadsniper.com/">
   <meta name="theme-color" content="#38bdf8">
@@ -20,7 +20,7 @@
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="LeadSniper — Autonomous Community Radar">
-  <meta name="twitter:description" content="Zero-API real-time social listening, buying intent scoring, and 1-click conversion engine for founders and creators.">
+  <meta name="twitter:description" content="Zero-API real-time social listening, buying intent scoring, and 1-click conversion engine for founders, creators, and agencies.">
 
   <!-- Google Fonts: Plus Jakarta Sans + JetBrains Mono + Outfit -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -110,7 +110,7 @@
       color: var(--text-primary);
       font-family: var(--font);
       min-height: 100vh;
-      padding: 18px 16px 50px;
+      padding: 16px 16px 50px;
       display: flex;
       justify-content: center;
       position: relative;
@@ -535,6 +535,28 @@
       font-family: var(--font-mono);
     }
 
+    .filter-pills {
+      display: flex;
+      gap: 4px;
+    }
+
+    .filter-pill-btn {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      color: var(--text-muted);
+      font-size: 10px;
+      font-family: var(--font-mono);
+      padding: 2px 7px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .filter-pill-btn.active {
+      background: rgba(56, 189, 248, 0.15);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
     .stream-items {
       max-height: 480px;
       overflow-y: auto;
@@ -825,6 +847,36 @@
       cursor: pointer;
     }
 
+    /* Comparison Matrix */
+    .compare-table-wrapper {
+      background: var(--card-inner);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      overflow-x: auto;
+    }
+
+    .compare-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12.5px;
+    }
+
+    .compare-table th {
+      background: rgba(255, 255, 255, 0.03);
+      padding: 12px 16px;
+      text-align: left;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .compare-table td {
+      padding: 12px 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      color: var(--text-secondary);
+    }
+
     /* FAQ Accordion */
     .faq-item {
       background: var(--card-inner);
@@ -909,14 +961,14 @@
   <div class="ambient-glow-top"></div>
 
   <div class="container">
-    <!-- Top HUD Navigation -->
+    <!-- Top HUD Header -->
     <header class="header-bar">
       <a href="/" class="brand-group">
         <div class="brand-icon">🎯</div>
         <div>
           <div class="brand-title">LeadSniper</div>
         </div>
-        <span class="brand-tag">v1.1.0</span>
+        <span class="brand-tag">v1.2.0</span>
       </a>
 
       <div class="header-stats">
@@ -953,7 +1005,7 @@
         <span class="cyan">In Real Time With 1-Click Conversion.</span>
       </h1>
       <p class="hero-subtext">
-        LeadSniper continuously monitors community discussions, extracts user pain points, scores buying intent, and crafts authentic, non-spam responses with 100% clean direct links.
+        LeadSniper continuously monitors community discussions, extracts user pain points, scores buying intent, and crafts authentic, non-spam responses with 100% clean direct links for any business or creator.
       </p>
     </section>
 
@@ -961,6 +1013,7 @@
     <nav class="tabs-nav">
       <button class="tab-btn active" onclick="openTab('tab-radar')">🎯 Live Target Radar</button>
       <button class="tab-btn" onclick="openTab('tab-builder')">🛠️ Preset Builder & Export</button>
+      <button class="tab-btn" onclick="openTab('tab-comparison')">⚔️ Anti-Spam Playbook</button>
       <button class="tab-btn" onclick="openTab('tab-features')">⚡ Architecture & Specs</button>
       <button class="tab-btn" onclick="openTab('tab-calculator')">📊 Growth ROI Calculator</button>
       <button class="tab-btn" onclick="openTab('tab-faq')">❓ FAQ & Help Center</button>
@@ -972,7 +1025,7 @@
       <div class="radar-card">
         <div class="radar-top-controls">
           <div class="control-row">
-            <span style="font-size: 12px; font-weight: 600; color: var(--text-muted);">Preset:</span>
+            <span style="font-size: 12px; font-weight: 600; color: var(--text-muted);">Workspace:</span>
             <select id="activePresetSelect" class="preset-selector" onchange="onPresetChange()">
               <option value="saas" selected>🚀 Micro-SaaS & Web Apps (r/SaaS, r/SideProject)</option>
               <option value="ecom">🛍️ E-Commerce & Shopify (r/ecommerce, r/shopify)</option>
@@ -987,6 +1040,7 @@
           </div>
 
           <div class="control-row">
+            <button onclick="exportLeadsCsv()" class="btn-action-nav" style="padding: 5px 10px; border-color: rgba(16, 185, 129, 0.3); color: var(--emerald);">📥 Export CSV</button>
             <span id="liveTargetLockBadge" style="font-size: 11px; font-family: var(--font-mono); color: var(--emerald);">● TARGET LOCK ACQUIRED</span>
             <button onclick="simulateScan()" class="btn-action-nav" style="padding: 5px 12px;">⚡ Live Scan</button>
           </div>
@@ -997,7 +1051,11 @@
           <div class="stream-container">
             <div class="stream-header">
               <span>INCOMING HIGH-INTENT TARGETS</span>
-              <span id="leadCountDisplay">3 Targets</span>
+              <div class="filter-pills">
+                <button class="filter-pill-btn active" onclick="filterLeads('ALL', this)">ALL</button>
+                <button class="filter-pill-btn" onclick="filterLeads('HOT', this)">🔥 HOT</button>
+                <button class="filter-pill-btn" onclick="filterLeads('WARM', this)">⚡ WARM</button>
+              </div>
             </div>
             <div class="stream-items" id="leadsStreamList">
               <!-- Rendered via JS -->
@@ -1101,7 +1159,54 @@
       </div>
     </div>
 
-    <!-- TAB 3: ARCHITECTURE & FEATURES -->
+    <!-- TAB 3: SPAM VS SNIPER COMPARISON -->
+    <div id="tab-comparison" class="tab-content">
+      <div class="radar-card">
+        <h3 style="font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px;">⚔️ The Anti-Spam Battleplan</h3>
+        <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 16px;">Why LeadSniper achieves 8–18% conversion while traditional bot spam gets accounts banned in 24 hours.</p>
+
+        <div class="compare-table-wrapper">
+          <table class="compare-table">
+            <thead>
+              <tr>
+                <th>OPERATIONAL VECTOR</th>
+                <th style="color: #f87171;">❌ TRADITIONAL BOT SPAM</th>
+                <th style="color: #34d399;">✅ LEADSNIPER VALUE-FIRST ARCHITECTURE</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Link Formatting</strong></td>
+                <td style="color: #f87171;">Markdown bracket traps <code>[Click Here](...)</code></td>
+                <td style="color: #34d399;">100% clean, raw, unbracketed URLs (natural preview)</td>
+              </tr>
+              <tr>
+                <td><strong>Ingestion Method</strong></td>
+                <td style="color: #f87171;">Paid Reddit OAuth API (frequent 403 blocks)</td>
+                <td style="color: #34d399;">Zero-API public Atom streams (zero cost, zero bans)</td>
+              </tr>
+              <tr>
+                <td><strong>Posting Flow</strong></td>
+                <td style="color: #f87171;">Automated bot API posting (triggers captcha shadowbans)</td>
+                <td style="color: #34d399;">1-Click operator dispatch (human in the loop)</td>
+              </tr>
+              <tr>
+                <td><strong>Response Quality</strong></td>
+                <td style="color: #f87171;">Generic promotional copy ("Check out my app!")</td>
+                <td style="color: #34d399;">Direct problem solution + optional speedup link</td>
+              </tr>
+              <tr>
+                <td><strong>Community Sentiment</strong></td>
+                <td style="color: #f87171;">Downvoted (-5), flagged as spam by AutoMod</td>
+                <td style="color: #34d399;">Upvoted (+12), authentic creator gratitude</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 4: ARCHITECTURE & FEATURES -->
     <div id="tab-features" class="tab-content">
       <div class="grid-3col">
         <div class="feature-hud-card">
@@ -1142,7 +1247,7 @@
       </div>
     </div>
 
-    <!-- TAB 4: CONVERSION CALCULATOR -->
+    <!-- TAB 5: CONVERSION CALCULATOR -->
     <div id="tab-calculator" class="tab-content">
       <div class="radar-card">
         <h3 style="font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px;">🎯 Organic Lead Acquisition & ROI Estimator</h3>
@@ -1190,7 +1295,7 @@
       </div>
     </div>
 
-    <!-- TAB 5: FAQ & SUPPORT -->
+    <!-- TAB 6: FAQ & SUPPORT -->
     <div id="tab-faq" class="tab-content">
       <div class="radar-card">
         <h3 style="font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px;">❓ Frequently Asked Questions & Operational Help</h3>
@@ -1238,7 +1343,7 @@
       </div>
     </div>
 
-    <!-- TAB 6: DESKTOP APP -->
+    <!-- TAB 7: DESKTOP APP -->
     <div id="tab-desktop" class="tab-content">
       <div class="radar-card" style="text-align: center; padding: 40px 20px;">
         <div style="font-size: 40px; margin-bottom: 12px;">💻</div>
@@ -1263,6 +1368,7 @@
       <div class="footer-links">
         <a href="#tab-radar" onclick="openTab('tab-radar')">Live Radar</a>
         <a href="#tab-builder" onclick="openTab('tab-builder')">Preset Builder</a>
+        <a href="#tab-comparison" onclick="openTab('tab-comparison')">Anti-Spam Playbook</a>
         <a href="#tab-features" onclick="openTab('tab-features')">Architecture</a>
         <a href="#tab-calculator" onclick="openTab('tab-calculator')">Growth Calculator</a>
         <a href="#tab-faq" onclick="openTab('tab-faq')">FAQ & Support</a>
@@ -1484,6 +1590,7 @@
     let activeKey = "saas";
     let activeIndex = 0;
     let activePersona = "founder";
+    let activeFilter = "ALL";
 
     function onPresetChange() {
       activeKey = document.getElementById("activePresetSelect").value;
@@ -1497,6 +1604,14 @@
       document.querySelectorAll(".persona-tag-btn").forEach(b => b.classList.remove("active"));
       if (event && event.target) event.target.classList.add("active");
       updateReplyBox();
+    }
+
+    function filterLeads(filterType, el) {
+      activeFilter = filterType;
+      document.querySelectorAll('.filter-pill-btn').forEach(b => b.classList.remove('active'));
+      el.classList.add('active');
+      renderLeads();
+      playTargetLockChime();
     }
 
     function selectLead(idx) {
@@ -1513,16 +1628,28 @@
       const container = document.getElementById("leadsStreamList");
       container.innerHTML = "";
 
-      p.leads.forEach((lead, idx) => {
+      const filtered = p.leads.filter(l => {
+        if (activeFilter === "HOT") return l.intent === "HOT";
+        if (activeFilter === "WARM") return l.intent === "WARM";
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--text-muted); font-size: 12px;">No targets matching filter.</div>';
+        return;
+      }
+
+      filtered.forEach((lead, idx) => {
         const row = document.createElement("div");
         row.className = `lead-row ${idx === activeIndex ? "selected" : ""}`;
         row.onclick = () => selectLead(idx);
 
         const badgeClass = lead.intent === "HOT" ? "badge-intent-hot" : "badge-intent-warm";
+        const score = lead.intent === "HOT" ? "88%" : "54%";
         row.innerHTML = `
           <div class="lead-meta">
             <span class="lead-sub-tag">${lead.sub}</span>
-            <span class="${badgeClass}">${lead.intent} 🔥 85%</span>
+            <span class="${badgeClass}">${lead.intent} 🔥 ${score}</span>
           </div>
           <div class="lead-post-title">${lead.title}</div>
           <div style="font-size: 11px; color: #64748b;">u/${lead.author}</div>
@@ -1530,7 +1657,7 @@
         container.appendChild(row);
       });
 
-      document.getElementById("leadCountDisplay").textContent = `${p.leads.length} Targets`;
+      document.getElementById("leadCountDisplay").textContent = `${filtered.length} Targets`;
       updateReplyBox();
     }
 
@@ -1567,6 +1694,23 @@
           label.textContent = "1-Click Copy Reply & Open Reddit Post";
         }, 2200);
       });
+    }
+
+    function exportLeadsCsv() {
+      const p = PRESETS[activeKey];
+      let csv = "Subreddit,Author,Intent,Title,Permalink,RecommendedReply\n";
+      p.leads.forEach(l => {
+        const cleanTitle = `"${l.title.replace(/"/g, '""')}"`;
+        const cleanReply = `"${(l.replies[activePersona] || l.replies.founder).replace(/"/g, '""')}"`;
+        csv += `${l.sub},${l.author},${l.intent},${cleanTitle},${l.permalink},${cleanReply}\n`;
+      });
+
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `leadsniper_${activeKey}_export.csv`;
+      a.click();
+      playTargetLockChime();
     }
 
     function simulateScan() {
