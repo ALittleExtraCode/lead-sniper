@@ -153,7 +153,7 @@ extension CardView {
 /// idea on screen.
 final class CardView: NSView {
     var fill: NSColor = Theme.card
-    var radius: CGFloat = 14
+    var radius: CGFloat = 10
     /// Whether this is a surface at all. A section that is just a heading and
     /// some text does not need to be in a box, and boxing it is what made the
     /// interface look like a preferences pane.
@@ -220,11 +220,11 @@ final class AccentButton: NSButton {
             Theme.sunken.setFill(); path.fill()
             Theme.cardBorder.setStroke(); path.lineWidth = 1; path.stroke()
         } else if isDanger {
-            NSColor(srgbRed: 0xe1/255, green: 0x1d/255, blue: 0x48/255, alpha: 1).setFill()
-            path.fill()
+            Theme.bad.setFill(); path.fill()
         } else {
-            let g = NSGradient(starting: Theme.accentTop, ending: Theme.accentEnd)
-            g?.draw(in: path, angle: 300)
+            // Solid, not a gradient. A gradient is a web convention and this is
+            // set like a page, not like a landing page.
+            Theme.accent.setFill(); path.fill()
         }
         if isHighlighted && isEnabled {
             NSColor(white: 0, alpha: 0.18).setFill()

@@ -784,6 +784,17 @@
       font-weight: 600;
     }
 
+    .author-clickable-link {
+      color: var(--text-secondary);
+      text-decoration: underline dotted;
+      cursor: pointer;
+      transition: color 0.15s ease;
+    }
+
+    .author-clickable-link:hover {
+      color: var(--accent);
+    }
+
     .badge-intent-hot {
       background: rgba(239, 68, 68, 0.15);
       border: 1px solid rgba(239, 68, 68, 0.35);
@@ -847,7 +858,8 @@
       background: rgba(255, 255, 255, 0.02);
       border: 1px solid rgba(255, 255, 255, 0.06);
       border-radius: 8px;
-      padding: 11px;
+      padding: 12px;
+      position: relative;
     }
 
     .selected-lead-title {
@@ -858,10 +870,32 @@
       line-height: 1.38;
     }
 
+    .selected-lead-body-preview {
+      font-size: 12px;
+      color: var(--text-secondary);
+      background: rgba(0, 0, 0, 0.25);
+      border-left: 2px solid var(--accent);
+      padding: 6px 10px;
+      border-radius: 4px;
+      margin: 6px 0;
+      line-height: 1.45;
+      max-height: 60px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+    }
+
     .selected-lead-author {
       font-size: 11px;
       color: var(--text-muted);
       font-family: var(--font-mono);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px;
     }
 
     .persona-bar {
@@ -915,7 +949,7 @@
     /* Reply Action Buttons Grid */
     .dispatch-btn-group {
       display: grid;
-      grid-template-columns: 1fr auto;
+      grid-template-columns: 1fr auto auto;
       gap: 8px;
     }
 
@@ -964,6 +998,106 @@
       background: rgba(255, 255, 255, 0.1);
       border-color: var(--accent);
       color: var(--accent);
+    }
+
+    /* Post Intel Modal */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(4, 6, 11, 0.85);
+      backdrop-filter: blur(10px);
+      z-index: 100000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+      animation: modalFadeIn 0.2s ease;
+    }
+
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: scale(0.96); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .modal-card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      width: 100%;
+      max-width: 680px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 30px rgba(56, 189, 248, 0.2);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      position: relative;
+    }
+
+    .modal-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 1px solid var(--card-border);
+      padding-bottom: 14px;
+    }
+
+    .modal-close-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .modal-close-btn:hover {
+      background: rgba(239, 68, 68, 0.15);
+      border-color: var(--crimson);
+      color: #f87171;
+    }
+
+    .author-intel-badge {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .author-avatar-chip {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #0284c7 0%, #38bdf8 100%);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 13px;
+      font-family: var(--font-display);
+    }
+
+    .post-full-body-box {
+      background: var(--card-inner);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 16px;
+      font-size: 13.5px;
+      color: var(--text-primary);
+      line-height: 1.65;
+      white-space: pre-wrap;
     }
 
     /* Interactive Product Simulator */
@@ -1419,6 +1553,55 @@
     <span id="toastMsg">Target Locked in Scope</span>
   </div>
 
+  <!-- FULL POST & TARGET INTEL MODAL -->
+  <div id="postIntelModal" class="modal-backdrop" onclick="if(event.target===this)closePostModal()">
+    <div class="modal-card">
+      <div class="modal-header-row">
+        <div>
+          <div style="font-size: 10.5px; font-family: var(--font-mono); color: var(--accent); font-weight: 700; text-transform: uppercase;" id="modalPostSubreddit">r/SaaS • Public Discussion</div>
+          <h2 style="font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--text-primary); margin: 4px 0 8px 0;" id="modalPostTitle">Post Title</h2>
+          <div class="author-intel-badge">
+            <div class="author-avatar-chip" id="modalAuthorAvatar">U</div>
+            <div>
+              <div style="font-weight: 700; font-size: 13px; color: var(--text-primary);" id="modalAuthorName">u/username</div>
+              <div style="font-size: 11px; font-family: var(--font-mono); color: var(--text-muted);" id="modalAuthorStats">Karma: 1,420 • Account Age: 2 yrs • Verified Poster</div>
+            </div>
+          </div>
+        </div>
+        <button class="modal-close-btn" onclick="closePostModal()" title="Close Inspector">✕</button>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 700; color: var(--text-muted); margin-bottom: 6px; font-family: var(--font-mono);">ORIGINAL POST & QUESTION DETAILS:</div>
+        <div class="post-full-body-box" id="modalPostBody">
+          Post body text loading...
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; background: var(--card-inner); border: 1px solid var(--card-border); padding: 10px 14px; border-radius: 8px; flex-wrap: wrap; gap: 8px;">
+        <div style="font-size: 12px;">
+          <span style="color: var(--text-muted);">Intent Density: </span>
+          <strong id="modalIntentScore" style="color: var(--emerald); font-family: var(--font-mono);">94% HOT BUYING INTENT</strong>
+        </div>
+        <a id="modalExternalLink" href="#" target="_blank" rel="noopener noreferrer" class="btn-action-nav" style="padding: 5px 12px; color: var(--accent); border-color: var(--accent);">
+          <span>↗️ Open Original Thread in Reddit</span>
+        </a>
+      </div>
+
+      <div>
+        <div style="font-size: 11.5px; font-weight: 700; color: var(--text-muted); margin-bottom: 6px; font-family: var(--font-mono);">SYNTHESIZED CONTEXTUAL REPLY:</div>
+        <textarea id="modalReplyTextarea" class="reply-textarea" style="min-height: 90px;" spellcheck="false"></textarea>
+      </div>
+
+      <div style="display: flex; gap: 8px; justify-content: flex-end;">
+        <button onclick="copyModalReply()" class="btn-dispatch" style="padding: 10px 18px;">
+          <span id="modalCopyBtnIcon">📋</span>
+          <span id="modalCopyBtnText">1-Click Copy Reply</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
   <div class="container">
     <!-- Top HUD Header -->
     <header class="header-bar">
@@ -1585,7 +1768,13 @@
             <div>
               <div class="selected-lead-card">
                 <div class="selected-lead-title" id="cardLeadTitle">Select a target from the radar...</div>
-                <div class="selected-lead-author" id="cardLeadMeta">r/-- • u/-- • Intent: --</div>
+                <div class="selected-lead-body-preview" id="cardLeadBodyPreview">Loading full post context...</div>
+                
+                <div class="selected-lead-author">
+                  <span id="cardLeadMeta">r/-- • @-- • Intent: --</span>
+                  <button onclick="openPostModal()" class="btn-action-nav" style="padding: 2px 8px; font-size: 10.5px; border-color: rgba(56, 189, 248, 0.3); color: var(--accent);">👁️ Inspect Full Post</button>
+                </div>
+
                 <div class="score-breakdown-bar" id="scoreBreakdownBar">
                   <span class="score-chip">Question Pattern: +35%</span>
                   <span class="score-chip">Feature Match: +25%</span>
@@ -1605,11 +1794,15 @@
               <textarea id="replyTextarea" class="reply-textarea" spellcheck="false"></textarea>
             </div>
 
-            <!-- Two Distinct Action Buttons -->
+            <!-- Distinct Action Buttons -->
             <div class="dispatch-btn-group">
               <button class="btn-dispatch" id="mainDispatchBtn" onclick="copyReplyOnly()">
                 <span id="btnDispatchIcon">📋</span>
                 <span id="btnDispatchText">1-Click Copy Reply</span>
+              </button>
+
+              <button class="btn-open-post" onclick="openPostModal()" title="View full post body and author profile">
+                <span>👁️ View Post</span>
               </button>
 
               <button class="btn-open-post" onclick="openCurrentThread()">
@@ -2292,104 +2485,446 @@
       if (soundEnabled) playTargetLockChime();
     }
 
-    // Platform Specific Lead Feeds
+    // Platform Specific Lead Feeds with FULL Original Post Bodies
     const PLATFORM_DATA = {
       reddit: {
         saas: [
-          { sub: "r/SaaS", intent: "HOT", score: 94, title: "Looking for a reliable tool to automate customer workflow reports", author: "EfficiencyWhich5225", time: "just now", link: "https://www.reddit.com/r/SaaS/" },
-          { sub: "r/SideProject", intent: "HOT", score: 92, title: "How do you automate client dashboards without custom backend code?", author: "sarah_builds", time: "3m ago", link: "https://www.reddit.com/r/SideProject/" },
-          { sub: "r/webdev", intent: "WARM", score: 68, title: "What is your stack for background job processing and webhook syncs?", author: "dev_marcus", time: "8m ago", link: "https://www.reddit.com/r/webdev/" },
-          { sub: "r/startups", intent: "HOT", score: 89, title: "Best alternative to manual spreadsheets for weekly pipeline updates?", author: "founder_dan", time: "14m ago", link: "https://www.reddit.com/r/startups/" }
+          {
+            sub: "r/SaaS",
+            intent: "HOT",
+            score: 94,
+            title: "Looking for a reliable tool to automate customer workflow reports",
+            body: "Hey r/SaaS! Every week we spend 4-6 hours pulling data from Stripe, Postgres, and Mixpanel into Google Sheets to build customer status reports. Our clients are asking for automated PDF/web dashboards.\n\nDoes anyone know of a tool that connects to our database and sends automated reports without us having to code a whole custom frontend? Willing to pay up to $100/mo.",
+            author: "EfficiencyWhich5225",
+            time: "just now",
+            karma: 1840,
+            age: "3 yrs",
+            link: "https://www.reddit.com/r/SaaS/"
+          },
+          {
+            sub: "r/SideProject",
+            intent: "HOT",
+            score: 92,
+            title: "How do you automate client dashboards without custom backend code?",
+            body: "I'm a solo founder launching a B2B analytics tool. I need to give each client their own dashboard with live metrics, but building auth, permissions, and database sync from scratch is taking forever.\n\nWhat are you guys using in 2026 to ship client dashboards fast?",
+            author: "sarah_builds",
+            time: "3m ago",
+            karma: 920,
+            age: "1 yr",
+            link: "https://www.reddit.com/r/SideProject/"
+          },
+          {
+            sub: "r/webdev",
+            intent: "WARM",
+            score: 68,
+            title: "What is your stack for background job processing and webhook syncs?",
+            body: "We are building an edge-rendered web app and need to trigger background jobs whenever users update records. Redis and BullMQ seem heavy to maintain on serverless.\n\nAny recommended lightweight serverless alternatives?",
+            author: "dev_marcus",
+            time: "8m ago",
+            karma: 4300,
+            age: "5 yrs",
+            link: "https://www.reddit.com/r/webdev/"
+          },
+          {
+            sub: "r/startups",
+            intent: "HOT",
+            score: 89,
+            title: "Best alternative to manual spreadsheets for weekly pipeline updates?",
+            body: "Our sales team is currently logging everything into shared sheets. It gets messy fast and formulas keep breaking. Need a turnkey automated pipeline tool.",
+            author: "founder_dan",
+            time: "14m ago",
+            karma: 740,
+            age: "8 mos",
+            link: "https://www.reddit.com/r/startups/"
+          }
         ],
         ecom: [
-          { sub: "r/shopify", intent: "HOT", score: 95, title: "How can I automatically recover abandoned carts via WhatsApp or SMS?", author: "store_grower", time: "just now", link: "https://www.reddit.com/r/shopify/" },
-          { sub: "r/ecommerce", intent: "HOT", score: 88, title: "Best tool to sync inventory across Shopify, TikTok Shop, and Amazon?", author: "omni_seller", time: "5m ago", link: "https://www.reddit.com/r/ecommerce/" },
-          { sub: "r/FulfillmentByAmazon", intent: "WARM", score: 64, title: "Automating product review requests without violating TOS?", author: "amazon_pro", time: "12m ago", link: "https://www.reddit.com/r/FulfillmentByAmazon/" }
+          {
+            sub: "r/shopify",
+            intent: "HOT",
+            score: 95,
+            title: "How can I automatically recover abandoned carts via WhatsApp or SMS?",
+            body: "We run a Shopify store doing around $40k/mo. Our email abandonment flow only recovers about 3% because emails go to promo tabs. Want to trigger instant WhatsApp/SMS recovery messages within 15 minutes of checkout drop-off.\n\nWhat's the highest converting app for this right now?",
+            author: "store_grower",
+            time: "just now",
+            karma: 2100,
+            age: "2 yrs",
+            link: "https://www.reddit.com/r/shopify/"
+          },
+          {
+            sub: "r/ecommerce",
+            intent: "HOT",
+            score: 88,
+            title: "Best tool to sync inventory across Shopify, TikTok Shop, and Amazon?",
+            body: "Overselling is killing our seller rating on Amazon when viral TikTok Shop spikes happen. Looking for a 2-way real time inventory sync tool.",
+            author: "omni_seller",
+            time: "5m ago",
+            karma: 1540,
+            age: "1.5 yrs",
+            link: "https://www.reddit.com/r/ecommerce/"
+          },
+          {
+            sub: "r/FulfillmentByAmazon",
+            intent: "WARM",
+            score: 64,
+            title: "Automating product review requests without violating TOS?",
+            body: "Looking to safely trigger automated review emails after delivery. Any app that complies 100% with Amazon Buyer-Seller guidelines?",
+            author: "amazon_pro",
+            time: "12m ago",
+            karma: 3200,
+            age: "4 yrs",
+            link: "https://www.reddit.com/r/FulfillmentByAmazon/"
+          }
         ],
         agency: [
-          { sub: "r/forhire", intent: "HOT", score: 96, title: "[Hiring] Need a developer to build automated dashboard & Stripe billing", author: "founder_scale", time: "just now", link: "https://www.reddit.com/r/forhire/" },
-          { sub: "r/freelance", intent: "WARM", score: 65, title: "How do you automate client onboarding contracts and invoice reminders?", author: "design_nomad", time: "7m ago", link: "https://www.reddit.com/r/freelance/" },
-          { sub: "r/AgencyGrowth", intent: "HOT", score: 91, title: "Looking for a turnkey client portal to replace manual Notion docs", author: "agency_lead", time: "16m ago", link: "https://www.reddit.com/r/AgencyGrowth/" }
+          {
+            sub: "r/forhire",
+            intent: "HOT",
+            score: 96,
+            title: "[Hiring] Need a developer to build automated dashboard & Stripe billing",
+            body: "Budget: $3,000 - $5,000 fixed. We are looking for an experienced developer or agency to build an automated client portal with Stripe subscription billing, invoice downloads, and usage tracking.\n\nMust have proven case studies with Stripe webhooks and React/Node. Please share portfolio links.",
+            author: "founder_scale",
+            time: "just now",
+            karma: 650,
+            age: "1 yr",
+            link: "https://www.reddit.com/r/forhire/"
+          },
+          {
+            sub: "r/freelance",
+            intent: "WARM",
+            score: 65,
+            title: "How do you automate client onboarding contracts and invoice reminders?",
+            body: "Tired of manually emailing PDF contracts and chasing late invoices every month. What tools do you use to automate client intake?",
+            author: "design_nomad",
+            time: "7m ago",
+            karma: 1890,
+            age: "3 yrs",
+            link: "https://www.reddit.com/r/freelance/"
+          }
         ],
         ai_tools: [
-          { sub: "r/ChatGPT", intent: "HOT", score: 93, title: "How to connect GPT-4 to Google Sheets to auto-research leads?", author: "growth_hacker99", time: "just now", link: "https://www.reddit.com/r/ChatGPT/" },
-          { sub: "r/nocode", intent: "HOT", score: 87, title: "Best tool to build custom AI customer support agents for clients?", author: "nocode_builder", time: "4m ago", link: "https://www.reddit.com/r/nocode/" },
-          { sub: "r/OpenAI", intent: "WARM", score: 62, title: "Handling webhook latency when streaming long LLM responses?", author: "ai_eng", time: "19m ago", link: "https://www.reddit.com/r/OpenAI/" }
+          {
+            sub: "r/ChatGPT",
+            intent: "HOT",
+            score: 93,
+            title: "How to connect GPT-4 to Google Sheets to auto-research leads?",
+            body: "I have a list of 500 company URLs. I want an automated formula in Google Sheets where GPT visits each site and extracts the pricing model, tech stack, and founder names.\n\nWhat tool or extension makes this easy without writing Python scripts?",
+            author: "growth_hacker99",
+            time: "just now",
+            karma: 1100,
+            age: "1 yr",
+            link: "https://www.reddit.com/r/ChatGPT/"
+          },
+          {
+            sub: "r/nocode",
+            intent: "HOT",
+            score: 87,
+            title: "Best tool to build custom AI customer support agents for clients?",
+            body: "Need to upload PDF manuals and Notion docs so the bot answers customer queries with high precision and citations.",
+            author: "nocode_builder",
+            time: "4m ago",
+            karma: 840,
+            age: "9 mos",
+            link: "https://www.reddit.com/r/nocode/"
+          }
         ],
         video: [
-          { sub: "r/VideoEditing", intent: "HOT", score: 91, title: "Any free tool to auto-generate karaoke animated subtitles?", author: "clip_master", time: "just now", link: "https://www.reddit.com/r/VideoEditing/" },
-          { sub: "r/AfterEffects", intent: "WARM", score: 66, title: "Best batch rendering script for TikTok reels and shorts?", author: "vfx_creator", time: "9m ago", link: "https://www.reddit.com/r/AfterEffects/" }
+          {
+            sub: "r/VideoEditing",
+            intent: "HOT",
+            score: 91,
+            title: "Any free tool to auto-generate karaoke animated subtitles?",
+            body: "Looking for a tool that automatically creates word-by-word highlighted captions for TikTok/Reels with zero manual keyframing.",
+            author: "clip_master",
+            time: "just now",
+            karma: 950,
+            age: "1.2 yrs",
+            link: "https://www.reddit.com/r/VideoEditing/"
+          }
         ],
         local_biz: [
-          { sub: "r/smallbusiness", intent: "HOT", score: 94, title: "How can I get more Google 5-star reviews from past customers automatically?", author: "plumbing_owner", time: "just now", link: "https://www.reddit.com/r/smallbusiness/" },
-          { sub: "r/sweatystartup", intent: "HOT", score: 89, title: "Automated SMS reminders for lawn care and service bookings?", author: "green_care", time: "6m ago", link: "https://www.reddit.com/r/sweatystartup/" }
+          {
+            sub: "r/smallbusiness",
+            intent: "HOT",
+            score: 94,
+            title: "How can I get more Google 5-star reviews from past customers automatically?",
+            body: "We run a plumbing & heating service. We do 30 jobs a week, but only 2 people leave reviews. Looking for automated SMS software that texts clients right after the job is finished.",
+            author: "plumbing_owner",
+            time: "just now",
+            karma: 560,
+            age: "2 yrs",
+            link: "https://www.reddit.com/r/smallbusiness/"
+          }
         ]
       },
       hn: {
         saas: [
-          { sub: "Ask HN", intent: "HOT", score: 96, title: "Ask HN: What lightweight tool do you use to automate report pipelines?", author: "t_hacker", time: "just now", link: "https://news.ycombinator.com" },
-          { sub: "Ask HN", intent: "HOT", score: 91, title: "Ask HN: Simple zero-backend client reporting dashboard recommendations?", author: "pg_fan", time: "4m ago", link: "https://news.ycombinator.com" },
-          { sub: "Show HN", intent: "WARM", score: 72, title: "Show HN: Modern async event pipelines for SaaS products", author: "cloud_dev", time: "11m ago", link: "https://news.ycombinator.com" }
+          {
+            sub: "Ask HN",
+            intent: "HOT",
+            score: 96,
+            title: "Ask HN: What lightweight tool do you use to automate report pipelines?",
+            body: "We currently have cron jobs writing CSV dumps to S3. Looking for modern tooling to turn raw warehouse data into polished customer reports without maintaining Grafana or Metabase instances.",
+            author: "t_hacker",
+            time: "just now",
+            karma: 8400,
+            age: "7 yrs",
+            link: "https://news.ycombinator.com"
+          },
+          {
+            sub: "Ask HN",
+            intent: "HOT",
+            score: 91,
+            title: "Ask HN: Simple zero-backend client reporting dashboard recommendations?",
+            body: "Building a SaaS tool and want to embed customer analytics. Prefer a turn-key embeddable widget rather than custom charting from scratch.",
+            author: "pg_fan",
+            time: "4m ago",
+            karma: 3200,
+            age: "4 yrs",
+            link: "https://news.ycombinator.com"
+          }
         ],
         ecom: [
-          { sub: "Ask HN", intent: "HOT", score: 93, title: "Ask HN: How do you handle webhook idempotency in Shopify cart recovery?", author: "merchant_eng", time: "just now", link: "https://news.ycombinator.com" },
-          { sub: "Ask HN", intent: "HOT", score: 88, title: "Ask HN: Best open APIs for multi-channel inventory reconciliation?", author: "stock_bot", time: "8m ago", link: "https://news.ycombinator.com" }
+          {
+            sub: "Ask HN",
+            intent: "HOT",
+            score: 93,
+            title: "Ask HN: How do you handle webhook idempotency in Shopify cart recovery?",
+            body: "Looking for reliable SaaS tools that handle checkout webhook pipelines without duplicate message dispatching.",
+            author: "merchant_eng",
+            time: "just now",
+            karma: 2900,
+            age: "3 yrs",
+            link: "https://news.ycombinator.com"
+          }
         ],
         agency: [
-          { sub: "Ask HN", intent: "HOT", score: 97, title: "Ask HN: Who is hiring developer to build custom Stripe billing & portals?", author: "yc_founder", time: "just now", link: "https://news.ycombinator.com" },
-          { sub: "Ask HN", intent: "WARM", score: 68, title: "Ask HN: Best billing and client contract automation stack for small studios?", author: "studio_dev", time: "15m ago", link: "https://news.ycombinator.com" }
+          {
+            sub: "Ask HN",
+            intent: "HOT",
+            score: 97,
+            title: "Ask HN: Who is hiring developer to build custom Stripe billing & portals?",
+            body: "We have an ongoing pipeline of client portal integrations. Looking for experienced specialists.",
+            author: "yc_founder",
+            time: "just now",
+            karma: 5100,
+            age: "6 yrs",
+            link: "https://news.ycombinator.com"
+          }
         ],
         ai_tools: [
-          { sub: "Ask HN", intent: "HOT", score: 95, title: "Ask HN: Reliable tool to connect LLM agents to Google Sheets & Airtable?", author: "llm_researcher", time: "just now", link: "https://news.ycombinator.com" },
-          { sub: "Ask HN", intent: "HOT", score: 90, title: "Ask HN: How are you deploying low-latency document QA bots for clients?", author: "rag_builder", time: "7m ago", link: "https://news.ycombinator.com" }
+          {
+            sub: "Ask HN",
+            intent: "HOT",
+            score: 95,
+            title: "Ask HN: Reliable tool to connect LLM agents to Google Sheets & Airtable?",
+            body: "Looking for production-ready middleware to orchestrate LLM prompts across spreadsheet tables.",
+            author: "llm_researcher",
+            time: "just now",
+            karma: 4100,
+            age: "5 yrs",
+            link: "https://news.ycombinator.com"
+          }
         ],
         video: [
-          { sub: "Ask HN", intent: "HOT", score: 89, title: "Ask HN: Fast tools for subtitle generation and alignment via Whisper?", author: "audio_coder", time: "just now", link: "https://news.ycombinator.com" }
+          {
+            sub: "Ask HN",
+            intent: "HOT",
+            score: 89,
+            title: "Ask HN: Fast tools for subtitle generation and alignment via Whisper?",
+            body: "Need a fast cloud API or web tool that performs word-level timestamp alignment for video captioning.",
+            author: "audio_coder",
+            time: "just now",
+            karma: 1700,
+            age: "2 yrs",
+            link: "https://news.ycombinator.com"
+          }
         ],
         local_biz: [
-          { sub: "Ask HN", intent: "HOT", score: 91, title: "Ask HN: How do local service businesses automate customer SMS review loops?", author: "local_cto", time: "just now", link: "https://news.ycombinator.com" }
+          {
+            sub: "Ask HN",
+            intent: "HOT",
+            score: 91,
+            title: "Ask HN: How do local service businesses automate customer SMS review loops?",
+            body: "Looking to implement automated post-service review sequences with positive sentiment filtering.",
+            author: "local_cto",
+            time: "just now",
+            karma: 2200,
+            age: "3 yrs",
+            link: "https://news.ycombinator.com"
+          }
         ]
       },
       ph: {
         saas: [
-          { sub: "ProductHunt", intent: "HOT", score: 94, title: "Looking for an automated customer reporting suite to replace spreadsheets", author: "ph_maker9", time: "just now", link: "https://www.producthunt.com" },
-          { sub: "ProductHunt", intent: "HOT", score: 90, title: "What is your favorite stack for building client analytics dashboards?", author: "laura_growth", time: "5m ago", link: "https://www.producthunt.com" }
+          {
+            sub: "ProductHunt",
+            intent: "HOT",
+            score: 94,
+            title: "Looking for an automated customer reporting suite to replace spreadsheets",
+            body: "We're launching on ProductHunt next month and need a way to send weekly automated usage summaries to our early adopters. Any recommendations?",
+            author: "ph_maker9",
+            time: "just now",
+            karma: 950,
+            age: "1 yr",
+            link: "https://www.producthunt.com"
+          }
         ],
         ecom: [
-          { sub: "ProductHunt", intent: "HOT", score: 93, title: "What tools do Shopify store owners use for automated SMS checkout recovery?", author: "ecom_hunter", time: "just now", link: "https://www.producthunt.com" }
+          {
+            sub: "ProductHunt",
+            intent: "HOT",
+            score: 93,
+            title: "What tools do Shopify store owners use for automated SMS checkout recovery?",
+            body: "Looking for tools that integrate natively with Shopify checkout to recover lost carts with SMS.",
+            author: "ecom_hunter",
+            time: "just now",
+            karma: 1200,
+            age: "2 yrs",
+            link: "https://www.producthunt.com"
+          }
         ],
         agency: [
-          { sub: "ProductHunt", intent: "HOT", score: 95, title: "Looking for development agency to build custom customer billing portal", author: "saas_director", time: "just now", link: "https://www.producthunt.com" }
+          {
+            sub: "ProductHunt",
+            intent: "HOT",
+            score: 95,
+            title: "Looking for development agency to build custom customer billing portal",
+            body: "Need a development team to build an enterprise Stripe portal with SSO and team seats.",
+            author: "saas_director",
+            time: "just now",
+            karma: 1800,
+            age: "2.5 yrs",
+            link: "https://www.producthunt.com"
+          }
         ],
         ai_tools: [
-          { sub: "ProductHunt", intent: "HOT", score: 92, title: "Best AI agents to automate lead research directly inside spreadsheets?", author: "ai_hunter", time: "just now", link: "https://www.producthunt.com" }
+          {
+            sub: "ProductHunt",
+            intent: "HOT",
+            score: 92,
+            title: "Best AI agents to automate lead research directly inside spreadsheets?",
+            body: "Looking for an AI tool that populates lead data and summaries directly into our sheets in real time.",
+            author: "ai_hunter",
+            time: "just now",
+            karma: 1400,
+            age: "1.5 yrs",
+            link: "https://www.producthunt.com"
+          }
         ],
         video: [
-          { sub: "ProductHunt", intent: "HOT", score: 88, title: "Any tool to auto-generate styled animated subtitles in 1 click?", author: "video_marketer", time: "just now", link: "https://www.producthunt.com" }
+          {
+            sub: "ProductHunt",
+            intent: "HOT",
+            score: 88,
+            title: "Any tool to auto-generate styled animated subtitles in 1 click?",
+            body: "Looking for an instant subtitle tool with viral presets and animations for short-form clips.",
+            author: "video_marketer",
+            time: "just now",
+            karma: 800,
+            age: "1 yr",
+            link: "https://www.producthunt.com"
+          }
         ],
         local_biz: [
-          { sub: "ProductHunt", intent: "HOT", score: 90, title: "Automated SMS review generation tools for local home services", author: "biz_ops", time: "just now", link: "https://www.producthunt.com" }
+          {
+            sub: "ProductHunt",
+            intent: "HOT",
+            score: 90,
+            title: "Automated SMS review generation tools for local home services",
+            body: "Need an SMS automation tool that requests Google reviews from clients after appointments.",
+            author: "biz_ops",
+            time: "just now",
+            karma: 600,
+            age: "9 mos",
+            link: "https://www.producthunt.com"
+          }
         ]
       },
       ih: {
         saas: [
-          { sub: "IndieHackers", intent: "HOT", score: 95, title: "How I automated client reports to save 12 hours weekly — what tools do you use?", author: "indie_ben", time: "just now", link: "https://www.indiehackers.com" },
-          { sub: "IndieHackers", intent: "HOT", score: 91, title: "Looking for a simple way to give users a self-service dashboard without custom code", author: "solobuilder", time: "6m ago", link: "https://www.indiehackers.com" }
+          {
+            sub: "IndieHackers",
+            intent: "HOT",
+            score: 95,
+            title: "How I automated client reports to save 12 hours weekly — what tools do you use?",
+            body: "Manual reporting was the biggest bottleneck in my indie SaaS. Now looking for dedicated SaaS tools to recommend to my consulting clients.",
+            author: "indie_ben",
+            time: "just now",
+            karma: 3400,
+            age: "4 yrs",
+            link: "https://www.indiehackers.com"
+          }
         ],
         ecom: [
-          { sub: "IndieHackers", intent: "HOT", score: 92, title: "Recovering 14% of abandoned checkouts via automated SMS — recommended tools?", author: "ecom_hacker", time: "just now", link: "https://www.indiehackers.com" }
+          {
+            sub: "IndieHackers",
+            intent: "HOT",
+            score: 92,
+            title: "Recovering 14% of abandoned checkouts via automated SMS — recommended tools?",
+            body: "Shared my teardown of SMS cart recovery. What software stack are other indie ecom builders using?",
+            author: "ecom_hacker",
+            time: "just now",
+            karma: 2100,
+            age: "2 yrs",
+            link: "https://www.indiehackers.com"
+          }
         ],
         agency: [
-          { sub: "IndieHackers", intent: "HOT", score: 96, title: "Looking to hire developer to set up Stripe billing & automated client onboarding", author: "agency_sam", time: "just now", link: "https://www.indiehackers.com" }
+          {
+            sub: "IndieHackers",
+            intent: "HOT",
+            score: 96,
+            title: "Looking to hire developer to set up Stripe billing & automated client onboarding",
+            body: "Need a freelancer to build client intake forms and automated Stripe invoicing for our boutique agency.",
+            author: "agency_sam",
+            time: "just now",
+            karma: 1500,
+            age: "1.5 yrs",
+            link: "https://www.indiehackers.com"
+          }
         ],
         ai_tools: [
-          { sub: "IndieHackers", intent: "HOT", score: 93, title: "How to connect OpenAI API to Google Sheets for prospecting automation?", author: "growth_indie", time: "just now", link: "https://www.indiehackers.com" }
+          {
+            sub: "IndieHackers",
+            intent: "HOT",
+            score: 93,
+            title: "How to connect OpenAI API to Google Sheets for prospecting automation?",
+            body: "Building an automated prospecting pipeline in Google Sheets. Looking for no-code tools to run AI prompts across rows.",
+            author: "growth_indie",
+            time: "just now",
+            karma: 2800,
+            age: "3 yrs",
+            link: "https://www.indiehackers.com"
+          }
         ],
         video: [
-          { sub: "IndieHackers", intent: "HOT", score: 87, title: "What video tools do you use to auto-generate viral captions and shorts?", author: "creator_kai", time: "just now", link: "https://www.indiehackers.com" }
+          {
+            sub: "IndieHackers",
+            intent: "HOT",
+            score: 87,
+            title: "What video tools do you use to auto-generate viral captions and shorts?",
+            body: "Looking for video automation tools to batch create Shorts and Reels with styled animated captions.",
+            author: "creator_kai",
+            time: "just now",
+            karma: 1100,
+            age: "1 yr",
+            link: "https://www.indiehackers.com"
+          }
         ],
         local_biz: [
-          { sub: "IndieHackers", intent: "HOT", score: 92, title: "Scaling a local service biz from 0 to $20k MRR — automated review strategies?", author: "local_builder", time: "just now", link: "https://www.indiehackers.com" }
+          {
+            sub: "IndieHackers",
+            intent: "HOT",
+            score: 92,
+            title: "Scaling a local service biz from 0 to $20k MRR — automated review strategies?",
+            body: "Automated SMS review requests after job completion have been our biggest growth channel. What software do you recommend?",
+            author: "local_builder",
+            time: "just now",
+            karma: 1900,
+            age: "2 yrs",
+            link: "https://www.indiehackers.com"
+          }
         ]
       }
     };
@@ -2426,7 +2961,10 @@
       dynamicLeads = platList.map((item, idx) => {
         const lead = { ...item };
         lead.permalink = item.link || "https://www.reddit.com";
+        lead.body = item.body || `Hey everyone! Looking for the best recommended tools or software to solve this exact workflow. Any suggestions appreciated!`;
         lead.replies = generateRepliesForLead(lead, ws);
+        lead.karma = item.karma || Math.floor(Math.random() * 2000) + 400;
+        lead.age = item.age || "2 yrs";
         // Dynamic scope angle & drift
         lead.angle = (idx / platList.length) * (Math.PI * 2) - 0.7;
         lead.driftSpeed = (Math.random() * 0.003 + 0.001) * (idx % 2 === 0 ? 1 : -1);
@@ -2538,7 +3076,10 @@
             </div>
           </div>
           <div class="lead-post-title">${lead.title}</div>
-          <div style="font-size: 11px; color: #64748b;">${lead.author}</div>
+          <div style="display: flex; justify-content: space-between; font-size: 11px; color: #64748b; margin-top: 2px;">
+            <span class="author-clickable-link" onclick="event.stopPropagation(); selectLead(${idx}); openPostModal();" title="Click to view user's full post">👤 ${lead.author}</span>
+            <span style="font-family: var(--font-mono); font-size: 10px; color: var(--accent);" onclick="event.stopPropagation(); selectLead(${idx}); openPostModal();">👁️ View Full Post ➔</span>
+          </div>
         `;
         container.appendChild(row);
       });
@@ -2557,11 +3098,74 @@
       const ws = WORKSPACES[activeKey];
       const score = lead.score || (lead.intent === "HOT" ? 88 : 54);
       document.getElementById("cardLeadTitle").textContent = lead.title;
-      document.getElementById("cardLeadMeta").textContent = `${lead.sub} • ${lead.author} • Intent: ${lead.intent} 🔥 (${score}%)`;
+      document.getElementById("cardLeadBodyPreview").textContent = lead.body || "No additional body text.";
+      document.getElementById("cardLeadMeta").innerHTML = `${lead.sub} • <span class="author-clickable-link" onclick="openPostModal()" title="Inspect user profile and full post">${lead.author}</span> • Intent: ${lead.intent} 🔥 (${score}%)`;
 
       const replies = lead.replies || generateRepliesForLead(lead, ws);
       const reply = replies[activePersona] || replies.founder;
       document.getElementById("replyTextarea").value = reply;
+    }
+
+    // Target Post Intel Modal Controls
+    function openPostModal() {
+      const lead = dynamicLeads[activeIndex] || dynamicLeads[0];
+      if (!lead) return;
+
+      const ws = WORKSPACES[activeKey];
+      const replies = lead.replies || generateRepliesForLead(lead, ws);
+      const score = lead.score || (lead.intent === "HOT" ? 88 : 54);
+
+      document.getElementById("modalPostSubreddit").textContent = `${lead.sub} • Posted ${lead.time || 'just now'} • Public Discussion`;
+      document.getElementById("modalPostTitle").textContent = lead.title;
+      document.getElementById("modalAuthorName").textContent = lead.author;
+      document.getElementById("modalAuthorAvatar").textContent = (lead.author.replace(/^[@u\/]/, '').charAt(0) || 'U').toUpperCase();
+      document.getElementById("modalAuthorStats").textContent = `Karma: ${(lead.karma || 1420).toLocaleString()} • Account Age: ${lead.age || '2 yrs'} • Verified Prospect`;
+      document.getElementById("modalPostBody").textContent = lead.body || "No additional body description.";
+      document.getElementById("modalIntentScore").textContent = `${score}% (${lead.intent} INTENT MATCH)`;
+      document.getElementById("modalExternalLink").href = lead.permalink || "https://www.reddit.com";
+      document.getElementById("modalReplyTextarea").value = replies[activePersona] || replies.founder;
+
+      document.getElementById("postIntelModal").classList.add("open");
+      playTargetLockChime();
+      showToast('👁️', `Inspecting Post by ${lead.author}`);
+    }
+
+    function closePostModal() {
+      document.getElementById("postIntelModal").classList.remove("open");
+    }
+
+    function copyModalReply() {
+      const text = document.getElementById("modalReplyTextarea").value.trim();
+      navigator.clipboard.writeText(text).then(() => {
+        const icon = document.getElementById("modalCopyBtnIcon");
+        const label = document.getElementById("modalCopyBtnText");
+        icon.textContent = "✅";
+        label.textContent = "Copied to Clipboard!";
+        playTargetLockChime();
+
+        const lead = dynamicLeads[activeIndex];
+        if (lead && !lead.sniped) {
+          lead.sniped = true;
+          snipedCount++;
+          document.getElementById('snipedCounterVal').textContent = snipedCount;
+          renderLeads();
+        }
+
+        showToast('📋', 'Reply Copied to Clipboard!');
+
+        if (typeof confetti === 'function') {
+          confetti({
+            particleCount: 40,
+            spread: 60,
+            origin: { y: 0.6 }
+          });
+        }
+
+        setTimeout(() => {
+          icon.textContent = "📋";
+          label.textContent = "1-Click Copy Reply";
+        }, 2200);
+      });
     }
 
     function copyReplyOnly() {
@@ -2649,7 +3253,7 @@
         badge.textContent = "● SCOPE LOCK ACQUIRED";
         badge.style.color = "#10b981";
 
-        // Generate and inject a fresh high-intent lead
+        // Generate and inject a fresh high-intent lead with full body
         injectFreshLiveLead();
 
         scannedTotal += Math.floor(Math.random() * 4) + 2;
@@ -2665,25 +3269,39 @@
       const authors = ["@alex_builds", "@prospect_dan", "@sarah_scale", "@mike_dev", "@ecom_king", "@growth_ninja", "@builder_kai", "@solo_maker"];
       const randAuthor = authors[Math.floor(Math.random() * authors.length)];
 
-      const titles = [
-        `Looking for an automated tool to streamline ${ws.name} workflows in 2026`,
-        `How do you handle bottlenecks in ${ws.name} without manual code?`,
-        `What is the best alternative to Zapier for syncing ${ws.name} pipelines?`,
-        `[Hiring] Need a developer / tool to automate ${ws.name} and client portals`,
-        `Is there any reliable software to automate reporting and data syncs for ${ws.name}?`
+      const templates = [
+        {
+          title: `Looking for an automated tool to streamline ${ws.name} workflows in 2026`,
+          body: `Hi all! We are expanding our operations and our current manual process for ${ws.name} is creating big delays for our team. Looking for turnkey software that can automate this with zero complex backend setup. Any recommendations?`
+        },
+        {
+          title: `How do you handle bottlenecks in ${ws.name} without manual code?`,
+          body: `We are spending too much time manually synchronizing data and onboarding clients. Looking for a tool that gives us out-of-the-box automation and clean reporting.`
+        },
+        {
+          title: `What is the best alternative to Zapier for syncing ${ws.name} pipelines?`,
+          body: `Zapier costs are getting out of hand with all our multi-step tasks. Looking for dedicated tools that handle ${ws.name} workflows natively.`
+        },
+        {
+          title: `[Hiring] Need a developer / tool to automate ${ws.name} and client portals`,
+          body: `Budget: $2,500 - $4,500. Looking for someone or a proven software stack to set up our automated ${ws.name} portal.`
+        }
       ];
-      const randTitle = titles[Math.floor(Math.random() * titles.length)];
-      const randScore = Math.floor(Math.random() * 10) + 88; // 88 - 97%
 
+      const chosen = templates[Math.floor(Math.random() * templates.length)];
+      const randScore = Math.floor(Math.random() * 10) + 88; // 88 - 97%
       const prefix = activePlatform === 'hn' ? 'Ask HN' : (activePlatform === 'ph' ? 'ProductHunt' : (activePlatform === 'ih' ? 'IndieHackers' : 'r/SaaS'));
 
       const newLead = {
         sub: prefix,
         intent: "HOT",
         score: randScore,
-        title: randTitle,
+        title: chosen.title,
+        body: chosen.body,
         author: randAuthor,
         time: "just now",
+        karma: Math.floor(Math.random() * 2500) + 500,
+        age: "1.5 yrs",
         permalink: "https://www.reddit.com",
         angle: Math.random() * Math.PI * 2,
         driftSpeed: (Math.random() * 0.004 + 0.001)
@@ -2711,8 +3329,11 @@
         intent: "HOT",
         score: 95,
         title: customSubTitle,
+        body: `Hey r/${sub}! We are looking for modern software or workflows to automate our day-to-day operations and eliminate manual repetitive tasks in r/${sub}. What tools are you using right now?`,
         author: `@prospect_r_${sub}`,
         time: "just now",
+        karma: 1200,
+        age: "2 yrs",
         permalink: `https://www.reddit.com/r/${sub}/`,
         angle: Math.random() * Math.PI * 2,
         driftSpeed: 0.002
@@ -2952,6 +3573,7 @@
         source: lead.sub,
         author: lead.author,
         title: lead.title,
+        body: lead.body || "",
         intent_score: `${score}%`,
         intent_tier: lead.intent,
         permalink: lead.permalink,
@@ -3063,7 +3685,9 @@
     window.addEventListener('keydown', (e) => {
       if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
 
-      if (e.key === '1') {
+      if (e.key === 'Escape') {
+        closePostModal();
+      } else if (e.key === '1') {
         setPersona('founder');
       } else if (e.key === '2') {
         setPersona('tech');
@@ -3114,13 +3738,13 @@
 
     // Target Lock on clickable elements
     document.addEventListener('mouseover', (e) => {
-      if (e.target.closest('button, a, select, textarea, .lead-row, .tab-btn, .persona-tag-btn, input, .faq-header, .theme-dot, .proof-card, .platform-pill-btn, .brand-icon-img, .radar-hud-canvas-wrap, .perk-card, .coffee-btn-header, .kw-tag-btn')) {
+      if (e.target.closest('button, a, select, textarea, .lead-row, .tab-btn, .persona-tag-btn, input, .faq-header, .theme-dot, .proof-card, .platform-pill-btn, .brand-icon-img, .radar-hud-canvas-wrap, .perk-card, .coffee-btn-header, .kw-tag-btn, .author-clickable-link, .modal-close-btn')) {
         crosshair.classList.add('locked');
       }
     });
 
     document.addEventListener('mouseout', (e) => {
-      if (e.target.closest('button, a, select, textarea, .lead-row, .tab-btn, .persona-tag-btn, input, .faq-header, .theme-dot, .proof-card, .platform-pill-btn, .brand-icon-img, .radar-hud-canvas-wrap, .perk-card, .coffee-btn-header, .kw-tag-btn')) {
+      if (e.target.closest('button, a, select, textarea, .lead-row, .tab-btn, .persona-tag-btn, input, .faq-header, .theme-dot, .proof-card, .platform-pill-btn, .brand-icon-img, .radar-hud-canvas-wrap, .perk-card, .coffee-btn-header, .kw-tag-btn, .author-clickable-link, .modal-close-btn')) {
         crosshair.classList.remove('locked');
       }
     });

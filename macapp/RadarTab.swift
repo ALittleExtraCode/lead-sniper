@@ -725,7 +725,7 @@ final class RadarTab: NSView, NSTableViewDataSource, NSTableViewDelegate, Primar
         bar.translatesAutoresizingMaskIntoConstraints = false
 
         let title = NSTextField(wrappingLabelWithString: lead.post.title)
-        title.font = spent ? .systemFont(ofSize: 13) : Theme.Font.row
+        title.font = Theme.Font.serif(14.5, weight: spent ? .regular : .semibold)
         title.textColor = spent ? Theme.textMuted : Theme.textPrimary
         title.preferredMaxLayoutWidth = width - 34
         title.cell?.wraps = true
@@ -736,9 +736,12 @@ final class RadarTab: NSView, NSTableViewDataSource, NSTableViewDelegate, Primar
         let state = lead.isDismissed ? L.t(.dismissed)
                   : lead.isAnswered ? L.t(.answered)
                   : Self.bandName(lead.verdict.band)
-        let meta = NSTextField.themed(
-            "\(state)  ·  r/\(lead.post.source)  ·  \(Self.ago(lead.post.posted))",
-            size: 11, color: spent ? Theme.textMuted : Theme.textSecond)
+        let meta = NSTextField(labelWithAttributedString: NSAttributedString(
+            string: "\(state)   r/\(lead.post.source)   \(Self.ago(lead.post.posted))",
+            attributes: [.font: NSFont.systemFont(ofSize: 10.5, weight: .semibold),
+                         .foregroundColor: spent ? Theme.textMuted
+                                                 : Self.bandColour(lead.verdict.band),
+                         .kern: 0.5]))
         meta.lineBreakMode = .byTruncatingTail
 
         let words = NSStackView(views: [title, meta])
@@ -756,7 +759,19 @@ final class RadarTab: NSView, NSTableViewDataSource, NSTableViewDelegate, Primar
             bar.widthAnchor.constraint(equalToConstant: 3),
             words.leadingAnchor.constraint(equalTo: bar.trailingAnchor, constant: 12),
             words.trailingAnchor.constraint(equalTo: cell.trailingAnchor, constant: -10),
-            words.topAnchor.constraint(equalTo: cell.topAnchor, constant: 9),
+            words.topAnchor.constraint(equalTo: cell.topAnchor, constant: 11),
+        ])
+
+        let hairline = NSView()
+        hairline.wantsLayer = true
+        hairline.layer?.backgroundColor = Theme.cardBorder.cgColor
+        hairline.translatesAutoresizingMaskIntoConstraints = false
+        cell.addSubview(hairline)
+        NSLayoutConstraint.activate([
+            hairline.leadingAnchor.constraint(equalTo: words.leadingAnchor),
+            hairline.trailingAnchor.constraint(equalTo: cell.trailingAnchor, constant: -10),
+            hairline.bottomAnchor.constraint(equalTo: cell.bottomAnchor),
+            hairline.heightAnchor.constraint(equalToConstant: 1),
         ])
 
         return cell
