@@ -125,7 +125,7 @@ final class RadarTab: NSView, NSTableViewDataSource, NSTableViewDelegate, Primar
         sweepButton.action = #selector(sweep)
         sweepButton.translatesAutoresizingMaskIntoConstraints = false
         sweepButton.heightAnchor.constraint(equalToConstant: 38).isActive = true
-        sweepButton.widthAnchor.constraint(equalToConstant: 150).isActive = true
+        sweepButton.widthAnchor.constraint(greaterThanOrEqualToConstant: 150).isActive = true
 
         statusLabel.lineBreakMode = .byWordWrapping
         statusLabel.maximumNumberOfLines = 0
@@ -266,7 +266,7 @@ final class RadarTab: NSView, NSTableViewDataSource, NSTableViewDelegate, Primar
         copyButton.action = #selector(copyAndOpen)
         copyButton.translatesAutoresizingMaskIntoConstraints = false
         copyButton.heightAnchor.constraint(equalToConstant: 34).isActive = true
-        copyButton.widthAnchor.constraint(equalToConstant: 190).isActive = true
+        copyButton.widthAnchor.constraint(greaterThanOrEqualToConstant: 190).isActive = true
 
         openButton.title = L.t(.justOpen)
         openButton.isBordered = false

@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>LeadSniper — Military-Grade Lead Acquisition & Precision Sniper Scope</title>
-  <meta name="description" content="Snip high-intent buyers, clients, and active users from Reddit, HackerNews, ProductHunt, and communities in real time. Zero API keys, AI intent scoring, multi-persona response engine, and 1-click conversion.">
-  <meta name="keywords" content="lead sniper, sniper scope lead generation, community radar, ai growth tool, saas marketing, automated outreach, reddit marketing, social listening, indie hacker tools, client acquisition">
+  <meta name="description" content="Snip high-intent buyers, clients, and active users from Reddit, HackerNews, ProductHunt, LinkedIn, X, and communities in real time. Zero API keys, AI intent scoring, multi-persona response engine, and 1-click conversion.">
+  <meta name="keywords" content="lead sniper, sniper scope lead generation, community radar, ai growth tool, saas marketing, automated outreach, reddit marketing, linkedin leads, twitter leads, social listening, indie hacker tools, client acquisition">
   <meta name="author" content="LeadSniper Team">
   <link rel="canonical" href="https://leadsniper.com/">
   <meta name="theme-color" content="#38bdf8">
@@ -18,7 +18,7 @@
   <!-- Open Graph -->
   <meta property="og:type" content="website">
   <meta property="og:title" content="LeadSniper — Precision Community Scope & Lead Acquisition Suite">
-  <meta property="og:description" content="Snip high-intent customers from Reddit & communities in real time. Zero API keys, AI intent scoring, and 1-click assisted conversion.">
+  <meta property="og:description" content="Snip high-intent customers from Reddit, HackerNews, LinkedIn, and communities in real time. Zero API keys, AI intent scoring, and 1-click assisted conversion.">
   <meta property="og:site_name" content="LeadSniper">
   <meta property="og:url" content="https://lead-sniper.christophercohen1992.workers.dev/">
   <meta property="og:image" content="https://lead-sniper.christophercohen1992.workers.dev/assets/icon-512.png">
@@ -1483,7 +1483,7 @@
           <span class="cyan">In Real Time With 1-Click Conversion.</span>
         </h1>
         <p class="hero-subtext">
-          LeadSniper operates as a precision cybernetic scope across community discussions, locking onto buyer pain points, plotting real targets dynamically on the reticle, and scoring intent in real time.
+          LeadSniper operates as a precision cybernetic scope across open community discussions and multi-channel inquiries, locking onto buyer pain points, plotting real targets dynamically on the reticle, and scoring intent in real time.
         </p>
       </div>
 
@@ -1498,13 +1498,13 @@
     <!-- Navigation Tabs (SunoGet Studio Layout) -->
     <nav class="tabs-nav">
       <button class="tab-btn active" onclick="openTab('tab-radar')">🎯 Live Target Radar</button>
-      <button class="tab-btn" onclick="openTab('tab-sandbox')">🧠 Intent Sandbox</button>
+      <button class="tab-btn" onclick="openTab('tab-sandbox')">🧠 Multi-Platform Intent Sandbox</button>
       <button class="tab-btn" onclick="openTab('tab-proof')">🎯 Acquisition Blueprints</button>
       <button class="tab-btn" onclick="openTab('tab-safety')">🛡️ Karma Safety Analyzer</button>
       <button class="tab-btn" onclick="openTab('tab-webhook')">⚡ Webhook Simulator</button>
       <button class="tab-btn" onclick="openTab('tab-perks')">🎁 Creator Perks & Affiliates</button>
       <button class="tab-btn" onclick="openTab('tab-builder')">🛠️ Preset Builder & Export</button>
-      <button class="tab-btn" onclick="openTab('tab-comparison')">⚔️ Anti-Spam Playbook</button>
+      <button class="tab-btn" onclick="openTab('tab-comparison')">⚔️ Multi-Platform & Anti-Spam Playbook</button>
       <button class="tab-btn" onclick="openTab('tab-features')">⚡ Architecture & Specs</button>
       <button class="tab-btn" onclick="openTab('tab-calculator')">📊 Growth ROI Calculator</button>
       <button class="tab-btn" onclick="openTab('tab-faq')">❓ FAQ & Help Center</button>
@@ -1640,28 +1640,34 @@
       </div>
     </div>
 
-    <!-- TAB 2: LIVE INTENT SANDBOX -->
+    <!-- TAB 2: UNIVERSAL MULTI-PLATFORM INTENT SANDBOX -->
     <div id="tab-sandbox" class="tab-content">
       <div class="radar-card">
-        <h3 style="font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px;">🧠 Live AI Intent Analyzer Sandbox</h3>
-        <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 14px;">Paste any real Reddit post, question, or forum thread to watch LeadSniper score buying intent and synthesize responses in real time.</p>
+        <h3 style="font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px;">🧠 Universal Multi-Platform AI Intent Sandbox</h3>
+        <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 12px;">
+          Paste any message, question, or post from <strong>Reddit, LinkedIn, 𝕏 (Twitter), Facebook Groups, or Client Inquiries</strong> to watch LeadSniper score buying intent and generate high-converting responses in real time.
+        </p>
 
-        <div style="display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap;">
-          <span style="font-size: 11px; font-family: var(--font-mono); color: var(--text-muted); align-self: center;">TEST PRESETS:</span>
-          <button onclick="loadSandboxSample('saas')" class="btn-action-nav" style="padding: 4px 10px; font-size: 11px;">🚀 SaaS Question</button>
+        <!-- Multi-Platform Sample Switcher -->
+        <div style="display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap;">
+          <span style="font-size: 11px; font-family: var(--font-mono); color: var(--text-muted); align-self: center;">TEST CHANNELS:</span>
+          <button onclick="loadSandboxSample('saas')" class="btn-action-nav" style="padding: 4px 10px; font-size: 11px;">🔴 Reddit Question</button>
+          <button onclick="loadSandboxSample('linkedin')" class="btn-action-nav" style="padding: 4px 10px; font-size: 11px; border-color: #0a66c2; color: #60a5fa;">💼 LinkedIn Inbound</button>
+          <button onclick="loadSandboxSample('twitter')" class="btn-action-nav" style="padding: 4px 10px; font-size: 11px; border-color: #38bdf8; color: #38bdf8;">🐦 𝕏 / Twitter Post</button>
           <button onclick="loadSandboxSample('ecom')" class="btn-action-nav" style="padding: 4px 10px; font-size: 11px;">🛍️ Shopify Inactive Carts</button>
-          <button onclick="loadSandboxSample('agency')" class="btn-action-nav" style="padding: 4px 10px; font-size: 11px;">💼 Hiring Developer</button>
+          <button onclick="loadSandboxSample('agency')" class="btn-action-nav" style="padding: 4px 10px; font-size: 11px;">💼 Agency Hiring Post</button>
+          <button onclick="loadSandboxSample('email')" class="btn-action-nav" style="padding: 4px 10px; font-size: 11px; border-color: #f59e0b; color: #fbbf24;">✉️ Client Inbound Email</button>
         </div>
 
         <div class="sandbox-split">
           <div style="display: flex; flex-direction: column; gap: 10px;">
             <div>
-              <label style="font-size: 11.5px; font-weight: 600; color: var(--text-muted);">PASTE THREAD TITLE / QUESTION:</label>
+              <label style="font-size: 11.5px; font-weight: 600; color: var(--text-muted);">PASTE THREAD / TWEET / INMAIL / QUESTION:</label>
               <textarea id="sbxInputText" class="reply-textarea" style="min-height: 100px; margin-top: 4px;" oninput="runSandboxAnalysis()" placeholder="e.g. Is there any good tool to automate customer reporting without coding?"></textarea>
             </div>
 
             <div>
-              <label style="font-size: 11.5px; font-weight: 600; color: var(--text-muted);">POSTER USERNAME (OPTIONAL):</label>
+              <label style="font-size: 11.5px; font-weight: 600; color: var(--text-muted);">AUTHOR / PROSPECT NAME (OPTIONAL):</label>
               <input type="text" id="sbxAuthor" class="input-field" value="curious_founder" oninput="runSandboxAnalysis()" style="width: 100%; margin-top: 4px;">
             </div>
 
@@ -1995,11 +2001,32 @@
       </div>
     </div>
 
-    <!-- TAB 8: SPAM VS SNIPER COMPARISON -->
+    <!-- TAB 8: MULTI-PLATFORM STRATEGY & SPAM VS SNIPER -->
     <div id="tab-comparison" class="tab-content">
       <div class="radar-card">
-        <h3 style="font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px;">⚔️ The Anti-Spam Battleplan</h3>
-        <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 16px;">Why LeadSniper achieves 8–18% conversion while traditional bot spam gets accounts banned in 24 hours.</p>
+        <h3 style="font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px;">⚔️ The Multi-Platform Strategy & Anti-Spam Battleplan</h3>
+        <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 16px;">How LeadSniper achieves 8–18% conversion across open communities and multi-channel inquiries without paid API fees or spam blocks.</p>
+
+        <!-- Multi-Platform Capability Matrix -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; margin-bottom: 16px;">
+          <div style="background: var(--card-inner); border: 1px solid var(--card-border); border-radius: 10px; padding: 14px;">
+            <div style="font-size: 12px; font-weight: 700; color: var(--emerald); margin-bottom: 4px;">🔴 Reddit & HackerNews</div>
+            <div style="font-size: 11.5px; color: var(--text-muted); margin-bottom: 6px;">Mode: <strong>Automated 24/7 Real-Time Scope</strong></div>
+            <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.45;">Zero-API public Atom streams monitor live question feeds constantly with zero monthly subscription fees.</p>
+          </div>
+
+          <div style="background: var(--card-inner); border: 1px solid var(--card-border); border-radius: 10px; padding: 14px;">
+            <div style="font-size: 12px; font-weight: 700; color: #60a5fa;">💼 LinkedIn & 𝕏 (Twitter)</div>
+            <div style="font-size: 11.5px; color: var(--text-muted); margin-bottom: 6px;">Mode: <strong>Universal Intent Sandbox</strong></div>
+            <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.45;">Paste DMs, inmails, or tweets directly into the Intent Sandbox (Tab 2) to score buying intent and craft tailored replies.</p>
+          </div>
+
+          <div style="background: var(--card-inner); border: 1px solid var(--card-border); border-radius: 10px; padding: 14px;">
+            <div style="font-size: 12px; font-weight: 700; color: #a855f7;">⚡ Discord, Slack & CRM</div>
+            <div style="font-size: 11.5px; color: var(--text-muted); margin-bottom: 6px;">Mode: <strong>Webhook Dispatch Pipelines</strong></div>
+            <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.45;">Pipe HOT leads into your private team channels or CRM webhooks to coordinate outreach wherever your customers are.</p>
+          </div>
+        </div>
 
         <div class="compare-table-wrapper">
           <table class="compare-table">
@@ -2138,9 +2165,19 @@
     <div id="tab-faq" class="tab-content">
       <div class="radar-card">
         <h3 style="font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px;">❓ Frequently Asked Questions & Operational Help</h3>
-        <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 16px;">Everything you need to know about Zero-API harvesting, karma safety, and scaling your reach.</p>
+        <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 16px;">Everything you need to know about Zero-API harvesting, multi-channel workflows, karma safety, and scaling your reach.</p>
 
         <div class="faq-item open">
+          <div class="faq-header" onclick="toggleFaq(this)">
+            <span>Can I use LeadSniper with LinkedIn, 𝕏 (Twitter), and Meta?</span>
+            <span class="faq-arrow">▼</span>
+          </div>
+          <div class="faq-body">
+            <strong>Yes, absolutely!</strong> While our automated 24/7 sniper scope focuses on Reddit, HackerNews, and open RSS feeds because they are open public sources that don't charge thousands/month in enterprise API paywalls, our <strong>AI Intent Engine works universally across any platform</strong>. You can paste tweets, LinkedIn posts/DMs, Facebook inquiries, or client emails directly into the <strong>Intent Sandbox (Tab 2)</strong> to score buying intent and generate high-converting, human-grade replies in seconds.
+          </div>
+        </div>
+
+        <div class="faq-item">
           <div class="faq-header" onclick="toggleFaq(this)">
             <span>How does LeadSniper work without Reddit API keys?</span>
             <span class="faq-arrow">▼</span>
@@ -2766,7 +2803,7 @@
       showToast('🎯', `Targeting "${name}" in live sniper scope!`);
     }
 
-    // Intent Sandbox Logic
+    // Intent Sandbox Logic (Universal Multi-Platform Samples)
     function loadSandboxSample(type) {
       const samples = {
         saas: {
@@ -2774,8 +2811,18 @@
           author: "saas_builder",
           url: "https://yourapp.com"
         },
+        linkedin: {
+          title: "Hey! We are currently looking for a fast way to automate our client onboarding and pipeline reporting without custom engineering. Any recommended software tools?",
+          author: "david_vp_growth",
+          url: "https://yourapp.com"
+        },
+        twitter: {
+          title: "What is the best alternative to Zapier for syncing Shopify and Google Sheets without breaking the bank? Need recommendations ASAP!",
+          author: "tech_founder_x",
+          url: "https://yourapp.com"
+        },
         ecom: {
-          title: "How do you recover abandoned carts on Shopify via SMS?",
+          title: "How do you recover abandoned carts on Shopify via SMS or WhatsApp?",
           author: "ecom_queen",
           url: "https://shopboost.io"
         },
@@ -2783,6 +2830,11 @@
           title: "[Hiring] Need a developer to build Stripe billing and client portal",
           author: "founder_scale",
           url: "https://apexstudio.agency"
+        },
+        email: {
+          title: "Hi there, I saw your case study on automating report pipelines. How quickly can this be integrated into an existing CRM setup?",
+          author: "marcus_coo",
+          url: "https://yourapp.com"
         }
       };
       const s = samples[type] || samples.saas;
@@ -2790,23 +2842,24 @@
       document.getElementById('sbxAuthor').value = s.author;
       runSandboxAnalysis();
       playTargetLockChime();
+      showToast('🧠', `Loaded ${type.toUpperCase()} Channel Inquiry`);
     }
 
     function runSandboxAnalysis() {
       const text = document.getElementById('sbxInputText').value.trim();
-      const author = document.getElementById('sbxAuthor').value.trim() || "creator";
+      const author = document.getElementById('sbxAuthor').value.trim() || "prospect";
       if (!text) return;
 
       let score = 20;
       let matchedArchetype = "None";
       let matchedKws = [];
 
-      if (/how (?:do|can|to)|looking for|recommend|best tool|alternative/i.test(text)) {
+      if (/how (?:do|can|to)|looking for|recommend|best tool|alternative|what is the best|need recommendations/i.test(text)) {
         score += 40;
         matchedArchetype = "Question Archetype (+40%)";
       }
 
-      if (/automate|tool|software|dashboard|cart|stripe|billing|leads/i.test(text)) {
+      if (/automate|tool|software|dashboard|cart|stripe|billing|leads|onboarding|pipeline|zapier|sync/i.test(text)) {
         score += 30;
         matchedKws.push("workflow intent (+30%)");
       }
@@ -2830,7 +2883,7 @@
       document.getElementById('sbxArchetype').textContent = matchedArchetype;
       document.getElementById('sbxKeywords').textContent = matchedKws.join(', ') || "Direct query";
 
-      document.getElementById('sbxReplyOutput').value = `Hey u/${author}! If you're looking to solve this, check out https://yourapp.com — handles this workflow in 1 click with zero complex setup. Best of luck!`;
+      document.getElementById('sbxReplyOutput').value = `Hey ${author.replace(/^u\//, '@')}! If you're looking to solve this, check out https://yourapp.com — handles this workflow in 1 click with zero complex setup. Best of luck!`;
     }
 
     // Karma Safety Score Calculator
@@ -3108,7 +3161,7 @@
       ctx.moveTo(cx - maxR, cy);
       ctx.lineTo(cx + maxR, cy);
       ctx.moveTo(cx, cy - maxR);
-      ctx.lineTo(cx, cy + maxR);
+      ctx.lineTo(cx + maxR, cy);
       ctx.strokeStyle = 'rgba(56, 189, 248, 0.22)';
       ctx.lineWidth = 1;
       ctx.stroke();

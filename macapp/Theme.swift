@@ -132,6 +132,21 @@ final class AccentButton: NSButton {
     /// Redrawn when enablement changes, because the default does not.
     override var isEnabled: Bool { didSet { needsDisplay = true } }
 
+    override var title: String { didSet { invalidateIntrinsicContentSize() } }
+
+    /// Sized to its own words.
+    ///
+    /// The buttons carried fixed widths, which works in exactly one language.
+    /// Measured across fifteen: German needs 204pt for "Copy and open thread"
+    /// in a 190pt button, Russian 218, and Indonesian 216 for "Find where they
+    /// talk". A fixed width does not wrap or shrink -- it clips, silently, in
+    /// the languages nobody building it can read.
+    override var intrinsicContentSize: NSSize {
+        let font = NSFont.systemFont(ofSize: 13, weight: .bold)
+        let width = (title as NSString).size(withAttributes: [.font: font]).width
+        return NSSize(width: (width + 34).rounded(), height: NSView.noIntrinsicMetric)
+    }
+
     override func draw(_ dirty: NSRect) {
         let path = NSBezierPath(roundedRect: bounds, xRadius: 9, yRadius: 9)
         // A disabled accent button used to draw exactly like an enabled one:

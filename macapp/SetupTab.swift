@@ -184,7 +184,7 @@ final class SetupTab: NSView, PrimaryAction {
         saveButton.action = #selector(save)
         saveButton.translatesAutoresizingMaskIntoConstraints = false
         saveButton.heightAnchor.constraint(equalToConstant: 36).isActive = true
-        saveButton.widthAnchor.constraint(equalToConstant: 150).isActive = true
+        saveButton.widthAnchor.constraint(greaterThanOrEqualToConstant: 150).isActive = true
         statusLabel.lineBreakMode = .byWordWrapping
         statusLabel.maximumNumberOfLines = 0
         statusLabel.preferredMaxLayoutWidth = 380

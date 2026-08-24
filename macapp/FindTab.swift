@@ -142,7 +142,7 @@ final class FindTab: NSView, PrimaryAction {
         findButton.action = #selector(find)
         findButton.translatesAutoresizingMaskIntoConstraints = false
         findButton.heightAnchor.constraint(equalToConstant: 38).isActive = true
-        findButton.widthAnchor.constraint(equalToConstant: 190).isActive = true
+        findButton.widthAnchor.constraint(greaterThanOrEqualToConstant: 190).isActive = true
 
         statusLabel.lineBreakMode = .byWordWrapping
         statusLabel.maximumNumberOfLines = 0
@@ -197,7 +197,7 @@ final class FindTab: NSView, PrimaryAction {
         watchButton.isEnabled = false
         watchButton.translatesAutoresizingMaskIntoConstraints = false
         watchButton.heightAnchor.constraint(equalToConstant: 34).isActive = true
-        watchButton.widthAnchor.constraint(equalToConstant: 190).isActive = true
+        watchButton.widthAnchor.constraint(greaterThanOrEqualToConstant: 190).isActive = true
 
         let foundBox = NSStackView(views: [resultsStack, watchButton])
         foundBox.orientation = .vertical

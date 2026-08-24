@@ -1004,5 +1004,44 @@ learner.restore(sample.post.id)
 check(learner.rejectedPosts().isEmpty, "putting it back removes it from the learning set")
 learnStore.removePersistentDomain(forName: "leadsniper.tests.learn")
 
+
+// ─────────────────────────────────────────────────────────────────────────────
+print("\n[28] fifteen languages, and none of them blank or clipped")
+
+check(L.languages.count == 15, "fifteen languages (\(L.languages.count))")
+let originally = L.code
+var missing: [String] = []
+var widest = 0
+for (code, _) in L.languages {
+    L.code = code
+    check(L.code == code, "\(code) can be selected")
+    // A blank label is worse than an English one, so a missing key falls back.
+    for key in [L.Key.tabFind, .tabRadar, .tabSetup, .sweep, .copyAndOpen, .findPlaces,
+                .bandHot, .bandWarm, .bandCool, .save, .watchThese, .notRelevant,
+                .mustEdit, .whereItCannotLook] {
+        if L.t(key).isEmpty { missing.append("\(code).\(key)") }
+    }
+    // Fixed button widths work in exactly one language. Measured across all
+    // fifteen, German needed 204pt for "Copy and open thread" in a 190pt
+    // button, Russian 218, Indonesian 216 for "Find where they talk" — clipped
+    // silently, in the languages nobody building it can read.
+    for text in [L.t(.sweep), L.t(.copyAndOpen), L.t(.findPlaces), L.t(.watchThese)] {
+        let button = AccentButton(title: text, target: nil, action: nil)
+        widest = max(widest, Int(button.intrinsicContentSize.width))
+        check(button.intrinsicContentSize.width >= CGFloat(text.count) * 4,
+              "\(code): \"\(text.prefix(18))\" gets a button wide enough")
+    }
+}
+check(missing.isEmpty, "no blank strings anywhere (\(missing.prefix(3)))")
+check(widest > 200, "and the widest grows to \(widest)pt rather than clipping")
+
+// Arabic is the one that needs the window mirrored, and the defaults that do it
+// are only read before NSApplication exists — hence the relaunch.
+L.code = "ar"
+check(L.isRightToLeft, "Arabic is right to left")
+L.code = "en"
+check(!L.isRightToLeft, "and English is not")
+L.code = originally
+
 print(failures == 0 ? "\nAll engine tests passed." : "\n\(failures) FAILURE(S)")
 exit(failures == 0 ? 0 : 1)

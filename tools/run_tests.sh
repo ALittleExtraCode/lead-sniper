@@ -6,7 +6,7 @@ OUT="${TMPDIR:-/tmp}/leadsniper-tests"
 rm -rf "$OUT"; mkdir -p "$OUT"
 FAILED=0
 
-ENGINE=(Build Secret RedditGate Feed HackerNews Discover Sectors Scout Share Webhook Score Workspace Draft Radar Updates Watch Strings Fixtures)
+ENGINE=(Theme Build Secret RedditGate Feed HackerNews Discover Sectors Scout Share Webhook Journal Score Workspace Draft Radar Updates Watch Strings Fixtures)
 
 run_suite () {
   local name="$1"; shift
