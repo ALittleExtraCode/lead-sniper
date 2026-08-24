@@ -21,6 +21,7 @@ final class SetupTab: NSView, PrimaryAction {
     private let negativeField = DarkField()
     private let newsToggle = ToggleChip()
     private let webhookField = DarkField()
+    private let languageChip = MenuChip()
     private let featuresStack = NSStackView()
     private let saveButton = AccentButton(title: "", target: nil, action: nil)
     private let statusLabel = NSTextField.themed("", size: 11, color: Theme.textMuted)
@@ -112,7 +113,14 @@ final class SetupTab: NSView, PrimaryAction {
             b.font = .systemFont(ofSize: 11, weight: .semibold)
             b.contentTintColor = Theme.accent
         }
-        let pickerRow = NSStackView(views: [picker, newButton, importButton, exportButton, NSView()])
+        languageChip.items = L.languages.enumerated().map { (title: $0.element.name, tag: $0.offset) }
+        languageChip.offTag = -1
+        languageChip.selectedTag = L.languages.firstIndex { $0.code == L.code } ?? 0
+        languageChip.target = self
+        languageChip.action = #selector(languagePicked)
+
+        let pickerRow = NSStackView(views: [picker, newButton, importButton, exportButton,
+                                            NSView(), languageChip])
         pickerRow.orientation = .horizontal
         pickerRow.spacing = 12
         addCard(L.t(.product), pickerRow)
@@ -332,6 +340,36 @@ final class SetupTab: NSView, PrimaryAction {
                           "\(workspace.communities.count)", "\(workspace.terms.count)")
         if workspace.features.isEmpty { told += " · " + L.t(.noFeaturesYet) }
         statusLabel.stringValue = told
+    }
+
+    /// Changing the language.
+    ///
+    /// Asks for a relaunch rather than redrawing. Right-to-left mirroring is set
+    /// by two defaults AppKit only reads before NSApplication exists, so a
+    /// switch to Arabic that redrew in place would come up fully translated and
+    /// still laid out left to right. Rebuilding every view for the other
+    /// fourteen and not for that one would be a worse kind of inconsistent.
+    @objc private func languagePicked() {
+        guard let chosen = L.languages[safe: languageChip.selectedTag] else { return }
+        guard chosen.code != L.code else { return }
+        L.code = chosen.code
+        L.applyLayoutDirection()
+
+        let alert = NSAlert()
+        alert.messageText = L.t(.languageChanged)
+        alert.informativeText = L.t(.languageRelaunch)
+        alert.addButton(withTitle: L.t(.relaunchNow))
+        alert.addButton(withTitle: L.t(.later))
+        if alert.runModal() == .alertFirstButtonReturn {
+            let path = Bundle.main.bundlePath
+            // Relaunched by a detached shell, because the app cannot start its
+            // own replacement while it is still holding the bundle.
+            let task = Process()
+            task.launchPath = "/bin/sh"
+            task.arguments = ["-c", "sleep 0.4; open \"\(path)\""]
+            try? task.run()
+            NSApp.terminate(nil)
+        }
     }
 
     // MARK: - Sharing a setup

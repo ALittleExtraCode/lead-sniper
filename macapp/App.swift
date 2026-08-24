@@ -91,6 +91,9 @@ final class MainController: NSViewController {
 
     /// Opens the setup tab, for when the radar has nothing to work with.
     func showSetup() { show(2) }
+    func showFind() { show(0) }
+    func showRadar() { show(1) }
+    func showPane(_ index: Int) { show(index) }
 
     @objc func performPrimary(_ sender: Any?) {
         (shown as? PrimaryAction)?.performPrimaryAction()
@@ -127,7 +130,27 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationShouldTerminateAfterLastWindowClosed(_ app: NSApplication) -> Bool { true }
 
-    @objc func sweepNow(_ sender: Any?) { main.performPrimary(sender) }
+    @objc func sweepNow(_ sender: Any?) {
+        main.showRadar()
+        main.radarForTest.beginSweep()
+    }
+    @objc func findPlaces(_ sender: Any?) { main.showFind() }
+    @objc func showTab(_ sender: Any?) {
+        guard let item = sender as? NSMenuItem else { return }
+        main.showPane(item.tag)
+    }
+    @objc func notRelevant(_ sender: Any?) {
+        main.showRadar()
+        main.radarForTest.dismissSelected()
+    }
+    @objc func copyAndOpen(_ sender: Any?) {
+        main.showRadar()
+        main.radarForTest.copyAndOpenSelected()
+    }
+    @objc func exportLeads(_ sender: Any?) {
+        main.showRadar()
+        main.radarForTest.exportSelected()
+    }
     @objc func openSetup(_ sender: Any?) { main.showSetup() }
     /// Checks, then says what it found. No modal, no progress bar, no
     /// downloading anything: SunoGet's in-app installer was the single most

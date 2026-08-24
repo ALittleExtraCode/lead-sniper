@@ -555,7 +555,7 @@ final class RadarTab: NSView, NSTableViewDataSource, NSTableViewDelegate, Primar
         }
     }
 
-    @objc private func copyAndOpen() {
+    @objc func copyAndOpen() {
         guard copyButton.isEnabled else { return }
         NSPasteboard.general.clearContents()
         NSPasteboard.general.setString(editor.string, forType: .string)
@@ -577,7 +577,7 @@ final class RadarTab: NSView, NSTableViewDataSource, NSTableViewDelegate, Primar
     /// Reversible on purpose. A keystroke that cannot be undone is one people
     /// are careful with, and careful is slow -- which defeats the point of a
     /// list you are meant to work down quickly.
-    @objc private func toggleDismiss() {
+    @objc func toggleDismiss() {
         let row = table.selectedRow
         guard let lead = leads[safe: row] else { return }
         if lead.isDismissed {
@@ -600,6 +600,11 @@ final class RadarTab: NSView, NSTableViewDataSource, NSTableViewDelegate, Primar
             showSelection(leads[safe: row + 1])
         }
     }
+
+    /// Driven from the menu, so the shortcuts work from anywhere.
+    func dismissSelected() { toggleDismiss() }
+    func copyAndOpenSelected() { copyAndOpen() }
+    func exportSelected() { exportLeads() }
 
     /// What the rejections have in common, offered once there are enough of them.
     ///
@@ -639,7 +644,7 @@ final class RadarTab: NSView, NSTableViewDataSource, NSTableViewDelegate, Primar
 
     override var acceptsFirstResponder: Bool { true }
 
-    @objc private func exportLeads() {
+    @objc func exportLeads() {
         guard !leads.isEmpty, let workspace = workspaces.active else {
             statusLabel.stringValue = L.t(.nothingToExport)
             return

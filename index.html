@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LeadSniper — Autonomous Sniper Scope & Real-Time Lead Acquisition Suite</title>
+  <title>LeadSniper — Military-Grade Lead Acquisition & Precision Sniper Scope</title>
   <meta name="description" content="Snip high-intent buyers, clients, and active users from Reddit, HackerNews, ProductHunt, and communities in real time. Zero API keys, AI intent scoring, multi-persona response engine, and 1-click conversion.">
   <meta name="keywords" content="lead sniper, sniper scope lead generation, community radar, ai growth tool, saas marketing, automated outreach, reddit marketing, social listening, indie hacker tools, client acquisition">
   <meta name="author" content="LeadSniper Team">
@@ -35,15 +35,15 @@
   <!-- Google Fonts: Plus Jakarta Sans + JetBrains Mono + Outfit -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --bg: #07090e;
-      --card: #0e121d;
-      --card-border: #1a2233;
-      --card-hover: #161e30;
-      --card-inner: #0a0d15;
+      --bg: #06080d;
+      --card: #0b0f19;
+      --card-border: #182236;
+      --card-hover: #131b2c;
+      --card-inner: #080b12;
       
       --accent: #38bdf8;
       --accent-glow: rgba(56, 189, 248, 0.35);
@@ -84,7 +84,34 @@
       position: relative;
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
-      cursor: crosshair !important;
+    }
+
+    /* Tactical Ambient Background Grids */
+    .bg-grid-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        linear-gradient(rgba(56, 189, 248, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(56, 189, 248, 0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      z-index: -2;
+      pointer-events: none;
+    }
+
+    .ambient-glow-top {
+      position: fixed;
+      top: -160px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 1000px;
+      height: 500px;
+      background: radial-gradient(ellipse at center, rgba(56, 189, 248, 0.14) 0%, rgba(16, 185, 129, 0.05) 45%, transparent 70%);
+      filter: blur(65px);
+      z-index: -1;
+      pointer-events: none;
     }
 
     /* Precision Tactical Sniper Scope Reticle Follower */
@@ -92,8 +119,8 @@
       position: fixed;
       pointer-events: none;
       z-index: 99999;
-      width: 36px;
-      height: 36px;
+      width: 38px;
+      height: 38px;
       transform: translate(-50%, -50%);
       transition: transform 0.04s ease-out, border-color 0.15s ease, box-shadow 0.15s ease;
       display: none;
@@ -115,8 +142,8 @@
     .sniper-crosshair .scope-hair-x {
       position: absolute;
       top: 50%;
-      left: -6px;
-      right: -6px;
+      left: -8px;
+      right: -8px;
       height: 1px;
       background: rgba(56, 189, 248, 0.4);
       transform: translateY(-50%);
@@ -125,8 +152,8 @@
     .sniper-crosshair .scope-hair-y {
       position: absolute;
       left: 50%;
-      top: -6px;
-      bottom: -6px;
+      top: -8px;
+      bottom: -8px;
       width: 1px;
       background: rgba(56, 189, 248, 0.4);
       transform: translateX(-50%);
@@ -135,7 +162,7 @@
     .sniper-crosshair .reticle-ring {
       position: absolute;
       inset: 0;
-      border: 1px dashed rgba(56, 189, 248, 0.55);
+      border: 1px dashed rgba(56, 189, 248, 0.6);
       border-radius: 50%;
       transition: all 0.2s ease;
     }
@@ -144,7 +171,7 @@
       border-color: var(--emerald);
       border-style: solid;
       transform: scale(1.3) rotate(45deg);
-      box-shadow: 0 0 16px rgba(16, 185, 129, 0.6);
+      box-shadow: 0 0 18px rgba(16, 185, 129, 0.7);
     }
 
     .sniper-crosshair.locked .scope-hair-x,
@@ -158,37 +185,9 @@
       box-shadow: 0 0 10px var(--emerald);
     }
 
-    /* Ambient Background Tactical Grids */
-    .bg-grid-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-image: 
-        linear-gradient(rgba(56, 189, 248, 0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(56, 189, 248, 0.03) 1px, transparent 1px);
-      background-size: 40px 40px;
-      z-index: -2;
-      pointer-events: none;
-    }
-
-    .ambient-glow-top {
-      position: fixed;
-      top: -160px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 900px;
-      height: 450px;
-      background: radial-gradient(ellipse at center, rgba(56, 189, 248, 0.12) 0%, rgba(16, 185, 129, 0.04) 45%, transparent 70%);
-      filter: blur(60px);
-      z-index: -1;
-      pointer-events: none;
-    }
-
     .container {
       width: 100%;
-      max-width: 1240px;
+      max-width: 1260px;
       display: flex;
       flex-direction: column;
       gap: 16px;
@@ -202,10 +201,10 @@
       justify-content: space-between;
       align-items: center;
       padding: 12px 18px;
-      background: rgba(14, 18, 29, 0.75);
+      background: rgba(11, 15, 25, 0.85);
       border: 1px solid var(--card-border);
       border-radius: 14px;
-      backdrop-filter: blur(16px);
+      backdrop-filter: blur(18px);
       flex-wrap: wrap;
       gap: 12px;
     }
@@ -234,7 +233,7 @@
     .brand-title {
       font-family: var(--font-display);
       font-size: 20px;
-      font-weight: 700;
+      font-weight: 800;
       color: var(--text-primary);
       letter-spacing: -0.3px;
     }
@@ -247,7 +246,7 @@
       border: 1px solid rgba(56, 189, 248, 0.25);
       padding: 2px 7px;
       border-radius: 5px;
-      font-weight: 600;
+      font-weight: 700;
     }
 
     .header-stats {
@@ -354,7 +353,7 @@
       display: flex;
       align-items: center;
       gap: 12px;
-      background: rgba(14, 18, 29, 0.5);
+      background: rgba(11, 15, 25, 0.6);
       border: 1px solid var(--card-border);
       padding: 7px 16px;
       border-radius: 10px;
@@ -388,12 +387,12 @@
       100% { transform: translateX(-50%); }
     }
 
-    /* Hero Banner with Live Interactive Sniper Scope Canvas */
+    /* Hero Banner with Live Variable-Driven Radar Scope HUD Canvas */
     .hero-panel {
-      background: radial-gradient(circle at top right, rgba(56, 189, 248, 0.08) 0%, var(--card) 60%);
+      background: radial-gradient(circle at top right, rgba(56, 189, 248, 0.09) 0%, var(--card) 60%);
       border: 1px solid var(--card-border);
       border-radius: 18px;
-      padding: 26px 24px;
+      padding: 24px 26px;
       position: relative;
       overflow: hidden;
       display: grid;
@@ -402,20 +401,20 @@
       align-items: center;
     }
 
-    @media (max-width: 800px) {
+    @media (max-width: 820px) {
       .hero-panel { grid-template-columns: 1fr; }
       .radar-hud-canvas-wrap { display: none; }
     }
 
     /* Interactive Live Radar Canvas Scope */
     .radar-hud-canvas-wrap {
-      width: 170px;
-      height: 170px;
+      width: 180px;
+      height: 180px;
       position: relative;
       border-radius: 50%;
       border: 2px solid rgba(56, 189, 248, 0.4);
-      background: rgba(8, 12, 20, 0.95);
-      box-shadow: 0 0 32px rgba(56, 189, 248, 0.25), inset 0 0 24px rgba(0,0,0,0.9);
+      background: rgba(6, 9, 15, 0.95);
+      box-shadow: 0 0 36px rgba(56, 189, 248, 0.25), inset 0 0 24px rgba(0,0,0,0.9);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -438,10 +437,19 @@
       font-weight: 700;
       letter-spacing: 0.8px;
       pointer-events: none;
-      background: rgba(7, 9, 14, 0.85);
+      background: rgba(6, 8, 13, 0.9);
       padding: 1px 6px;
       border-radius: 4px;
       border: 1px solid rgba(56, 189, 248, 0.25);
+    }
+
+    .radar-telemetry-badge {
+      position: absolute;
+      top: 8px;
+      font-size: 8px;
+      font-family: var(--font-mono);
+      color: var(--text-muted);
+      pointer-events: none;
     }
 
     .hero-meta-badge {
@@ -458,14 +466,14 @@
       padding: 3px 9px;
       border-radius: 5px;
       margin-bottom: 10px;
-      font-weight: 600;
+      font-weight: 700;
     }
 
     .hero-heading {
       font-family: var(--font-display);
       font-size: clamp(22px, 3.5vw, 36px);
-      font-weight: 700;
-      line-height: 1.22;
+      font-weight: 800;
+      line-height: 1.2;
       margin-bottom: 8px;
       letter-spacing: -0.4px;
     }
@@ -855,7 +863,7 @@
     }
 
     .reply-textarea {
-      background: #06080d;
+      background: #05070b;
       border: 1px solid var(--card-border);
       border-radius: 8px;
       padding: 11px;
@@ -863,7 +871,7 @@
       font-family: var(--font);
       color: var(--text-primary);
       line-height: 1.5;
-      min-height: 130px;
+      min-height: 120px;
       resize: none;
       outline: none;
       transition: border-color 0.2s ease;
@@ -996,6 +1004,31 @@
       color: var(--text-primary);
     }
 
+    /* Karma Safety Scorecard */
+    .karma-score-card {
+      background: var(--card-inner);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    /* Webhook Simulation Box */
+    .webhook-preview-box {
+      background: #040609;
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 12px;
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      color: #38bdf8;
+      max-height: 240px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+    }
+
     /* Preset Builder */
     .preset-builder-grid {
       display: grid;
@@ -1008,7 +1041,7 @@
     }
 
     .json-code-box {
-      background: #06080d;
+      background: #040609;
       border: 1px solid var(--card-border);
       border-radius: 8px;
       padding: 14px;
@@ -1260,7 +1293,7 @@
       position: fixed;
       bottom: 24px;
       right: 24px;
-      background: rgba(14, 18, 29, 0.95);
+      background: rgba(11, 15, 25, 0.95);
       border: 1px solid var(--accent);
       box-shadow: 0 0 20px rgba(56, 189, 248, 0.3);
       padding: 12px 18px;
@@ -1332,7 +1365,7 @@
         <div>
           <div class="brand-title">LeadSniper</div>
         </div>
-        <span class="brand-tag">PRECISION SCOPE v1.8.0</span>
+        <span class="brand-tag">PRECISION SCOPE v2.0</span>
       </a>
 
       <div class="header-stats">
@@ -1388,13 +1421,14 @@
           <span class="cyan">In Real Time With 1-Click Conversion.</span>
         </h1>
         <p class="hero-subtext">
-          LeadSniper acts as a precision sniper scope across community discussions, locking onto exact user pain points, plotting real targets dynamically on the scope reticle, and scoring buying intent in real time.
+          LeadSniper operates as a precision cybernetic scope across community discussions, locking onto buyer pain points, plotting real targets dynamically on the reticle, and scoring intent in real time.
         </p>
       </div>
 
       <!-- Real Dynamic HTML5 Canvas Sniper Scope HUD -->
       <div class="radar-hud-canvas-wrap" id="radarScopeContainer" title="Click any blip to lock target">
-        <canvas id="radarScopeCanvas" width="340" height="340"></canvas>
+        <div class="radar-telemetry-badge">AZ: 142° | RG: 88%</div>
+        <canvas id="radarScopeCanvas" width="360" height="360"></canvas>
         <div class="radar-scope-label" id="scopeStatusText">SCOPE: 3 TARGETS</div>
       </div>
     </section>
@@ -1403,6 +1437,8 @@
     <nav class="tabs-nav">
       <button class="tab-btn active" onclick="openTab('tab-radar')">🎯 Live Target Radar</button>
       <button class="tab-btn" onclick="openTab('tab-sandbox')">🧠 Intent Sandbox</button>
+      <button class="tab-btn" onclick="openTab('tab-safety')">🛡️ Karma Safety Analyzer</button>
+      <button class="tab-btn" onclick="openTab('tab-webhook')">⚡ Webhook Simulator</button>
       <button class="tab-btn" onclick="openTab('tab-perks')">🎁 Creator Perks & Affiliates</button>
       <button class="tab-btn" onclick="openTab('tab-proof')">🏆 Case Studies & Proof</button>
       <button class="tab-btn" onclick="openTab('tab-builder')">🛠️ Preset Builder & Export</button>
@@ -1444,6 +1480,7 @@
           <div class="control-row">
             <button id="autopilotBtn" onclick="toggleAutoPilot()" class="btn-action-nav" style="padding: 5px 10px; border-color: rgba(56, 189, 248, 0.4); color: var(--accent);">▶️ Auto-Pilot Demo</button>
             <button onclick="exportLeadsCsv()" class="btn-action-nav" style="padding: 5px 10px; border-color: rgba(16, 185, 129, 0.3); color: var(--emerald);">📥 Export CSV</button>
+            <button onclick="exportLeadsJson()" class="btn-action-nav" style="padding: 5px 10px;">📄 JSON</button>
             <span id="liveTargetLockBadge" style="font-size: 11px; font-family: var(--font-mono); color: var(--emerald);">● SCOPE LOCK ACQUIRED</span>
             <button onclick="simulateScan()" class="btn-action-nav" style="padding: 5px 12px;">⚡ Live Scan</button>
           </div>
@@ -1481,11 +1518,12 @@
                 </div>
               </div>
 
-              <div style="margin: 12px 0 6px 0; font-size: 11px; font-weight: 600; color: var(--text-muted);">SELECT PERSONA:</div>
+              <div style="margin: 12px 0 6px 0; font-size: 11px; font-weight: 600; color: var(--text-muted);">SELECT AI PERSONA / TONE MODIFIER:</div>
               <div class="persona-bar" id="personaButtons">
                 <button class="persona-tag-btn active" onclick="setPersona('founder')">🚀 Helpful Founder</button>
                 <button class="persona-tag-btn" onclick="setPersona('tech')">⚙️ Tech Lead</button>
                 <button class="persona-tag-btn" onclick="setPersona('creator')">🎬 Creator Peer</button>
+                <button class="persona-tag-btn" onclick="setPersona('concise')">⚡ Ultra Concise</button>
               </div>
 
               <div style="margin: 10px 0 4px 0; font-size: 11px; font-weight: 600; color: var(--text-muted);">GENERATED CONTEXTUAL REPLY (100% CLEAN URL):</div>
@@ -1516,7 +1554,7 @@
           <span>⌨️ KEYBOARD SHORTCUTS:</span>
           <span><span class="kbd-tag">Space</span> or <span class="kbd-tag">C</span> 1-Click Copy & Open</span>
           <span><span class="kbd-tag">↑ / ↓</span> Select Lead</span>
-          <span><span class="kbd-tag">1 / 2 / 3</span> Switch Persona</span>
+          <span><span class="kbd-tag">1 / 2 / 3 / 4</span> Switch Persona</span>
         </div>
       </div>
     </div>
@@ -1583,7 +1621,100 @@
       </div>
     </div>
 
-    <!-- TAB 3: CREATOR & OPERATOR PERKS (AFFILIATES & COFFEE) -->
+    <!-- TAB 3: KARMA SAFETY ANALYZER -->
+    <div id="tab-safety" class="tab-content">
+      <div class="radar-card">
+        <h3 style="font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px;">🛡️ Anti-Ban Karma Safety Scorecard & Account Health Calculator</h3>
+        <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 16px;">Calculate your safe daily snipe limits based on your Reddit account karma, age, and historical post ratio.</p>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+          <div class="karma-score-card">
+            <div>
+              <label style="font-size: 12px; font-weight: 600; color: var(--text-muted);">CURRENT REDDIT COMMENT KARMA:</label>
+              <input type="number" id="safetyKarma" class="input-field" value="450" oninput="calculateSafetyScore()" style="width: 100%; margin-top: 4px;">
+            </div>
+
+            <div>
+              <label style="font-size: 12px; font-weight: 600; color: var(--text-muted);">ACCOUNT AGE (IN DAYS):</label>
+              <input type="number" id="safetyAge" class="input-field" value="90" oninput="calculateSafetyScore()" style="width: 100%; margin-top: 4px;">
+            </div>
+
+            <div>
+              <label style="font-size: 12px; font-weight: 600; color: var(--text-muted);">HISTORICAL 4:1 ORGANIC VALUE RATIO COMPLIANCE:</label>
+              <select id="safetyRatio" class="preset-selector" onchange="calculateSafetyScore()" style="width: 100%; margin-top: 4px;">
+                <option value="100" selected>✅ 100% Strict (4-5 organic replies per 1 link)</option>
+                <option value="75">⚡ Moderate (2-3 organic replies per 1 link)</option>
+                <option value="30">⚠️ Low (Mostly link recommendations)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Calculated Safety Scorecard -->
+          <div style="background: var(--card-inner); border: 1px solid var(--card-border); border-radius: 12px; padding: 20px; display: flex; flex-direction: column; justify-content: center; gap: 14px;">
+            <div>
+              <div style="font-size: 11px; font-family: var(--font-mono); color: var(--text-muted); text-transform: uppercase;">ACCOUNT SAFETY RATING</div>
+              <div id="safetyScorePercent" style="font-family: var(--font-display); font-size: 34px; font-weight: 800; color: var(--emerald);">96% (EXCELLENT)</div>
+            </div>
+
+            <div style="border-top: 1px solid rgba(255,255,255,0.06); padding-top: 10px; display: flex; flex-direction: column; gap: 6px; font-size: 12px;">
+              <div style="display: flex; justify-content: space-between;">
+                <span style="color: var(--text-muted);">Max Safe Daily Snipes:</span>
+                <strong id="safetyMaxSnipes" style="color: var(--accent); font-family: var(--font-mono);">12-16 snipes / day</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                <span style="color: var(--text-muted);">AutoMod Shadowban Risk:</span>
+                <strong id="safetyRiskBadge" style="color: var(--emerald); font-family: var(--font-mono);">< 1% (ULTRA LOW)</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                <span style="color: var(--text-muted);">Recommended Delay Between Posts:</span>
+                <strong style="color: var(--text-secondary); font-family: var(--font-mono);">8 to 15 minutes</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 4: WEBHOOK SIMULATOR -->
+    <div id="tab-webhook" class="tab-content">
+      <div class="radar-card">
+        <h3 style="font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px;">⚡ Discord & Slack Webhook Dispatch Simulator</h3>
+        <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 16px;">Automate high-priority notifications to your internal team channels whenever a 90%+ HOT lead is detected.</p>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <div>
+            <label style="font-size: 11.5px; font-weight: 600; color: var(--text-muted);">SIMULATE WEBHOOK PAYLOAD (JSON):</label>
+            <pre class="webhook-preview-box" id="webhookJsonBox"></pre>
+
+            <div style="display: flex; gap: 8px; margin-top: 10px;">
+              <button onclick="testWebhookAlert('discord')" class="btn-dispatch" style="flex: 1; padding: 9px 12px; font-size: 12px; background: #5865f2;">
+                <span>👾 Dispatch Discord Webhook</span>
+              </button>
+              <button onclick="testWebhookAlert('slack')" class="btn-action-nav" style="padding: 9px 14px;">
+                <span>💬 Slack Alert</span>
+              </button>
+            </div>
+          </div>
+
+          <div style="background: var(--card-inner); border: 1px solid var(--card-border); border-radius: 12px; padding: 18px; display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+              <div style="font-size: 11px; font-family: var(--font-mono); color: #5865f2; font-weight: 700; margin-bottom: 6px;">DISCORD EMBED PREVIEW:</div>
+              <div style="background: #2b2d31; border-left: 4px solid var(--accent); border-radius: 6px; padding: 12px;">
+                <div style="font-size: 12px; font-weight: 700; color: #fff; margin-bottom: 4px;">🎯 [HOT LEAD 92%] r/SideProject</div>
+                <div style="font-size: 11.5px; color: #dbdee1; margin-bottom: 8px;">"How do you automate client dashboards without custom backend code?"</div>
+                <div style="font-size: 10px; font-family: var(--font-mono); color: #949ba4;">Author: u/sarah_builds • Match: 92% Intent Density</div>
+              </div>
+            </div>
+
+            <div style="font-size: 11px; color: var(--text-muted); margin-top: 12px;">
+              💡 <em>Enterprise operators pipe this directly into Slack / Discord channels so sales teams or founders can 1-click snipe leads in seconds.</em>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 5: CREATOR & OPERATOR PERKS (AFFILIATES & COFFEE) -->
     <div id="tab-perks" class="tab-content">
       <div class="radar-card">
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
@@ -1672,7 +1803,7 @@
       </div>
     </div>
 
-    <!-- TAB 4: PROOF & CASE STUDIES -->
+    <!-- TAB 6: PROOF & CASE STUDIES -->
     <div id="tab-proof" class="tab-content">
       <div class="radar-card">
         <h3 style="font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px;">🏆 Real-World Founder Case Studies</h3>
@@ -1709,7 +1840,7 @@
       </div>
     </div>
 
-    <!-- TAB 5: PRESET BUILDER & EXPORT -->
+    <!-- TAB 7: PRESET BUILDER & EXPORT -->
     <div id="tab-builder" class="tab-content">
       <div class="radar-card">
         <h3 style="font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px;">🛠️ Interactive Preset Builder & JSON Exporter</h3>
@@ -1761,7 +1892,7 @@
       </div>
     </div>
 
-    <!-- TAB 6: SPAM VS SNIPER COMPARISON -->
+    <!-- TAB 8: SPAM VS SNIPER COMPARISON -->
     <div id="tab-comparison" class="tab-content">
       <div class="radar-card">
         <h3 style="font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px;">⚔️ The Anti-Spam Battleplan</h3>
@@ -1808,7 +1939,7 @@
       </div>
     </div>
 
-    <!-- TAB 7: ARCHITECTURE & FEATURES -->
+    <!-- TAB 9: ARCHITECTURE & FEATURES -->
     <div id="tab-features" class="tab-content">
       <div class="grid-3col">
         <div class="feature-hud-card">
@@ -1849,7 +1980,7 @@
       </div>
     </div>
 
-    <!-- TAB 8: CONVERSION CALCULATOR -->
+    <!-- TAB 10: CONVERSION CALCULATOR -->
     <div id="tab-calculator" class="tab-content">
       <div class="radar-card">
         <h3 style="font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px;">🎯 Organic Lead Acquisition & ROI Estimator</h3>
@@ -1900,7 +2031,7 @@
       </div>
     </div>
 
-    <!-- TAB 9: FAQ & SUPPORT -->
+    <!-- TAB 11: FAQ & SUPPORT -->
     <div id="tab-faq" class="tab-content">
       <div class="radar-card">
         <h3 style="font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px;">❓ Frequently Asked Questions & Operational Help</h3>
@@ -1948,7 +2079,7 @@
       </div>
     </div>
 
-    <!-- TAB 10: DESKTOP APP -->
+    <!-- TAB 12: DESKTOP APP -->
     <div id="tab-desktop" class="tab-content">
       <div class="radar-card" style="text-align: center; padding: 40px 20px;">
         <img src="/assets/icon-512.png" alt="LeadSniper App Icon" style="width: 88px; height: 88px; border-radius: 22px; border: 1px solid rgba(56, 189, 248, 0.4); box-shadow: 0 0 30px rgba(56, 189, 248, 0.35); margin-bottom: 16px; display: inline-block;">
@@ -1974,6 +2105,8 @@
       <div class="footer-links">
         <a href="#tab-radar" onclick="openTab('tab-radar')">Live Radar</a>
         <a href="#tab-sandbox" onclick="openTab('tab-sandbox')">Intent Sandbox</a>
+        <a href="#tab-safety" onclick="openTab('tab-safety')">Karma Safety</a>
+        <a href="#tab-webhook" onclick="openTab('tab-webhook')">Webhook Sim</a>
         <a href="#tab-perks" onclick="openTab('tab-perks')">🎁 Partner Perks</a>
         <a href="https://buymeacoffee.com/sunoget" target="_blank" rel="noopener noreferrer" style="color: #ffdd00;">☕ Buy Me A Coffee</a>
         <a href="#tab-proof" onclick="openTab('tab-proof')">Case Studies</a>
@@ -2094,6 +2227,24 @@
       } catch(e) {}
     }
 
+    function playRadarPing() {
+      if (!soundEnabled) return;
+      try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(1200, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(300, audioCtx.currentTime + 0.08);
+        gain.gain.setValueAtTime(0.02, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.08);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.08);
+      } catch(e) {}
+    }
+
     // Live Lead Presets (Universal Everyman Business Models)
     const PRESETS = {
       saas: {
@@ -2110,7 +2261,8 @@
             replies: {
               founder: "Great point u/EfficiencyWhich5225! If you're looking to automate customer workflow reports, check out https://yourapp.com — built specifically to handle this with zero complex setup. Best of luck with the project!",
               tech: "Hey u/EfficiencyWhich5225, for handling customer workflow reports, you might want to look into https://yourapp.com. Solves the core bottlenecks without requiring extra middleware.",
-              creator: "Hey u/EfficiencyWhich5225, had the exact same issue last month! Found https://yourapp.com and it streamlined the entire report generation in minutes."
+              creator: "Hey u/EfficiencyWhich5225, had the exact same issue last month! Found https://yourapp.com and it streamlined the entire report generation in minutes.",
+              concise: "Check out https://yourapp.com — automates customer workflow reports in 1 click with 0 code."
             }
           },
           {
@@ -2123,7 +2275,8 @@
             replies: {
               founder: "Hey u/sarah_builds! If you're looking to automate client dashboards, https://yourapp.com gives you direct 1-click workflows with zero custom backend needed. Hope this helps!",
               tech: "For zero-backend client reporting u/sarah_builds, take a look at https://yourapp.com — handles the sync pipelines automatically.",
-              creator: "Nice project u/sarah_builds! Definitely check out https://yourapp.com for ready-made dashboard pipelines."
+              creator: "Nice project u/sarah_builds! Definitely check out https://yourapp.com for ready-made dashboard pipelines.",
+              concise: "You can use https://yourapp.com for automated client dashboards without custom backends."
             }
           },
           {
@@ -2136,7 +2289,8 @@
             replies: {
               founder: "Hey u/dev_marcus! If you want a lightweight solution without managing Redis clusters, https://yourapp.com has serverless async pipelines ready out of the box.",
               tech: "For modern job dispatching u/dev_marcus, check out https://yourapp.com for clean edge integrations.",
-              creator: "Nice question u/dev_marcus! https://yourapp.com made handling this super easy for our projects."
+              creator: "Nice question u/dev_marcus! https://yourapp.com made handling this super easy for our projects.",
+              concise: "Take a look at https://yourapp.com for lightweight async serverless job pipelines."
             }
           }
         ]
@@ -2155,7 +2309,8 @@
             replies: {
               founder: "Hey u/store_grower! If you want to automate abandoned cart recovery with 1-click WhatsApp/SMS triggers, check out https://shopboost.io. Recovers ~14% of lost sales on average!",
               tech: "For Shopify webhook cart recovery u/store_grower, https://shopboost.io handles the dispatch pipelines with zero latency.",
-              creator: "Great store u/store_grower! I use https://shopboost.io on our store and it bumped recovery rates significantly."
+              creator: "Great store u/store_grower! I use https://shopboost.io on our store and it bumped recovery rates significantly.",
+              concise: "Use https://shopboost.io to trigger automated abandoned cart recovery via WhatsApp & SMS."
             }
           },
           {
@@ -2168,7 +2323,8 @@
             replies: {
               founder: "Hey u/omni_seller! If you're managing multi-channel inventory, https://shopboost.io auto-syncs stock across all 3 platforms in real time with zero overselling risk.",
               tech: "For real-time multi-platform inventory reconciliation u/omni_seller, https://shopboost.io provides reliable two-way webhooks.",
-              creator: "Nice brand u/omni_seller! Check out https://shopboost.io for simple 1-click catalog syncing."
+              creator: "Nice brand u/omni_seller! Check out https://shopboost.io for simple 1-click catalog syncing.",
+              concise: "https://shopboost.io auto-syncs real-time inventory between Shopify, TikTok Shop, and Amazon."
             }
           }
         ]
@@ -2187,7 +2343,8 @@
             replies: {
               founder: "Hey u/founder_scale! We build custom automated dashboards and billing pipelines with 1-week turnaround. You can view our portfolio and schedule a direct sprint call at https://apexstudio.agency.",
               tech: "Hey u/founder_scale, we specialize in Stripe integrations and modern dashboard architectures. Check out our case studies at https://apexstudio.agency.",
-              creator: "Great project u/founder_scale! Check out https://apexstudio.agency for fast dashboard builds."
+              creator: "Great project u/founder_scale! Check out https://apexstudio.agency for fast dashboard builds.",
+              concise: "We build custom automated Stripe dashboards with 1-week turnaround at https://apexstudio.agency."
             }
           },
           {
@@ -2200,7 +2357,8 @@
             replies: {
               founder: "Great workflow u/design_nomad! We open-sourced our client onboarding workflows at https://apexstudio.agency — hope it saves you time on contracts!",
               tech: "For automated client portals and payment reconciliation u/design_nomad, check out https://apexstudio.agency.",
-              creator: "Nice setup u/design_nomad! Definitely check out https://apexstudio.agency for client intake templates."
+              creator: "Nice setup u/design_nomad! Definitely check out https://apexstudio.agency for client intake templates.",
+              concise: "Check out our client onboarding workflows and invoice templates at https://apexstudio.agency."
             }
           }
         ]
@@ -2219,7 +2377,8 @@
             replies: {
               founder: "Hey u/growth_hacker99! If you want to auto-enrich and research leads in Google Sheets with AI, check out https://flowagent.ai — does this in 1 click with zero code!",
               tech: "For automated LLM sheet pipelines u/growth_hacker99, https://flowagent.ai exposes direct webhooks and functions.",
-              creator: "Awesome workflow u/growth_hacker99! I use https://flowagent.ai for enriching my prospecting sheets daily."
+              creator: "Awesome workflow u/growth_hacker99! I use https://flowagent.ai for enriching my prospecting sheets daily.",
+              concise: "Connect AI models to Google Sheets in 1 click with https://flowagent.ai."
             }
           },
           {
@@ -2232,7 +2391,8 @@
             replies: {
               founder: "Hey u/nocode_builder! If you're building branded AI agents trained on client docs, https://flowagent.ai lets you deploy embedded bots in under 5 minutes.",
               tech: "For vector search and document embedding agents u/nocode_builder, check out https://flowagent.ai.",
-              creator: "Nice build u/nocode_builder! https://flowagent.ai makes spinning up client agents super straightforward."
+              creator: "Nice build u/nocode_builder! https://flowagent.ai makes spinning up client agents super straightforward.",
+              concise: "Deploy custom document-trained AI customer support bots with https://flowagent.ai."
             }
           }
         ]
@@ -2251,7 +2411,8 @@
             replies: {
               founder: "Hey u/clip_master! If you need animated karaoke captions, https://yourvideotool.com generates synchronized subtitles in one click for free.",
               tech: "For fast word-level subtitle alignment u/clip_master, check out https://yourvideotool.com.",
-              creator: "Nice workflow u/clip_master! I use https://yourvideotool.com for auto-captioning my Shorts."
+              creator: "Nice workflow u/clip_master! I use https://yourvideotool.com for auto-captioning my Shorts.",
+              concise: "Auto-generate synchronized karaoke animated subtitles with https://yourvideotool.com."
             }
           }
         ]
@@ -2270,7 +2431,8 @@
             replies: {
               founder: "Hey u/plumbing_owner! If you want to automatically send SMS review requests after completed jobs, https://localrankpro.com automates the whole sequence and filters 5-star reviews to Google.",
               tech: "For automated local review generation u/plumbing_owner, check out https://localrankpro.com.",
-              creator: "Great business u/plumbing_owner! https://localrankpro.com helped our local shop double our Google review count in 30 days."
+              creator: "Great business u/plumbing_owner! https://localrankpro.com helped our local shop double our Google review count in 30 days.",
+              concise: "Automate SMS 5-star Google review sequences with https://localrankpro.com."
             }
           }
         ]
@@ -2286,6 +2448,7 @@
       activeKey = document.getElementById("activePresetSelect").value;
       activeIndex = 0;
       renderLeads();
+      updateWebhookPreview();
       playTargetLockChime();
       showToast('🎯', `Scope Locked: ${PRESETS[activeKey].name}`);
     }
@@ -2311,6 +2474,7 @@
         r.classList.toggle("selected", i === idx);
       });
       updateReplyBox();
+      updateWebhookPreview();
       playTargetLockChime();
     }
 
@@ -2400,10 +2564,10 @@
         // Confetti burst animation
         if (typeof confetti === 'function') {
           confetti({
-            particleCount: 40,
-            spread: 60,
+            particleCount: 45,
+            spread: 65,
             origin: { y: 0.75 },
-            colors: ['#38bdf8', '#10b981', '#ffffff']
+            colors: ['#38bdf8', '#10b981', '#ffffff', '#ffdd00']
           });
         }
 
@@ -2437,6 +2601,17 @@
       showToast('📥', 'Exported Leads to CSV');
     }
 
+    function exportLeadsJson() {
+      const p = PRESETS[activeKey];
+      const blob = new Blob([JSON.stringify(p, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `leadsniper_${activeKey}_leads.json`;
+      a.click();
+      playTargetLockChime();
+      showToast('📄', 'Exported Leads to JSON');
+    }
+
     function simulateScan() {
       const badge = document.getElementById("liveTargetLockBadge");
       badge.textContent = "● SCANNING SCOPE...";
@@ -2466,7 +2641,8 @@
         replies: {
           founder: `Hey u/live_prospect! If you need a reliable tool for ${p.name}, check out ${p.url} — designed specifically to streamline this with 0 hassle.`,
           tech: `Hey u/live_prospect, take a look at ${p.url}. Solves the core bottlenecks directly.`,
-          creator: `Great question u/live_prospect! I use ${p.url} for this exact workflow.`
+          creator: `Great question u/live_prospect! I use ${p.url} for this exact workflow.`,
+          concise: `Check out ${p.url} for this exact workflow.`
         }
       });
       activeIndex = 0;
@@ -2486,6 +2662,7 @@
         l.replies.founder = `Hey u/${l.author}! If you're looking to streamline this workflow, check out ${name} at ${url}. Zero complex setup needed!`;
         l.replies.tech = `Hey u/${l.author}, for this exact use-case, ${url} provides direct workflows.`;
         l.replies.creator = `Nice post u/${l.author}! ${url} makes handling this super fast.`;
+        l.replies.concise = `Check out ${name} at ${url} to solve this in 1 click.`;
       });
 
       updateReplyBox();
@@ -2560,6 +2737,80 @@
       document.getElementById('sbxReplyOutput').value = `Hey u/${author}! If you're looking to solve this, check out https://yourapp.com — handles this workflow in 1 click with zero complex setup. Best of luck!`;
     }
 
+    // Karma Safety Score Calculator
+    function calculateSafetyScore() {
+      const karma = parseInt(document.getElementById('safetyKarma').value, 10) || 0;
+      const age = parseInt(document.getElementById('safetyAge').value, 10) || 0;
+      const ratio = parseInt(document.getElementById('safetyRatio').value, 10) || 100;
+
+      let score = 50;
+      if (karma > 500) score += 20;
+      else if (karma > 100) score += 10;
+      else if (karma < 30) score -= 25;
+
+      if (age > 180) score += 15;
+      else if (age > 30) score += 10;
+      else if (age < 14) score -= 20;
+
+      if (ratio === 100) score += 15;
+      else if (ratio === 75) score += 5;
+      else score -= 30;
+
+      score = Math.max(10, Math.min(99, score));
+
+      const scoreEl = document.getElementById('safetyScorePercent');
+      const maxEl = document.getElementById('safetyMaxSnipes');
+      const riskEl = document.getElementById('safetyRiskBadge');
+
+      if (score >= 85) {
+        scoreEl.textContent = `${score}% (EXCELLENT)`;
+        scoreEl.style.color = "var(--emerald)";
+        maxEl.textContent = "12-16 snipes / day";
+        riskEl.textContent = "< 1% (ULTRA LOW)";
+        riskEl.style.color = "var(--emerald)";
+      } else if (score >= 60) {
+        scoreEl.textContent = `${score}% (MODERATE)`;
+        scoreEl.style.color = "var(--amber)";
+        maxEl.textContent = "6-8 snipes / day";
+        riskEl.textContent = "5-8% (LOW)";
+        riskEl.style.color = "var(--amber)";
+      } else {
+        scoreEl.textContent = `${score}% (CAUTION)`;
+        scoreEl.style.color = "var(--crimson)";
+        maxEl.textContent = "2-3 snipes / day";
+        riskEl.textContent = "25%+ (HIGH RISK)";
+        riskEl.style.color = "var(--crimson)";
+      }
+    }
+
+    // Webhook Simulator
+    function updateWebhookPreview() {
+      const p = PRESETS[activeKey];
+      const lead = p.leads[activeIndex] || p.leads[0];
+      if (!lead) return;
+
+      const score = lead.score || (lead.intent === "HOT" ? 88 : 54);
+      const payload = {
+        event: "target_locked",
+        source: lead.sub,
+        author: lead.author,
+        title: lead.title,
+        intent_score: `${score}%`,
+        intent_tier: lead.intent,
+        permalink: lead.permalink,
+        suggested_reply: lead.replies.founder,
+        timestamp: new Date().toISOString()
+      };
+
+      const box = document.getElementById('webhookJsonBox');
+      if (box) box.textContent = JSON.stringify(payload, null, 2);
+    }
+
+    function testWebhookAlert(service) {
+      playTargetLockChime();
+      showToast('⚡', `Simulated ${service.toUpperCase()} Webhook Dispatched!`);
+    }
+
     // Preset Builder Sync
     function syncBuilderJson() {
       const id = document.getElementById('bldId').value.trim() || "my_tool";
@@ -2586,6 +2837,11 @@
             id: "tech",
             name: "⚙️ Technical Architect",
             template: `Hey u/{author}, for direct workflows check out ${url}.`
+          },
+          {
+            id: "concise",
+            name: "⚡ Ultra Concise",
+            template: `Check out ${url} to streamline this in 1 click.`
           }
         ]
       };
@@ -2648,7 +2904,6 @@
 
     // Keyboard Shortcuts
     window.addEventListener('keydown', (e) => {
-      // Avoid triggering when user is typing in inputs or textareas
       if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
 
       if (e.code === 'Space' || e.key === 'c' || e.key === 'C') {
@@ -2660,6 +2915,8 @@
         setPersona('tech');
       } else if (e.key === '3') {
         setPersona('creator');
+      } else if (e.key === '4') {
+        setPersona('concise');
       } else if (e.key === 'ArrowDown') {
         e.preventDefault();
         const p = PRESETS[activeKey];
@@ -2727,7 +2984,7 @@
       const h = radarCanvas.height;
       const cx = w / 2;
       const cy = h / 2;
-      const maxR = (w / 2) - 12;
+      const maxR = (w / 2) - 14;
 
       ctx.clearRect(0, 0, w, h);
 
@@ -2738,7 +2995,7 @@
       ctx.fillStyle = '#06090f';
       ctx.fill();
       ctx.lineWidth = 2;
-      ctx.strokeStyle = 'rgba(56, 189, 248, 0.4)';
+      ctx.strokeStyle = 'rgba(56, 189, 248, 0.45)';
       ctx.stroke();
 
       // 2. Range Rings (Distance = Intent Tiers)
@@ -2774,7 +3031,7 @@
         ctx.lineTo(cx - i * tickSpacing, cy + 3);
         // Vertical ticks
         ctx.moveTo(cx - 3, cy + i * tickSpacing);
-        ctx.lineTo(ctx + 3, cy + i * tickSpacing);
+        ctx.lineTo(cx + 3, cy + i * tickSpacing);
         ctx.moveTo(cx - 3, cy - i * tickSpacing);
         ctx.lineTo(cx + 3, cy - i * tickSpacing);
         ctx.strokeStyle = 'rgba(56, 189, 248, 0.45)';
@@ -2809,34 +3066,27 @@
       ctx.restore();
 
       // 6. REAL VARIABLE-DRIVEN LEAD BLIPS
-      // Each lead is plotted based on actual score and index position
       const p = PRESETS[activeKey];
       if (p && p.leads) {
         p.leads.forEach((lead, idx) => {
-          // Angle derived from index position across 360 deg
           const totalLeads = p.leads.length;
           const leadAngle = (idx / totalLeads) * (Math.PI * 2) - 0.7;
 
-          // Distance from center: higher score = closer to bullseye
           const score = lead.score || (lead.intent === 'HOT' ? 88 : 54);
-          // Distance mapped from score (100% score -> radius 35px from center; 40% score -> radius 130px)
           const blipDist = maxR * (1 - (score / 130));
 
           const bx = cx + Math.cos(leadAngle) * blipDist;
           const by = cy + Math.sin(leadAngle) * blipDist;
 
-          // Store coordinates for click detection
           lead._screenX = bx;
           lead._screenY = by;
 
-          // Sweep hit illumination check
           let angleDiff = (radarAngle - leadAngle) % (Math.PI * 2);
           if (angleDiff < 0) angleDiff += Math.PI * 2;
           const isSweptRecently = angleDiff < 0.6;
 
           const isSelected = (idx === activeIndex);
 
-          // Draw Target Blip
           ctx.save();
           ctx.beginPath();
           const blipRadius = isSelected ? 8 : (lead.intent === 'HOT' ? 6 : 4.5);
@@ -2856,7 +3106,6 @@
           ctx.shadowBlur = isSelected ? 16 : (isSweptRecently ? 12 : 5);
           ctx.fill();
 
-          // Selection lock ring
           if (isSelected) {
             ctx.beginPath();
             ctx.arc(bx, by, 14, 0, Math.PI * 2);
@@ -2865,8 +3114,7 @@
             ctx.setLineDash([3, 3]);
             ctx.stroke();
 
-            // Label tag on scope
-            ctx.font = '600 9px "JetBrains Mono", monospace';
+            ctx.font = '700 9.5px "JetBrains Mono", monospace';
             ctx.fillStyle = '#f1f5f9';
             ctx.fillText(`${lead.sub}`, bx + 16, by + 3);
           }
@@ -2879,7 +3127,6 @@
       requestAnimationFrame(drawRealRadarScope);
     }
 
-    // Click on real radar scope canvas to select lead
     radarCanvas.addEventListener('click', (e) => {
       const rect = radarCanvas.getBoundingClientRect();
       const scaleX = radarCanvas.width / rect.width;
@@ -2904,6 +3151,8 @@
     document.addEventListener("DOMContentLoaded", () => {
       renderLeads();
       updateCalculator();
+      calculateSafetyScore();
+      updateWebhookPreview();
       syncBuilderJson();
       runSandboxAnalysis();
       drawRealRadarScope();

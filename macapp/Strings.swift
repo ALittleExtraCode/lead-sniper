@@ -4,9 +4,10 @@ import Foundation
 ///
 /// A flat table rather than a .strings bundle, for the same reason SunoGet uses
 /// one: the app is built by `swiftc` from a file list with no resource step, so
-/// anything living in .lproj folders would not survive the build. English only
-/// for now, and structured so the other languages drop in without touching a
-/// call site.
+/// anything living in .lproj folders would not survive the build.
+///
+/// A missing key falls back to English rather than showing the key itself, so a
+/// half-translated language reads as a mixed one instead of a broken one.
 enum L {
     enum Key {
         case tabRadar, tabSetup
@@ -48,9 +49,63 @@ enum L {
         case nextCheckMinutes, nextCheckSeconds, checkingNow
         case notRelevant, putBack, dismissed, dismissedNote, keyboardHint
         case rejectedPattern
+        case menuFindPlaces, languageChanged, languageRelaunch, relaunchNow, later
     }
 
-    static func t(_ key: Key) -> String { english[key] ?? "" }
+    static let languages: [(code: String, name: String)] = [
+        ("en", "English"),      ("es", "Español"),      ("de", "Deutsch"),
+        ("fr", "Français"),     ("it", "Italiano"),     ("pt", "Português"),
+        ("zh", "中文"),          ("ja", "日本語"),        ("ko", "한국어"),
+        ("ru", "Русский"),      ("ar", "العربية"),       ("hi", "हिन्दी"),
+        ("tr", "Türkçe"),       ("vi", "Tiếng Việt"),   ("id", "Bahasa Indonesia"),
+    ]
+
+    private static let stored = "appLanguage"
+
+    /// The chosen language, or the closest match to the Mac's own on first run.
+    static var code: String {
+        get {
+            if let saved = UserDefaults.standard.string(forKey: stored),
+               languages.contains(where: { $0.code == saved }) {
+                return saved
+            }
+            let preferred = Locale.preferredLanguages.first?.prefix(2).lowercased() ?? "en"
+            return languages.contains { $0.code == preferred } ? String(preferred) : "en"
+        }
+        set { UserDefaults.standard.set(newValue, forKey: stored) }
+    }
+
+    static var name: String { languages.first { $0.code == code }?.name ?? "English" }
+
+    static var isRightToLeft: Bool { code == "ar" }
+
+    /// Mirrors the whole window for a right-to-left language.
+    ///
+    /// AppKit mirrors a window only when the *system* is set to a right-to-left
+    /// language. This app picks its own instead, so Arabic would otherwise come
+    /// up fully translated and still laid out left to right -- every label on
+    /// the wrong side of its control.
+    ///
+    /// These two defaults have to be *written* rather than registered:
+    /// `register(defaults:)` fills the lowest-priority domain and AppKit does
+    /// not read them there. They also have to be set before NSApplication
+    /// exists, which is why changing the language asks for a relaunch. Cleared
+    /// for every other language, or Arabic once would mirror the app forever.
+    static func applyLayoutDirection() {
+        let defaults = UserDefaults.standard
+        for name in ["AppleTextDirection", "NSForceRightToLeftWritingDirection"] {
+            if isRightToLeft { defaults.set(true, forKey: name) }
+            else { defaults.removeObject(forKey: name) }
+        }
+    }
+
+    static func t(_ key: Key) -> String {
+        // English is the fallback for anything a translation has not filled in.
+        tables[code]?[key] ?? english[key] ?? ""
+    }
+
+    /// Every language, keyed by code.
+    static var tables: [String: [Key: String]] { ["en": english] }
 
     private static let english: [Key: String] = [
         .tabRadar: "Radar",
@@ -187,6 +242,12 @@ enum L {
         .notAPreset: "That is not a LeadSniper workspace file.",
         .presetTooNew: "That file was made by a newer version (%@). Update LeadSniper first.",
         .presetUnusable: "That file is missing %@, so it would import into something that cannot sweep.",
+
+        .menuFindPlaces: "Find Where They Talk",
+        .languageChanged: "Language changed",
+        .languageRelaunch: "LeadSniper needs to restart to finish switching. Nothing you have set up is affected.",
+        .relaunchNow: "Restart now",
+        .later: "Later",
 
         .rejectedPattern: "The ones you have rejected keep saying %@ — add those to \"Never show me\" in Setup and they will stop appearing.",
         .notRelevant: "Not relevant (D)",

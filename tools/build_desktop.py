@@ -275,6 +275,106 @@ def build_app() -> Path | None:
     return app
 
 
+def dmg_background(dest: Path) -> bool:
+    """Draws the installer backdrop.
+
+    Paper and a soft arrow, in the app's own palette, so opening the disk image
+    looks like the thing you are about to install rather than a folder. Drawn
+    rather than shipped as an asset for the same reason the icon is: there is
+    nothing to start from, and a few honest shapes beat a bare window.
+
+    Retina: the PNG is 2x and carries a DPI so Finder scales it back down.
+    """
+    try:
+        from PIL import Image, ImageDraw, ImageFont
+    except ImportError:
+        return False
+
+    W, H, S = 620, 420, 2
+    im = Image.new("RGB", (W * S, H * S), (0xF5, 0xF4, 0xF1))
+    d = ImageDraw.Draw(im)
+
+    # A band of the accent along the top, thin enough to be a detail.
+    for y in range(0, 5 * S):
+        t = y / (5 * S)
+        d.line([(0, y), (W * S, y)],
+               fill=(int(0x22 + (0x43 - 0x22) * t),
+                     int(0xd3 + (0x38 - 0xd3) * t),
+                     int(0xee + (0xca - 0xee) * t)))
+
+    def text(xy, s, size, fill, anchor="mm"):
+        for name in ("/System/Library/Fonts/SFNS.ttf",
+                     "/System/Library/Fonts/Helvetica.ttc"):
+            try:
+                f = ImageFont.truetype(name, size * S)
+                d.text((xy[0] * S, xy[1] * S), s, font=f, fill=fill, anchor=anchor)
+                return
+            except Exception:
+                continue
+        d.text((xy[0] * S, xy[1] * S), s, fill=fill, anchor=anchor)
+
+    text((W // 2, 54), "LeadSniper", 26, (0x1b, 0x1d, 0x21))
+    text((W // 2, 86), "Drag it across to install", 14, (0x5d, 0x63, 0x6b))
+
+    # The arrow, between where the two icons sit.
+    y = 218 * S
+    x1, x2 = 246 * S, 374 * S
+    d.line([(x1, y), (x2 - 13 * S, y)], fill=(0xC3, 0xC0, 0xB8), width=3 * S)
+    d.polygon([(x2, y), (x2 - 15 * S, y - 9 * S), (x2 - 15 * S, y + 9 * S)],
+              fill=(0x9f, 0xa5, 0xad))
+
+    text((W // 2, 372), "leadsniper.com", 12, (0x8d, 0x93, 0x9b))
+    im.save(dest, dpi=(144, 144))
+    return dest.is_file()
+
+
+def style_dmg(stage: Path) -> None:
+    """Backdrop, volume icon and icon positions.
+
+    Every step is allowed to fail. An unstyled disk image still installs the
+    app perfectly well, and a build that stops because Finder would not answer
+    an AppleScript is a build that ships nothing.
+    """
+    try:
+        back = stage / ".background"
+        back.mkdir(exist_ok=True)
+        if not dmg_background(back / "background.png"):
+            return
+        icns = stage / APP_NAME / "Contents" / "Resources" / "AppIcon.icns"
+        if icns.exists():
+            shutil.copy2(icns, stage / ".VolumeIcon.icns")
+            sh("SetFile", "-a", "C", str(stage))
+    except Exception:
+        return
+
+
+def arrange(volume: str) -> None:
+    """Positions the icons in the mounted volume, via Finder."""
+    script = f'''
+    tell application "Finder"
+      tell disk "{volume}"
+        open
+        set current view of container window to icon view
+        set toolbar visible of container window to false
+        set statusbar visible of container window to false
+        set the bounds of container window to {{200, 160, 820, 580}}
+        set opts to the icon view options of container window
+        set arrangement of opts to not arranged
+        set icon size of opts to 112
+        set background picture of opts to file ".background:background.png"
+        set position of item "{APP_NAME}" of container window to {{170, 215}}
+        set position of item "Applications" of container window to {{450, 215}}
+        close
+        open
+        update without registering applications
+        delay 1
+        close
+      end tell
+    end tell
+    '''
+    sh("osascript", "-e", script)
+
+
 def build_dmg(app: Path) -> Path | None:
     stage = BUILD / "stage"
     if stage.exists():
@@ -282,14 +382,41 @@ def build_dmg(app: Path) -> Path | None:
     stage.mkdir(parents=True)
     shutil.copytree(app, stage / APP_NAME, symlinks=True)
     (stage / "Applications").symlink_to("/Applications")
+    style_dmg(stage)
 
     dmg = BUILD / "LeadSniper.dmg"
     if dmg.exists():
         dmg.unlink()
+
+    # Built read-write first so Finder can arrange it, then converted to the
+    # compressed read-only image that ships. Arranging a UDZO image is not
+    # possible -- it is already read-only by the time it exists.
+    scratch = BUILD / "LeadSniper-rw.dmg"
+    if scratch.exists():
+        scratch.unlink()
     r = sh("hdiutil", "create", "-volname", "LeadSniper", "-srcfolder", str(stage),
-           "-ov", "-format", "UDZO", str(dmg))
+           "-ov", "-format", "UDRW", str(scratch))
     if r.returncode != 0:
         print(f"  ✗  could not build the disk image: {r.stderr.strip()[:200]}")
+        return None
+
+    mounted = sh("hdiutil", "attach", "-nobrowse", "-noverify", str(scratch)).stdout
+    volume = next((l.split("\t")[-1].strip() for l in mounted.splitlines()
+                   if "/Volumes/" in l), None)
+    if volume:
+        arrange(Path(volume).name)
+        sh("sync")
+        for _ in range(3):
+            if sh("hdiutil", "detach", volume).returncode == 0:
+                break
+            time.sleep(1)
+        else:
+            sh("hdiutil", "detach", volume, "-force")
+
+    r = sh("hdiutil", "convert", str(scratch), "-format", "UDZO", "-o", str(dmg))
+    scratch.unlink(missing_ok=True)
+    if r.returncode != 0:
+        print(f"  ✗  could not compress the disk image: {r.stderr.strip()[:200]}")
         return None
     identity = developer_id_identity()
     if identity and not sign(dmg, identity):
