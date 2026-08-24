@@ -22,53 +22,13 @@
   <meta name="twitter:title" content="LeadSniper — Autonomous Community Radar">
   <meta name="twitter:description" content="Zero-API real-time social listening, buying intent scoring, and 1-click conversion engine for founders, creators, and agencies.">
 
+  <!-- Canvas Confetti -->
+  <script defer src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
   <!-- Google Fonts: Plus Jakarta Sans + JetBrains Mono + Outfit -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-  <!-- Schema.org JSON-LD Structured Data -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "WebApplication",
-        "name": "LeadSniper",
-        "url": "https://leadsniper.com",
-        "description": "Zero-API autonomous community radar and lead acquisition engine.",
-        "applicationCategory": "BusinessApplication",
-        "operatingSystem": "All (Web, macOS, Windows, Linux)",
-        "offers": {
-          "@type": "Offer",
-          "price": "0",
-          "priceCurrency": "USD"
-        }
-      },
-      {
-        "@type": "FAQPage",
-        "mainEntity": [
-          {
-            "@type": "Question",
-            "name": "How does LeadSniper work without Reddit API keys?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "LeadSniper parses public XML/Atom streams from multi-subreddit feeds. This completely bypasses Reddit's 403 API paywalls and rate limits."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Why does LeadSniper enforce unbracketed raw links?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Markdown link brackets look like automated spam bots and trigger AutoMod filters. Raw URLs read as genuine human recommendations."
-            }
-          }
-        ]
-      }
-    ]
-  }
-  </script>
 
   <style>
     :root {
@@ -155,8 +115,8 @@
     .sniper-crosshair.locked .reticle-ring {
       border-color: var(--emerald);
       border-style: solid;
-      transform: scale(1.2) rotate(45deg);
-      box-shadow: 0 0 12px rgba(16, 185, 129, 0.5);
+      transform: scale(1.25) rotate(45deg);
+      box-shadow: 0 0 14px rgba(16, 185, 129, 0.5);
     }
 
     .sniper-crosshair.locked::before {
@@ -311,7 +271,7 @@
       color: var(--accent);
     }
 
-    /* Live Ticker Bar */
+    /* Live Ticker Marquee */
     .live-ticker-bar {
       display: flex;
       align-items: center;
@@ -325,6 +285,7 @@
       color: var(--text-secondary);
       overflow: hidden;
       white-space: nowrap;
+      position: relative;
     }
 
     .ticker-tag {
@@ -333,12 +294,20 @@
       display: flex;
       align-items: center;
       gap: 6px;
+      z-index: 2;
+      background: var(--bg);
+      padding-right: 8px;
     }
 
-    .ticker-content {
-      color: var(--text-muted);
-      overflow: hidden;
-      text-overflow: ellipsis;
+    .ticker-marquee-inner {
+      display: inline-block;
+      white-space: nowrap;
+      animation: tickerMarquee 35s linear infinite;
+    }
+
+    @keyframes tickerMarquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
     }
 
     /* Hero Banner */
@@ -437,6 +406,12 @@
 
     .tab-content.active {
       display: block;
+      animation: tabFadeIn 0.25s ease;
+    }
+
+    @keyframes tabFadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     /* Radar Main Card Layout */
@@ -448,6 +423,7 @@
       display: flex;
       flex-direction: column;
       gap: 16px;
+      position: relative;
     }
 
     .radar-top-controls {
@@ -521,6 +497,7 @@
       overflow: hidden;
       display: flex;
       flex-direction: column;
+      position: relative;
     }
 
     .stream-header {
@@ -549,6 +526,7 @@
       padding: 2px 7px;
       border-radius: 4px;
       cursor: pointer;
+      transition: all 0.15s ease;
     }
 
     .filter-pill-btn.active {
@@ -560,6 +538,7 @@
     .stream-items {
       max-height: 480px;
       overflow-y: auto;
+      position: relative;
     }
 
     .lead-row {
@@ -570,6 +549,13 @@
       display: flex;
       flex-direction: column;
       gap: 5px;
+      position: relative;
+      animation: leadSlideIn 0.3s ease;
+    }
+
+    @keyframes leadSlideIn {
+      from { opacity: 0; transform: translateY(-8px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .lead-row:hover, .lead-row.selected {
@@ -711,6 +697,7 @@
       min-height: 130px;
       resize: none;
       outline: none;
+      transition: border-color 0.2s ease;
     }
 
     .reply-textarea:focus {
@@ -736,8 +723,8 @@
     }
 
     .btn-dispatch:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 22px rgba(16, 185, 129, 0.45);
     }
 
     /* Interactive Product Simulator */
@@ -813,11 +800,12 @@
       border: 1px solid var(--card-border);
       border-radius: 14px;
       padding: 20px;
-      transition: border 0.2s ease;
+      transition: all 0.2s ease;
     }
 
     .feature-hud-card:hover {
       border-color: rgba(56, 189, 248, 0.3);
+      transform: translateY(-2px);
     }
 
     .feature-hud-icon {
@@ -926,6 +914,31 @@
       color: var(--text-muted);
     }
 
+    /* Keyboard Shortcuts HUD Bar */
+    .shortcuts-bar {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 14px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      font-size: 11px;
+      font-family: var(--font-mono);
+      color: var(--text-muted);
+      flex-wrap: wrap;
+    }
+
+    .kbd-tag {
+      background: var(--card-inner);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: var(--accent);
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+
     /* Footer */
     .footer-bar {
       border-top: 1px solid var(--card-border);
@@ -968,7 +981,7 @@
         <div>
           <div class="brand-title">LeadSniper</div>
         </div>
-        <span class="brand-tag">v1.2.0</span>
+        <span class="brand-tag">v1.3.0</span>
       </a>
 
       <div class="header-stats">
@@ -989,10 +1002,13 @@
       </div>
     </header>
 
-    <!-- Live Ticker Bar -->
+    <!-- Live Ticker Marquee -->
     <div class="live-ticker-bar">
       <div class="ticker-tag">🔴 LIVE RADAR</div>
-      <div class="ticker-content" id="tickerLiveStream">Scanning Reddit public Atom streams • Zero API keys required • Intent scoring active (HOT 🔥 / WARM ⚡) • 100% clean direct URLs</div>
+      <div class="ticker-marquee-inner" id="tickerMarquee">
+        <span>⚡ r/SaaS: "Looking for a tool to automate customer workflow reports" (88% 🔥 HOT) • 🎯 r/shopify: "How can I automatically recover abandoned carts via WhatsApp?" (88% 🔥 HOT) • ⚡ r/forhire: "[Hiring] Need a developer to build automated dashboard & Stripe billing" (88% 🔥 HOT) • 🧠 r/ChatGPT: "How to connect GPT-4 to Google Sheets to auto-research leads?" (88% 🔥 HOT) • 🎬 r/VideoEditing: "Any free tool to auto-generate karaoke animated subtitles?" (88% 🔥 HOT) • 🏪 r/smallbusiness: "How can I get more Google 5-star reviews from past customers?" (88% 🔥 HOT) • &nbsp;&nbsp;</span>
+        <span>⚡ r/SaaS: "Looking for a tool to automate customer workflow reports" (88% 🔥 HOT) • 🎯 r/shopify: "How can I automatically recover abandoned carts via WhatsApp?" (88% 🔥 HOT) • ⚡ r/forhire: "[Hiring] Need a developer to build automated dashboard & Stripe billing" (88% 🔥 HOT) • 🧠 r/ChatGPT: "How to connect GPT-4 to Google Sheets to auto-research leads?" (88% 🔥 HOT) • 🎬 r/VideoEditing: "Any free tool to auto-generate karaoke animated subtitles?" (88% 🔥 HOT) • 🏪 r/smallbusiness: "How can I get more Google 5-star reviews from past customers?" (88% 🔥 HOT) • &nbsp;&nbsp;</span>
+      </div>
     </div>
 
     <!-- Tactical Hero Panel -->
@@ -1071,7 +1087,7 @@
                 <div class="score-breakdown-bar" id="scoreBreakdownBar">
                   <span class="score-chip">Question Pattern: +35%</span>
                   <span class="score-chip">Feature Match: +25%</span>
-                  <span class="score-chip">Intent Density: +25%</span>
+                  <span class="score-chip">Intent Density: +28%</span>
                 </div>
               </div>
 
@@ -1086,7 +1102,7 @@
               <textarea id="replyTextarea" class="reply-textarea" spellcheck="false"></textarea>
             </div>
 
-            <button class="btn-dispatch" onclick="copyAndDispatch()">
+            <button class="btn-dispatch" id="mainDispatchBtn" onclick="copyAndDispatch()">
               <span id="btnDispatchIcon">🚀</span>
               <span id="btnDispatchText">1-Click Copy Reply & Open Reddit Post</span>
             </button>
@@ -1103,6 +1119,14 @@
           <div style="display: flex; justify-content: flex-end;">
             <button onclick="applyCustomProduct()" class="btn-action-nav" style="background: rgba(56, 189, 248, 0.15); border-color: var(--accent); color: var(--accent);">⚡ Inject My Product Into Live Radar</button>
           </div>
+        </div>
+
+        <!-- Keyboard Shortcuts Bar -->
+        <div class="shortcuts-bar">
+          <span>⌨️ KEYBOARD SHORTCUTS:</span>
+          <span><span class="kbd-tag">Space</span> or <span class="kbd-tag">C</span> 1-Click Copy & Open</span>
+          <span><span class="kbd-tag">↑ / ↓</span> Select Lead</span>
+          <span><span class="kbd-tag">1 / 2 / 3</span> Switch Persona</span>
         </div>
       </div>
     </div>
@@ -1685,6 +1709,16 @@
         label.textContent = "Copied to Clipboard & Opened Reddit!";
         playTargetLockChime();
 
+        // Confetti burst animation
+        if (typeof confetti === 'function') {
+          confetti({
+            particleCount: 40,
+            spread: 60,
+            origin: { y: 0.75 },
+            colors: ['#38bdf8', '#10b981', '#ffffff']
+          });
+        }
+
         if (lead && lead.permalink) {
           window.open(lead.permalink, '_blank');
         }
@@ -1840,6 +1874,34 @@
       item.classList.toggle('open');
       if (soundEnabled) playTargetLockChime();
     }
+
+    // Keyboard Shortcuts
+    window.addEventListener('keydown', (e) => {
+      // Avoid triggering when user is typing in inputs or textareas
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+      if (e.code === 'Space' || e.key === 'c' || e.key === 'C') {
+        e.preventDefault();
+        copyAndDispatch();
+      } else if (e.key === '1') {
+        setPersona('founder');
+      } else if (e.key === '2') {
+        setPersona('tech');
+      } else if (e.key === '3') {
+        setPersona('creator');
+      } else if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        const p = PRESETS[activeKey];
+        if (activeIndex < p.leads.length - 1) {
+          selectLead(activeIndex + 1);
+        }
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        if (activeIndex > 0) {
+          selectLead(activeIndex - 1);
+        }
+      }
+    });
 
     // Tactical Sniper Crosshair Follower
     const crosshair = document.createElement('div');

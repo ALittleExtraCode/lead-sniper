@@ -69,6 +69,16 @@ final class RadarTab: NSView, NSTableViewDataSource, NSTableViewDelegate, Primar
     }
     required init?(coder: NSCoder) { fatalError() }
 
+    deinit {
+        // A repeating Timer is retained by the run loop, not by this view, so
+        // without this it keeps firing for the life of the process against a
+        // view nobody can see. The watch's task is cancelled for the same
+        // reason: it would go on sweeping, and spending the rate limit, for a
+        // tab that is gone.
+        ticker?.invalidate()
+        Task { @MainActor [watch] in watch.stop() }
+    }
+
     func refresh() {
         updateStatus()
         if leads.isEmpty { showSelection(nil) }

@@ -312,6 +312,8 @@ final class SetupTab: NSView, PrimaryAction {
         workspace.negativeTerms = Self.split(negativeField.stringValue)
         workspace.features = features.filter { !$0.name.isEmpty && !$0.triggers.isEmpty }
         workspace.watchesHackerNews = newsToggle.isLit
+        // Set after the id is settled, so the keychain item is filed under the
+        // workspace it belongs to rather than under a temporary one.
         workspace.webhook = webhookField.stringValue.trimmingCharacters(in: .whitespaces)
 
         guard workspace.isUsable else {

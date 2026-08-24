@@ -43,6 +43,16 @@ final class Radar {
         var isAnswered: Bool = false
     }
 
+    /// True while a sweep is in flight.
+    ///
+    /// The guard lives here rather than in the caller because there are two
+    /// callers and only one of them had it. Pressing "Sweep now" while the
+    /// half-hourly watch fired ran both: they interleaved on `seen`, both
+    /// called `remember` so the second overwrote the first, both pushed a list
+    /// into the interface so it flickered, and both spent the same rate-limit
+    /// budget to fetch the same posts.
+    private(set) var isSweeping = false
+
     private var seen: Set<String> = []
 
     /// Posts a reply has already been copied for.
@@ -130,6 +140,14 @@ final class Radar {
                wait: (TimeInterval) async -> Void = { try? await Task.sleep(nanoseconds: UInt64($0 * 1_000_000_000)) },
                progress: (Int, Int) -> Void = { _, _ in }
     ) async -> Sweep {
+        guard !isSweeping else {
+            var busy = Sweep()
+            busy.problems.append("a sweep is already running")
+            return busy
+        }
+        isSweeping = true
+        defer { isSweeping = false }
+
         var result = Sweep()
         let batches = Self.groups(workspace.communities, offset: offset)
         guard !batches.isEmpty || workspace.watchesHackerNews else {

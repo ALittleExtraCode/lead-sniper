@@ -41,12 +41,28 @@ struct Workspace: Codable, Equatable {
     /// broken. For the ones it suits, it finds the people who pay.
     var watchesHackerNews: Bool = false
 
-    /// A Slack or Discord webhook to push hot leads to, or empty.
+    /// Whether a webhook is set. The address itself lives in the keychain.
     ///
-    /// Per workspace rather than per app: somebody running two products sends
-    /// each one's leads to a different channel, and one shared address would
-    /// mean the wrong team getting the wrong leads.
-    var webhook: String = ""
+    /// Only the flag is stored here. The URL grants write access to somebody's
+    /// channel, and this struct is written to UserDefaults -- a plain plist any
+    /// process running as the user can read -- and exported to a file people
+    /// send each other. Neither is a place for a credential.
+    var hasWebhook: Bool = false
+
+    /// The address, read from the keychain on demand.
+    var webhook: String {
+        get { hasWebhook ? Secret.read(for: id) : "" }
+        set {
+            let trimmed = newValue.trimmingCharacters(in: .whitespaces)
+            Secret.save(trimmed, for: id)
+            hasWebhook = !trimmed.isEmpty
+        }
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case id, name, url, summary, communities, terms, negativeTerms
+        case features, maximumAgeInDays, watchesHackerNews, hasWebhook
+    }
 
     struct Feature: Codable, Equatable {
         var name: String
@@ -69,7 +85,7 @@ struct Workspace: Codable, Equatable {
         Workspace(id: id, name: "", url: "", summary: "",
                   communities: [], terms: [], negativeTerms: defaultNegativeTerms,
                   features: [], maximumAgeInDays: 7, watchesHackerNews: false,
-                  webhook: "")
+                  hasWebhook: false)
     }
 
     /// Terms that are a bad idea to answer under any product.
@@ -152,6 +168,9 @@ final class Workspaces {
     }
 
     func delete(_ id: String) {
+        // The credential goes with it, rather than being orphaned in the
+        // keychain under an id nothing refers to any more.
+        Secret.remove(for: id)
         all.removeAll { $0.id == id }
         if activeID == id {
             activeID = all.first?.id
