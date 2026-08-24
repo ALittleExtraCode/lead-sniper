@@ -4,22 +4,71 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>LeadSniper — #1 Autonomous Community Radar & Zero-API Lead Acquisition Suite</title>
-  <meta name="description" content="Acquire high-intent buyers and users from Reddit, forums, and communities in real time. Zero API keys, AI intent scoring, multi-persona response engine, and 1-click assisted conversion.">
-  <meta name="keywords" content="lead sniper, reddit lead generation, community radar, ai growth tool, saas marketing, automated outreach, reddit marketing, social listening, indie hacker tools">
-  <meta name="author" content="LeadSniper">
+  <meta name="description" content="Acquire high-intent buyers and active users from Reddit, communities, and forums in real time. Zero API keys, AI intent scoring, multi-persona response engine, and 1-click assisted conversion.">
+  <meta name="keywords" content="lead sniper, reddit lead generation, community radar, ai growth tool, saas marketing, automated outreach, reddit marketing, social listening, indie hacker tools, sunoget growth">
+  <meta name="author" content="LeadSniper Team">
   <link rel="canonical" href="https://leadsniper.com/">
   <meta name="theme-color" content="#38bdf8">
 
   <!-- Open Graph -->
   <meta property="og:type" content="website">
-  <meta property="og:title" content="LeadSniper — Autonomous Community Radar & Lead Acquisition">
+  <meta property="og:title" content="LeadSniper — Autonomous Community Radar & Lead Acquisition Suite">
   <meta property="og:description" content="Acquire high-intent customers from Reddit & communities in real time. Zero API keys, AI intent scoring, and 1-click assisted conversion.">
   <meta property="og:site_name" content="LeadSniper">
+  <meta property="og:url" content="https://leadsniper.com/">
 
-  <!-- Google Fonts -->
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="LeadSniper — Autonomous Community Radar">
+  <meta name="twitter:description" content="Zero-API real-time social listening, buying intent scoring, and 1-click conversion engine for founders and creators.">
+
+  <!-- Google Fonts: Plus Jakarta Sans + JetBrains Mono + Outfit -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Schema.org JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebApplication",
+        "name": "LeadSniper",
+        "url": "https://leadsniper.com",
+        "description": "Zero-API autonomous community radar and lead acquisition engine.",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "All (Web, macOS, Windows, Linux)",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        }
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "How does LeadSniper work without Reddit API keys?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "LeadSniper parses public XML/Atom streams from multi-subreddit feeds. This completely bypasses Reddit's 403 API paywalls and rate limits."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Why does LeadSniper enforce unbracketed raw links?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Markdown link brackets look like automated spam bots and trigger AutoMod filters. Raw URLs read as genuine human recommendations."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
 
   <style>
     :root {
@@ -61,7 +110,7 @@
       color: var(--text-primary);
       font-family: var(--font);
       min-height: 100vh;
-      padding: 20px 16px 40px;
+      padding: 18px 16px 50px;
       display: flex;
       justify-content: center;
       position: relative;
@@ -135,7 +184,7 @@
       top: -160px;
       left: 50%;
       transform: translateX(-50%);
-      width: 850px;
+      width: 900px;
       height: 450px;
       background: radial-gradient(ellipse at center, rgba(56, 189, 248, 0.12) 0%, rgba(16, 185, 129, 0.04) 45%, transparent 70%);
       filter: blur(60px);
@@ -145,7 +194,7 @@
 
     .container {
       width: 100%;
-      max-width: 1200px;
+      max-width: 1240px;
       display: flex;
       flex-direction: column;
       gap: 16px;
@@ -158,33 +207,33 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 14px 20px;
-      background: rgba(14, 18, 29, 0.7);
+      padding: 12px 18px;
+      background: rgba(14, 18, 29, 0.75);
       border: 1px solid var(--card-border);
-      border-radius: 16px;
+      border-radius: 14px;
       backdrop-filter: blur(16px);
       flex-wrap: wrap;
-      gap: 14px;
+      gap: 12px;
     }
 
     .brand-group {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       text-decoration: none;
     }
 
     .brand-icon {
       width: 36px;
       height: 36px;
-      border-radius: 10px;
+      border-radius: 9px;
       background: linear-gradient(135deg, rgba(56, 189, 248, 0.2), rgba(16, 185, 129, 0.2));
       border: 1px solid rgba(56, 189, 248, 0.4);
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 18px;
-      box-shadow: 0 0 16px rgba(56, 189, 248, 0.2);
+      box-shadow: 0 0 14px rgba(56, 189, 248, 0.2);
     }
 
     .brand-title {
@@ -197,31 +246,31 @@
 
     .brand-tag {
       font-family: var(--font-mono);
-      font-size: 11px;
+      font-size: 10.5px;
       color: var(--accent);
       background: rgba(56, 189, 248, 0.1);
       border: 1px solid rgba(56, 189, 248, 0.25);
-      padding: 2px 8px;
-      border-radius: 6px;
+      padding: 2px 7px;
+      border-radius: 5px;
       font-weight: 600;
     }
 
     .header-stats {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       flex-wrap: wrap;
     }
 
     .stat-pill {
       display: flex;
       align-items: center;
-      gap: 7px;
+      gap: 6px;
       background: var(--card-inner);
       border: 1px solid var(--card-border);
-      padding: 5px 12px;
-      border-radius: 8px;
-      font-size: 12px;
+      padding: 5px 11px;
+      border-radius: 7px;
+      font-size: 11.5px;
       font-family: var(--font-mono);
       color: var(--text-secondary);
     }
@@ -244,9 +293,9 @@
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid var(--card-border);
       color: var(--text-primary);
-      padding: 6px 14px;
-      border-radius: 8px;
-      font-size: 12.5px;
+      padding: 5px 12px;
+      border-radius: 7px;
+      font-size: 12px;
       font-weight: 600;
       text-decoration: none;
       display: inline-flex;
@@ -262,12 +311,42 @@
       color: var(--accent);
     }
 
+    /* Live Ticker Bar */
+    .live-ticker-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(14, 18, 29, 0.5);
+      border: 1px solid var(--card-border);
+      padding: 7px 16px;
+      border-radius: 10px;
+      font-size: 11.5px;
+      font-family: var(--font-mono);
+      color: var(--text-secondary);
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .ticker-tag {
+      color: var(--emerald);
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .ticker-content {
+      color: var(--text-muted);
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
     /* Hero Banner */
     .hero-panel {
       background: radial-gradient(circle at top right, rgba(56, 189, 248, 0.08) 0%, var(--card) 60%);
       border: 1px solid var(--card-border);
-      border-radius: 20px;
-      padding: 30px 26px;
+      border-radius: 18px;
+      padding: 26px 24px;
       position: relative;
       overflow: hidden;
     }
@@ -276,26 +355,26 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      font-size: 11px;
+      font-size: 10.5px;
       font-family: var(--font-mono);
       text-transform: uppercase;
       letter-spacing: 0.8px;
       color: var(--accent);
       background: rgba(56, 189, 248, 0.08);
       border: 1px solid rgba(56, 189, 248, 0.25);
-      padding: 4px 10px;
-      border-radius: 6px;
-      margin-bottom: 12px;
+      padding: 3px 9px;
+      border-radius: 5px;
+      margin-bottom: 10px;
       font-weight: 600;
     }
 
     .hero-heading {
       font-family: var(--font-display);
-      font-size: clamp(24px, 3.8vw, 38px);
+      font-size: clamp(22px, 3.5vw, 36px);
       font-weight: 700;
-      line-height: 1.2;
-      margin-bottom: 10px;
-      letter-spacing: -0.5px;
+      line-height: 1.22;
+      margin-bottom: 8px;
+      letter-spacing: -0.4px;
     }
 
     .hero-heading span.cyan {
@@ -305,9 +384,9 @@
     }
 
     .hero-subtext {
-      font-size: 14.5px;
+      font-size: 14px;
       color: var(--text-secondary);
-      max-width: 760px;
+      max-width: 780px;
       line-height: 1.55;
     }
 
@@ -327,14 +406,14 @@
       border: none;
       color: var(--text-muted);
       font-family: var(--font);
-      font-size: 13px;
+      font-size: 12.5px;
       font-weight: 600;
-      padding: 8px 16px;
-      border-radius: 8px;
+      padding: 7px 14px;
+      border-radius: 7px;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 7px;
       white-space: nowrap;
       transition: all 0.2s ease;
     }
@@ -364,11 +443,11 @@
     .radar-card {
       background: var(--card);
       border: 1px solid var(--card-border);
-      border-radius: 18px;
-      padding: 22px;
+      border-radius: 16px;
+      padding: 20px;
       display: flex;
       flex-direction: column;
-      gap: 18px;
+      gap: 16px;
     }
 
     .radar-top-controls {
@@ -376,15 +455,15 @@
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 12px;
-      padding-bottom: 14px;
+      gap: 10px;
+      padding-bottom: 12px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     }
 
     .control-row {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       flex-wrap: wrap;
     }
 
@@ -393,10 +472,10 @@
       border: 1px solid var(--card-border);
       color: var(--text-primary);
       font-family: var(--font);
-      font-size: 13px;
+      font-size: 12.5px;
       font-weight: 600;
-      padding: 7px 14px;
-      border-radius: 8px;
+      padding: 6px 12px;
+      border-radius: 7px;
       outline: none;
       cursor: pointer;
     }
@@ -411,8 +490,8 @@
       color: var(--text-primary);
       font-family: var(--font-mono);
       font-size: 12px;
-      padding: 7px 12px;
-      border-radius: 8px;
+      padding: 6px 10px;
+      border-radius: 7px;
       outline: none;
       width: 140px;
     }
@@ -425,7 +504,7 @@
     .radar-split {
       display: grid;
       grid-template-columns: 1.15fr 1fr;
-      gap: 18px;
+      gap: 16px;
     }
 
     @media (max-width: 960px) {
@@ -445,13 +524,13 @@
     }
 
     .stream-header {
-      padding: 10px 14px;
+      padding: 9px 13px;
       background: rgba(255, 255, 255, 0.02);
       border-bottom: 1px solid rgba(255, 255, 255, 0.05);
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 11.5px;
+      font-size: 11px;
       color: var(--text-secondary);
       font-family: var(--font-mono);
     }
@@ -462,13 +541,13 @@
     }
 
     .lead-row {
-      padding: 13px 15px;
+      padding: 12px 14px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.04);
       cursor: pointer;
       transition: all 0.15s ease;
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 5px;
     }
 
     .lead-row:hover, .lead-row.selected {
@@ -518,7 +597,6 @@
       line-height: 1.35;
     }
 
-    /* Score Breakdown Pill Bar */
     .score-breakdown-bar {
       display: flex;
       gap: 6px;
@@ -528,7 +606,7 @@
     }
 
     .score-chip {
-      font-size: 10px;
+      font-size: 9.5px;
       font-family: var(--font-mono);
       color: var(--text-muted);
       background: rgba(255, 255, 255, 0.03);
@@ -542,7 +620,7 @@
       background: var(--card-inner);
       border: 1px solid var(--card-border);
       border-radius: 12px;
-      padding: 16px;
+      padding: 15px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -553,15 +631,15 @@
       background: rgba(255, 255, 255, 0.02);
       border: 1px solid rgba(255, 255, 255, 0.06);
       border-radius: 8px;
-      padding: 12px;
+      padding: 11px;
     }
 
     .selected-lead-title {
-      font-size: 13.5px;
+      font-size: 13px;
       font-weight: 600;
       color: var(--text-primary);
-      margin-bottom: 6px;
-      line-height: 1.4;
+      margin-bottom: 5px;
+      line-height: 1.38;
     }
 
     .selected-lead-author {
@@ -580,9 +658,9 @@
       background: rgba(255, 255, 255, 0.04);
       border: 1px solid var(--card-border);
       color: var(--text-secondary);
-      padding: 5px 11px;
+      padding: 4px 10px;
       border-radius: 6px;
-      font-size: 11.5px;
+      font-size: 11px;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.15s ease;
@@ -603,7 +681,7 @@
       background: #06080d;
       border: 1px solid var(--card-border);
       border-radius: 8px;
-      padding: 12px;
+      padding: 11px;
       font-size: 12.5px;
       font-family: var(--font);
       color: var(--text-primary);
@@ -624,7 +702,7 @@
       font-family: var(--font);
       font-size: 13px;
       font-weight: 700;
-      padding: 12px 18px;
+      padding: 11px 16px;
       border-radius: 8px;
       cursor: pointer;
       display: flex;
@@ -640,13 +718,13 @@
       box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
     }
 
-    /* Live Target Simulator Form */
+    /* Interactive Product Simulator */
     .custom-product-card {
       background: rgba(255, 255, 255, 0.02);
       border: 1px solid var(--card-border);
       border-radius: 12px;
-      padding: 16px;
-      margin-top: 14px;
+      padding: 14px;
+      margin-top: 12px;
       display: flex;
       flex-direction: column;
       gap: 10px;
@@ -666,9 +744,9 @@
       background: var(--card-inner);
       border: 1px solid var(--card-border);
       color: var(--text-primary);
-      padding: 8px 12px;
+      padding: 8px 11px;
       border-radius: 6px;
-      font-size: 12.5px;
+      font-size: 12px;
       outline: none;
       font-family: var(--font);
     }
@@ -677,19 +755,42 @@
       border-color: var(--accent);
     }
 
+    /* Preset Builder */
+    .preset-builder-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    @media (max-width: 840px) {
+      .preset-builder-grid { grid-template-columns: 1fr; }
+    }
+
+    .json-code-box {
+      background: #06080d;
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 14px;
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      color: #7dd3fc;
+      max-height: 380px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+    }
+
     /* Feature Grid Section */
     .grid-3col {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 16px;
-      margin-top: 10px;
+      grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+      gap: 14px;
     }
 
     .feature-hud-card {
       background: var(--card);
       border: 1px solid var(--card-border);
       border-radius: 14px;
-      padding: 22px;
+      padding: 20px;
       transition: border 0.2s ease;
     }
 
@@ -698,8 +799,8 @@
     }
 
     .feature-hud-icon {
-      font-size: 24px;
-      margin-bottom: 10px;
+      font-size: 22px;
+      margin-bottom: 8px;
     }
 
     .feature-hud-title {
@@ -711,7 +812,7 @@
     }
 
     .feature-hud-desc {
-      font-size: 13.5px;
+      font-size: 13px;
       color: var(--text-secondary);
       line-height: 1.5;
     }
@@ -724,17 +825,66 @@
       cursor: pointer;
     }
 
+    /* FAQ Accordion */
+    .faq-item {
+      background: var(--card-inner);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      margin-bottom: 10px;
+      overflow: hidden;
+    }
+
+    .faq-header {
+      padding: 14px 16px;
+      cursor: pointer;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--text-primary);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background 0.15s ease;
+    }
+
+    .faq-header:hover {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .faq-body {
+      display: none;
+      padding: 0 16px 14px 16px;
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      border-top: 1px solid rgba(255, 255, 255, 0.04);
+      padding-top: 10px;
+    }
+
+    .faq-item.open .faq-body {
+      display: block;
+    }
+
+    .faq-item.open .faq-arrow {
+      transform: rotate(180deg);
+    }
+
+    .faq-arrow {
+      transition: transform 0.2s ease;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
     /* Footer */
     .footer-bar {
       border-top: 1px solid var(--card-border);
-      padding: 24px 0 10px 0;
+      padding: 22px 0 10px 0;
       margin-top: 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
       gap: 14px;
-      font-size: 12.5px;
+      font-size: 12px;
       color: var(--text-muted);
     }
 
@@ -766,7 +916,7 @@
         <div>
           <div class="brand-title">LeadSniper</div>
         </div>
-        <span class="brand-tag">v1.0.0</span>
+        <span class="brand-tag">v1.1.0</span>
       </a>
 
       <div class="header-stats">
@@ -777,12 +927,22 @@
         <div class="stat-pill">
           <span>🎯 SNIPED: <strong>112</strong></span>
         </div>
+        <button id="soundToggleBtn" onclick="toggleSound()" class="btn-action-nav" style="padding: 5px 9px;">
+          <span id="soundIcon">🔊</span>
+          <span id="soundLabel">Audio ON</span>
+        </button>
         <a href="https://github.com/ALittleExtraCode/lead-sniper" target="_blank" rel="noopener noreferrer" class="btn-action-nav">
           <svg height="14" width="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg>
           <span>Star on GitHub</span>
         </a>
       </div>
     </header>
+
+    <!-- Live Ticker Bar -->
+    <div class="live-ticker-bar">
+      <div class="ticker-tag">🔴 LIVE RADAR</div>
+      <div class="ticker-content" id="tickerLiveStream">Scanning Reddit public Atom streams • Zero API keys required • Intent scoring active (HOT 🔥 / WARM ⚡) • 100% clean direct URLs</div>
+    </div>
 
     <!-- Tactical Hero Panel -->
     <section class="hero-panel">
@@ -798,12 +958,13 @@
       </p>
     </section>
 
-    <!-- Navigation Tabs (SunoGet Style) -->
+    <!-- Navigation Tabs (SunoGet Studio Layout) -->
     <nav class="tabs-nav">
       <button class="tab-btn active" onclick="openTab('tab-radar')">🎯 Live Target Radar</button>
-      <button class="tab-btn" onclick="openTab('tab-features')">⚡ Architecture & Features</button>
-      <button class="tab-btn" onclick="openTab('tab-presets')">⚙️ Multi-Product Presets</button>
-      <button class="tab-btn" onclick="openTab('tab-calculator')">📊 Conversion Calculator</button>
+      <button class="tab-btn" onclick="openTab('tab-builder')">🛠️ Preset Builder & Export</button>
+      <button class="tab-btn" onclick="openTab('tab-features')">⚡ Architecture & Specs</button>
+      <button class="tab-btn" onclick="openTab('tab-calculator')">📊 Growth ROI Calculator</button>
+      <button class="tab-btn" onclick="openTab('tab-faq')">❓ FAQ & Help Center</button>
       <button class="tab-btn" onclick="openTab('tab-desktop')">💻 Desktop App (.DMG / .EXE)</button>
     </nav>
 
@@ -817,6 +978,7 @@
               <option value="sunoget" selected>SunoGet Studio (AI Music & DAW)</option>
               <option value="saas">Micro-SaaS & Indie Product</option>
               <option value="video">Video Editor & Auto-Captions</option>
+              <option value="agency">Agency & Freelance Client Acquisition</option>
             </select>
             
             <input type="text" id="customSubInput" class="custom-sub-input" placeholder="r/custom_sub..." onkeydown="if(event.key==='Enter')scanCustomSub()">
@@ -854,14 +1016,14 @@
                 </div>
               </div>
 
-              <div style="margin: 12px 0 6px 0; font-size: 11.5px; font-weight: 600; color: var(--text-muted);">SELECT PERSONA:</div>
+              <div style="margin: 12px 0 6px 0; font-size: 11px; font-weight: 600; color: var(--text-muted);">SELECT PERSONA:</div>
               <div class="persona-bar" id="personaButtons">
                 <button class="persona-tag-btn active" onclick="setPersona('founder')">🚀 Helpful Founder</button>
                 <button class="persona-tag-btn" onclick="setPersona('tech')">⚙️ Tech Lead</button>
                 <button class="persona-tag-btn" onclick="setPersona('creator')">🎬 Creator Peer</button>
               </div>
 
-              <div style="margin: 10px 0 4px 0; font-size: 11.5px; font-weight: 600; color: var(--text-muted);">GENERATED CONTEXTUAL REPLY (100% CLEAN URL):</div>
+              <div style="margin: 10px 0 4px 0; font-size: 11px; font-weight: 600; color: var(--text-muted);">GENERATED CONTEXTUAL REPLY (100% CLEAN URL):</div>
               <textarea id="replyTextarea" class="reply-textarea" spellcheck="false"></textarea>
             </div>
 
@@ -886,7 +1048,59 @@
       </div>
     </div>
 
-    <!-- TAB 2: ARCHITECTURE & FEATURES -->
+    <!-- TAB 2: PRESET BUILDER & EXPORT -->
+    <div id="tab-builder" class="tab-content">
+      <div class="radar-card">
+        <h3 style="font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px;">🛠️ Interactive Preset Builder & JSON Exporter</h3>
+        <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 14px;">Build a custom workspace configuration for your tool in 30 seconds and export it directly to your desktop app.</p>
+
+        <div class="preset-builder-grid">
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <div>
+              <label style="font-size: 11.5px; font-weight: 600; color: var(--text-muted);">PROJECT ID (SLUG):</label>
+              <input type="text" id="bldId" class="input-field" value="my_new_tool" oninput="syncBuilderJson()" style="width: 100%; margin-top: 3px;">
+            </div>
+
+            <div>
+              <label style="font-size: 11.5px; font-weight: 600; color: var(--text-muted);">PRODUCT NAME:</label>
+              <input type="text" id="bldName" class="input-field" value="My Awesome SaaS" oninput="syncBuilderJson()" style="width: 100%; margin-top: 3px;">
+            </div>
+
+            <div>
+              <label style="font-size: 11.5px; font-weight: 600; color: var(--text-muted);">PRODUCT URL (100% CLEAN):</label>
+              <input type="text" id="bldUrl" class="input-field" value="https://mysite.com/app" oninput="syncBuilderJson()" style="width: 100%; margin-top: 3px;">
+            </div>
+
+            <div>
+              <label style="font-size: 11.5px; font-weight: 600; color: var(--text-muted);">TARGET SUBREDDITS (COMMA SEPARATED):</label>
+              <input type="text" id="bldSubs" class="input-field" value="SaaS, SideProject, webdev" oninput="syncBuilderJson()" style="width: 100%; margin-top: 3px;">
+            </div>
+
+            <div>
+              <label style="font-size: 11.5px; font-weight: 600; color: var(--text-muted);">TRIGGER KEYWORDS (COMMA SEPARATED):</label>
+              <input type="text" id="bldKeywords" class="input-field" value="recommend, tool, automate, alternative, how to" oninput="syncBuilderJson()" style="width: 100%; margin-top: 3px;">
+            </div>
+
+            <div style="display: flex; gap: 8px; margin-top: 8px;">
+              <button onclick="downloadPresetJson()" class="btn-dispatch" style="flex: 1; padding: 10px; font-size: 12.5px;">
+                <span>📥 Download .JSON Preset</span>
+              </button>
+              <button onclick="copyPresetJson()" class="btn-action-nav" style="padding: 10px 14px;">
+                <span>📋 Copy JSON</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Live Generated JSON View -->
+          <div>
+            <div style="font-size: 11.5px; font-weight: 600; color: var(--text-muted); margin-bottom: 6px;">LIVE GENERATED CONFIGURATION:</div>
+            <pre class="json-code-box" id="jsonPreviewBox"></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: ARCHITECTURE & FEATURES -->
     <div id="tab-features" class="tab-content">
       <div class="grid-3col">
         <div class="feature-hud-card">
@@ -927,37 +1141,11 @@
       </div>
     </div>
 
-    <!-- TAB 3: PRESETS & KEYWORDS -->
-    <div id="tab-presets" class="tab-content">
-      <div class="radar-card">
-        <h3 style="font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--text-primary);">Configured Product Presets</h3>
-        <p style="font-size: 13.5px; color: var(--text-secondary); margin-bottom: 12px;">Add any product in 30 seconds by dropping a JSON preset into <code>presets/</code>.</p>
-        
-        <div style="background: var(--card-inner); border: 1px solid var(--card-border); border-radius: 10px; padding: 16px; font-family: var(--font-mono); font-size: 12px; color: #a5f3fc; overflow-x: auto;">
-<pre>{
-  "id": "my_new_saas",
-  "name": "My New SaaS",
-  "product_url": "https://myapp.com",
-  "subreddits": ["SaaS", "SideProject", "webdev"],
-  "keywords": ["tool", "recommend", "automate", "alternative", "how to"],
-  "negative_keywords": ["scam", "spam", "refund"],
-  "personas": [
-    {
-      "id": "founder",
-      "name": "🚀 Helpful Founder",
-      "template": "Hey u/{author}! If you're looking to {action_phrase}, check out {url}. Hope this helps!"
-    }
-  ]
-}</pre>
-        </div>
-      </div>
-    </div>
-
     <!-- TAB 4: CONVERSION CALCULATOR -->
     <div id="tab-calculator" class="tab-content">
       <div class="radar-card">
         <h3 style="font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px;">🎯 Organic Lead Acquisition & ROI Estimator</h3>
-        <p style="font-size: 13.5px; color: var(--text-secondary); margin-bottom: 18px;">Estimate your monthly growth by engaging high-intent community leads with 1-click conversion.</p>
+        <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 16px;">Estimate your monthly growth by engaging high-intent community leads with 1-click conversion.</p>
 
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
           <div>
@@ -1001,7 +1189,55 @@
       </div>
     </div>
 
-    <!-- TAB 5: DESKTOP APP -->
+    <!-- TAB 5: FAQ & SUPPORT -->
+    <div id="tab-faq" class="tab-content">
+      <div class="radar-card">
+        <h3 style="font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px;">❓ Frequently Asked Questions & Operational Help</h3>
+        <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 16px;">Everything you need to know about Zero-API harvesting, karma safety, and scaling your reach.</p>
+
+        <div class="faq-item open">
+          <div class="faq-header" onclick="toggleFaq(this)">
+            <span>How does LeadSniper work without Reddit API keys?</span>
+            <span class="faq-arrow">▼</span>
+          </div>
+          <div class="faq-body">
+            Reddit exposes real-time XML/Atom feeds for all public subreddits (e.g. <code>/r/SaaS/new.rss</code>). LeadSniper batches multiple subreddits in combined single queries (e.g. <code>/r/sub1+sub2/new.rss</code>) using rotating browser headers. This provides instant real-time data with zero API costs and zero rate limit blocks.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-header" onclick="toggleFaq(this)">
+            <span>Why are markdown brackets banned in replies?</span>
+            <span class="faq-arrow">▼</span>
+          </div>
+          <div class="faq-body">
+            Markdown links like <code>[Click Here](https://...)</code> immediately look like spam affiliate bot links. Reddit users downvote them, and AutoModerator bots aggressively flag them. Raw unbracketed URLs (e.g. <code>https://sunoget.com/daw</code>) read as genuine creator recommendations, convert 300% higher, and render rich auto-previews on mobile apps.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-header" onclick="toggleFaq(this)">
+            <span>How do I avoid getting banned on Reddit?</span>
+            <span class="faq-arrow">▼</span>
+          </div>
+          <div class="faq-body">
+            Follow the <strong>4:1 Value Rule</strong>: for every 1 tool recommendation link you post, write 4-5 genuine, helpful replies without any links. Keep daily volume between 8-15 snipes per day. Always use an account with at least 50+ karma and 14+ days of age.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-header" onclick="toggleFaq(this)">
+            <span>Can I add my own custom product or agency?</span>
+            <span class="faq-arrow">▼</span>
+          </div>
+          <div class="faq-body">
+            Yes! Use the <strong>Preset Builder</strong> tab above to generate a custom JSON file for your SaaS, video tool, agency, or client. Drop the file into <code>~/Desktop/leadsniper/presets/</code> and it will instantly appear in your desktop app dropdown.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 6: DESKTOP APP -->
     <div id="tab-desktop" class="tab-content">
       <div class="radar-card" style="text-align: center; padding: 40px 20px;">
         <div style="font-size: 40px; margin-bottom: 12px;">💻</div>
@@ -1025,13 +1261,23 @@
       </div>
       <div class="footer-links">
         <a href="https://github.com/ALittleExtraCode/lead-sniper" target="_blank" rel="noopener noreferrer">GitHub</a>
-        <a href="https://github.com/ALittleExtraCode/lead-sniper/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">MIT License</a>
+        <a href="https://github.com/ALittleExtraCode/lead-sniper/blob/main/AGENT_GUIDE.md" target="_blank" rel="noopener noreferrer">Agent Guide</a>
+        <a href="https://github.com/ALittleExtraCode/lead-sniper/blob/main/GROWTH_PLAYBOOK.md" target="_blank" rel="noopener noreferrer">Growth Playbook</a>
         <a href="https://github.com/ALittleExtraCode/lead-sniper/issues" target="_blank" rel="noopener noreferrer">Issues & Community</a>
       </div>
     </footer>
   </div>
 
   <script>
+    let soundEnabled = true;
+
+    function toggleSound() {
+      soundEnabled = !soundEnabled;
+      document.getElementById('soundIcon').textContent = soundEnabled ? '🔊' : '🔇';
+      document.getElementById('soundLabel').textContent = soundEnabled ? 'Audio ON' : 'Audio OFF';
+      if (soundEnabled) playTargetLockChime();
+    }
+
     // Tab Switcher
     function openTab(tabId) {
       document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
@@ -1039,10 +1285,12 @@
       
       document.getElementById(tabId).classList.add('active');
       if (event && event.target) event.target.classList.add('active');
+      if (soundEnabled) playTargetLockChime();
     }
 
     // Audio Chime Feedback (Web Audio API Synthesizer)
     function playTargetLockChime() {
+      if (!soundEnabled) return;
       try {
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         const osc = audioCtx.createOscillator();
@@ -1147,6 +1395,24 @@
               founder: "Hey u/clip_master! If you need animated karaoke captions, https://yourvideotool.com generates synchronized subtitles in one click for free.",
               tech: "For fast word-level subtitle alignment u/clip_master, check out https://yourvideotool.com.",
               creator: "Nice workflow u/clip_master! I use https://yourvideotool.com for auto-captioning my Shorts."
+            }
+          }
+        ]
+      },
+      agency: {
+        name: "Apex Agency",
+        url: "https://apexstudio.agency",
+        leads: [
+          {
+            sub: "r/forhire",
+            intent: "HOT",
+            title: "[Hiring] Need a developer to build automated dashboard & Stripe billing",
+            author: "founder_scale",
+            permalink: "https://www.reddit.com/r/forhire/",
+            replies: {
+              founder: "Hey u/founder_scale! We build custom automated dashboards and billing pipelines with 1-week turnaround. You can view our portfolio and schedule a direct sprint call at https://apexstudio.agency.",
+              tech: "Hey u/founder_scale, we specialize in Stripe integrations and modern dashboard architectures. Check out our case studies at https://apexstudio.agency.",
+              creator: "Great project u/founder_scale! Check out https://apexstudio.agency for fast dashboard builds."
             }
           }
         ]
@@ -1293,6 +1559,58 @@
       alert(`✅ Product "${name}" injected! Look at the generated replies in the studio panel.`);
     }
 
+    // Preset Builder Sync
+    function syncBuilderJson() {
+      const id = document.getElementById('bldId').value.trim() || "my_tool";
+      const name = document.getElementById('bldName').value.trim() || "My Tool";
+      const url = document.getElementById('bldUrl').value.trim() || "https://mysite.com";
+      const subs = document.getElementById('bldSubs').value.split(',').map(s => s.trim().replace(/^r\//, '')).filter(Boolean);
+      const kws = document.getElementById('bldKeywords').value.split(',').map(k => k.trim()).filter(Boolean);
+
+      const obj = {
+        id: id,
+        name: name,
+        product_url: url,
+        description: `Lead acquisition workspace for ${name}`,
+        subreddits: subs,
+        keywords: kws,
+        negative_keywords: ["scam", "refund", "banned", "spam"],
+        personas: [
+          {
+            id: "founder",
+            name: "🚀 Helpful Founder",
+            template: `Hey u/{author}! If you need to {action_phrase}, check out ${url}. Hope this helps!`
+          },
+          {
+            id: "tech",
+            name: "⚙️ Technical Architect",
+            template: `Hey u/{author}, for direct workflows check out ${url}.`
+          }
+        ]
+      };
+
+      document.getElementById('jsonPreviewBox').textContent = JSON.stringify(obj, null, 2);
+      return obj;
+    }
+
+    function downloadPresetJson() {
+      const obj = syncBuilderJson();
+      const blob = new Blob([JSON.stringify(obj, null, 2)], { type: "application/json" });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `${obj.id}.json`;
+      a.click();
+      playTargetLockChime();
+    }
+
+    function copyPresetJson() {
+      const text = document.getElementById('jsonPreviewBox').textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        playTargetLockChime();
+        alert('📋 Preset JSON copied to clipboard!');
+      });
+    }
+
     // ROI Calculator Function
     function updateCalculator() {
       const snipes = parseInt(document.getElementById("calcSnipes").value, 10);
@@ -1309,6 +1627,12 @@
 
       document.getElementById("calcResultCustomers").textContent = `${customers.toLocaleString()} users/mo`;
       document.getElementById("calcResultRevenue").textContent = `$${revenue.toLocaleString()} /mo`;
+    }
+
+    function toggleFaq(el) {
+      const item = el.closest('.faq-item');
+      item.classList.toggle('open');
+      if (soundEnabled) playTargetLockChime();
     }
 
     // Tactical Sniper Crosshair Follower
@@ -1337,13 +1661,13 @@
 
     // Target Lock on clickable elements
     document.addEventListener('mouseover', (e) => {
-      if (e.target.closest('button, a, select, textarea, .lead-row, .tab-btn, .persona-tag-btn, input')) {
+      if (e.target.closest('button, a, select, textarea, .lead-row, .tab-btn, .persona-tag-btn, input, .faq-header')) {
         crosshair.classList.add('locked');
       }
     });
 
     document.addEventListener('mouseout', (e) => {
-      if (e.target.closest('button, a, select, textarea, .lead-row, .tab-btn, .persona-tag-btn, input')) {
+      if (e.target.closest('button, a, select, textarea, .lead-row, .tab-btn, .persona-tag-btn, input, .faq-header')) {
         crosshair.classList.remove('locked');
       }
     });
@@ -1351,6 +1675,7 @@
     document.addEventListener("DOMContentLoaded", () => {
       renderLeads();
       updateCalculator();
+      syncBuilderJson();
     });
   </script>
 </body>
