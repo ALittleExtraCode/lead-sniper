@@ -104,10 +104,10 @@ final class RadarTab: NSView, NSTableViewDataSource, NSTableViewDelegate, Primar
         table.headerView = nil
         table.backgroundColor = .clear
         table.usesAlternatingRowBackgroundColors = false
-        table.selectionHighlightStyle = .none
+        table.selectionHighlightStyle = .regular
         table.gridStyleMask = []
         table.style = .plain
-        table.rowHeight = 78
+        table.rowHeight = 66
         table.dataSource = self
         table.delegate = self
         table.doubleAction = #selector(openThread)
@@ -195,68 +195,82 @@ final class RadarTab: NSView, NSTableViewDataSource, NSTableViewDelegate, Primar
             emptyLabel.widthAnchor.constraint(equalTo: listScroll.widthAnchor, constant: -8),
         ])
 
-        // ---- right: the post, and the reply --------------------------------
+        // ---- right: one continuous read, not three boxes -------------------
+        //
+        // This was three cards stacked with a gap between each. Three boxes down
+        // a column is what a preferences pane looks like; a thread you are about
+        // to answer is one thing, read top to bottom, so it is set as one.
         let right = NSStackView()
         right.orientation = .vertical
         right.alignment = .leading
-        right.spacing = 14
+        right.spacing = Theme.Space.gap
+        right.edgeInsets = NSEdgeInsets(top: Theme.Space.section, left: Theme.Space.section,
+                                        bottom: Theme.Space.section, right: Theme.Space.section)
         right.translatesAutoresizingMaskIntoConstraints = false
 
-        postTitle.font = .systemFont(ofSize: 15, weight: .semibold)
+        // The post title is the content, so it is set like content.
+        postTitle.font = Theme.Font.display
         postTitle.textColor = Theme.textPrimary
         postTitle.maximumNumberOfLines = 3
         postTitle.preferredMaxLayoutWidth = 640
 
-        postBody.font = .systemFont(ofSize: 12)
+        postMeta.font = Theme.Font.meta
+
+        postBody.font = Theme.Font.body
         postBody.textColor = Theme.textSecond
-        postBody.maximumNumberOfLines = 8
+        postBody.maximumNumberOfLines = 10
         postBody.cell?.wraps = true
         postBody.cell?.truncatesLastVisibleLine = true
         postBody.preferredMaxLayoutWidth = 640
 
-        let postBox = NSStackView(views: [postTitle, postMeta, postBody])
-        postBox.orientation = .vertical
-        postBox.alignment = .leading
-        postBox.spacing = 6
-        for label in [postTitle, postMeta, postBody] {
-            label.widthAnchor.constraint(equalTo: postBox.widthAnchor).isActive = true
-        }
-        // Cards fill the column. An .leading-aligned stack sizes its children to
-        // their intrinsic width, which left an empty "THE POST" card 140pt wide
-        // beside a full-width one below it.
-        func addCard(_ title: String, _ body: NSView) {
-            let card = CardView.titled(title, body)
-            right.addArrangedSubview(card)
-            card.widthAnchor.constraint(equalTo: right.widthAnchor).isActive = true
+        for view in [postTitle, postMeta, postBody] {
+            right.addArrangedSubview(view)
+            view.widthAnchor.constraint(equalTo: right.widthAnchor,
+                                        constant: -Theme.Space.section * 2).isActive = true
         }
 
-        addCard(L.t(.thePost), postBox)
+        let firstRule = Theme.rule()
+        right.addArrangedSubview(firstRule)
+        firstRule.widthAnchor.constraint(equalTo: right.widthAnchor,
+                                         constant: -Theme.Space.section * 2).isActive = true
 
+        let whyLabel = Theme.sectionLabel(L.t(.whyItMatched))
+        right.addArrangedSubview(whyLabel)
         whyStack.translatesAutoresizingMaskIntoConstraints = false
-        addCard(L.t(.whyItMatched), whyStack)
+        right.addArrangedSubview(whyStack)
+        whyStack.widthAnchor.constraint(equalTo: right.widthAnchor,
+                                        constant: -Theme.Space.section * 2).isActive = true
 
-        // The editor. A real NSTextView, because this is writing rather than a
-        // field to fill in, and it should feel like it.
-        editor.font = .systemFont(ofSize: 12.5)
+        let secondRule = Theme.rule()
+        right.addArrangedSubview(secondRule)
+        secondRule.widthAnchor.constraint(equalTo: right.widthAnchor,
+                                          constant: -Theme.Space.section * 2).isActive = true
+
+        right.addArrangedSubview(Theme.sectionLabel(L.t(.yourReply)))
+
+        editor.font = Theme.Font.body
         editor.textColor = Theme.textPrimary
-        editor.backgroundColor = Theme.card
+        editor.backgroundColor = Theme.sunken
         editor.insertionPointColor = Theme.accent
         editor.isEditable = true
         editor.isRichText = false
-        editor.textContainerInset = NSSize(width: 8, height: 8)
+        editor.textContainerInset = NSSize(width: 12, height: 12)
         editor.delegate = self
         editorScroll.documentView = editor
         editorScroll.drawsBackground = false
-        // A visible edge, because a white box on a white card is not a box. On
-        // the dark theme the darker fill did this job by itself.
-        editorScroll.wantsLayer = true
-        editorScroll.layer?.borderWidth = 1
-        editorScroll.layer?.borderColor = Theme.cardBorder.cgColor
-        editorScroll.layer?.cornerRadius = 8
         editorScroll.hasVerticalScroller = true
         editorScroll.translatesAutoresizingMaskIntoConstraints = false
-        editorScroll.heightAnchor.constraint(equalToConstant: 132).isActive = true
+        editorScroll.wantsLayer = true
+        editorScroll.layer?.borderWidth = 1
+        editorScroll.layer?.borderColor = NSColor(srgbRed: 0xd8/255, green: 0xd4/255,
+                                                  blue: 0xc9/255, alpha: 1).cgColor
+        editorScroll.layer?.backgroundColor = Theme.sunken.cgColor
+        editorScroll.drawsBackground = true
+        editorScroll.backgroundColor = Theme.sunken
+        editorScroll.layer?.cornerRadius = 10
+        editorScroll.heightAnchor.constraint(equalToConstant: 150).isActive = true
 
+        gapLabel.font = Theme.Font.meta
         gapLabel.lineBreakMode = .byWordWrapping
         gapLabel.maximumNumberOfLines = 0
         gapLabel.preferredMaxLayoutWidth = 640
@@ -265,40 +279,47 @@ final class RadarTab: NSView, NSTableViewDataSource, NSTableViewDelegate, Primar
         copyButton.target = self
         copyButton.action = #selector(copyAndOpen)
         copyButton.translatesAutoresizingMaskIntoConstraints = false
-        copyButton.heightAnchor.constraint(equalToConstant: 34).isActive = true
-        copyButton.widthAnchor.constraint(greaterThanOrEqualToConstant: 190).isActive = true
+        copyButton.heightAnchor.constraint(equalToConstant: 36).isActive = true
+        copyButton.widthAnchor.constraint(greaterThanOrEqualToConstant: 170).isActive = true
 
         openButton.title = L.t(.justOpen)
         openButton.isBordered = false
-        openButton.font = .systemFont(ofSize: 11, weight: .semibold)
+        openButton.font = .systemFont(ofSize: 12, weight: .semibold)
         openButton.contentTintColor = Theme.accent
         openButton.target = self
         openButton.action = #selector(openThread)
 
         let dismissButton = NSButton(title: L.t(.notRelevant), target: self, action: #selector(toggleDismiss))
         dismissButton.isBordered = false
-        dismissButton.font = .systemFont(ofSize: 11, weight: .semibold)
+        dismissButton.font = .systemFont(ofSize: 12, weight: .semibold)
         dismissButton.contentTintColor = Theme.textMuted
         self.dismissButton = dismissButton
 
         let exportButton = NSButton(title: L.t(.exportLeads), target: self, action: #selector(exportLeads))
         exportButton.isBordered = false
-        exportButton.font = .systemFont(ofSize: 11, weight: .semibold)
-        exportButton.contentTintColor = Theme.accent
+        exportButton.font = .systemFont(ofSize: 12, weight: .semibold)
+        exportButton.contentTintColor = Theme.textMuted
 
         let actions = NSStackView(views: [copyButton, openButton, dismissButton, exportButton, NSView()])
         actions.orientation = .horizontal
-        actions.spacing = 12
+        actions.spacing = Theme.Space.gap
         actions.alignment = .centerY
 
-        let replyBox = NSStackView(views: [editorScroll, gapLabel, actions])
-        replyBox.orientation = .vertical
-        replyBox.alignment = .leading
-        replyBox.spacing = 8
-        editorScroll.widthAnchor.constraint(equalTo: replyBox.widthAnchor).isActive = true
-        gapLabel.widthAnchor.constraint(equalTo: replyBox.widthAnchor).isActive = true
-        actions.widthAnchor.constraint(equalTo: replyBox.widthAnchor).isActive = true
-        addCard(L.t(.yourReply), replyBox)
+        for view in [editorScroll, gapLabel, actions] {
+            right.addArrangedSubview(view)
+            view.widthAnchor.constraint(equalTo: right.widthAnchor,
+                                        constant: -Theme.Space.section * 2).isActive = true
+        }
+
+        let panel = NSView()
+        panel.wantsLayer = true
+        panel.layer?.backgroundColor = Theme.card.cgColor
+        panel.translatesAutoresizingMaskIntoConstraints = false
+
+        let edge = NSView()
+        edge.wantsLayer = true
+        edge.layer?.backgroundColor = Theme.cardBorder.cgColor
+        edge.translatesAutoresizingMaskIntoConstraints = false
 
         let rightScroll = NSScrollView()
         let doc = FlippedView()
@@ -310,7 +331,9 @@ final class RadarTab: NSView, NSTableViewDataSource, NSTableViewDelegate, Primar
         rightScroll.translatesAutoresizingMaskIntoConstraints = false
 
         addSubview(left)
-        addSubview(rightScroll)
+        addSubview(panel)
+        panel.addSubview(edge)
+        panel.addSubview(rightScroll)
         NSLayoutConstraint.activate([
             doc.widthAnchor.constraint(equalTo: rightScroll.contentView.widthAnchor),
             right.topAnchor.constraint(equalTo: doc.topAnchor),
@@ -319,17 +342,27 @@ final class RadarTab: NSView, NSTableViewDataSource, NSTableViewDelegate, Primar
             right.bottomAnchor.constraint(equalTo: doc.bottomAnchor),
 
             left.topAnchor.constraint(equalTo: topAnchor, constant: 4),
-            left.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
+            left.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Theme.Space.margin),
             left.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16),
             // The list is a fixed column and the post gets everything else. The
             // other way round gave 568pt to two one-line rows and squeezed the
             // post being answered into 480.
-            left.widthAnchor.constraint(equalToConstant: 340),
+            left.widthAnchor.constraint(equalToConstant: 360),
 
-            rightScroll.topAnchor.constraint(equalTo: topAnchor),
-            rightScroll.leadingAnchor.constraint(equalTo: left.trailingAnchor, constant: 16),
-            rightScroll.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
-            rightScroll.bottomAnchor.constraint(equalTo: bottomAnchor),
+            panel.topAnchor.constraint(equalTo: topAnchor),
+            panel.leadingAnchor.constraint(equalTo: left.trailingAnchor, constant: Theme.Space.margin),
+            panel.trailingAnchor.constraint(equalTo: trailingAnchor),
+            panel.bottomAnchor.constraint(equalTo: bottomAnchor),
+
+            edge.leadingAnchor.constraint(equalTo: panel.leadingAnchor),
+            edge.topAnchor.constraint(equalTo: panel.topAnchor),
+            edge.bottomAnchor.constraint(equalTo: panel.bottomAnchor),
+            edge.widthAnchor.constraint(equalToConstant: 1),
+
+            rightScroll.topAnchor.constraint(equalTo: panel.topAnchor),
+            rightScroll.leadingAnchor.constraint(equalTo: edge.trailingAnchor),
+            rightScroll.trailingAnchor.constraint(equalTo: panel.trailingAnchor),
+            rightScroll.bottomAnchor.constraint(equalTo: panel.bottomAnchor),
         ])
 
         showSelection(nil)
@@ -674,63 +707,74 @@ final class RadarTab: NSView, NSTableViewDataSource, NSTableViewDelegate, Primar
     func tableView(_ tableView: NSTableView, viewFor column: NSTableColumn?, row: Int) -> NSView? {
         guard let lead = leads[safe: row] else { return nil }
         let width = column?.width ?? tableView.bounds.width
+        let spent = lead.isAnswered || lead.isDismissed
 
         let cell = NSView(frame: NSRect(x: 0, y: 0, width: width, height: tableView.rowHeight))
         cell.autoresizingMask = [.width]
+        cell.wantsLayer = true
 
-        let bandText = lead.isDismissed ? L.t(.dismissed)
-                     : lead.isAnswered ? L.t(.answered)
-                     : Self.bandName(lead.verdict.band)
-        let band = NSTextField.themed(
-            bandText, size: 9.5,
-            color: (lead.isDismissed || lead.isAnswered) ? Theme.cool
-                                                         : Self.bandColour(lead.verdict.band))
-        band.font = .systemFont(ofSize: 9.5, weight: .bold)
-
-        let meta = NSTextField.themed("r/\(lead.post.source) · \(Self.ago(lead.post.posted))",
-                                      size: 9.5, color: Theme.textMuted)
-        let head = NSStackView(views: [band, meta, NSView()])
-        head.orientation = .horizontal
-        head.spacing = 8
+        // A colour bar down the left edge rather than a word in the corner.
+        // Band, state and selection are three things the eye needs before it
+        // reads anything, and a 3pt rule carries all of them without spending a
+        // line of text on it.
+        let bar = NSView()
+        bar.wantsLayer = true
+        bar.layer?.backgroundColor = (spent ? Theme.cardBorder
+                                            : Self.bandColour(lead.verdict.band)).cgColor
+        bar.layer?.cornerRadius = 1.5
+        bar.translatesAutoresizingMaskIntoConstraints = false
 
         let title = NSTextField(wrappingLabelWithString: lead.post.title)
-        // Answered rows are always regular weight. Muting the colour alone was
-        // enough on a dark ground; on paper a semibold line still pulls the eye
-        // first, so an already-handled thread outshouted a live one.
-        title.font = .systemFont(ofSize: 11.5,
-                                 weight: (lead.isAnswered || lead.isDismissed) ? .regular
-                                       : (lead.isNew ? .semibold : .regular))
-        title.textColor = (lead.isAnswered || lead.isDismissed) ? Theme.textMuted : Theme.textPrimary
-        title.preferredMaxLayoutWidth = width - 22
+        title.font = spent ? .systemFont(ofSize: 13) : Theme.Font.row
+        title.textColor = spent ? Theme.textMuted : Theme.textPrimary
+        title.preferredMaxLayoutWidth = width - 34
         title.cell?.wraps = true
         title.cell?.truncatesLastVisibleLine = true
         title.maximumNumberOfLines = 2
+        title.identifier = NSUserInterfaceItemIdentifier("mayTruncate")
 
-        let stack = NSStackView(views: [head, title])
-        stack.orientation = .vertical
-        stack.alignment = .leading
-        stack.spacing = 4
-        stack.edgeInsets = NSEdgeInsets(top: 8, left: 10, bottom: 8, right: 10)
-        stack.translatesAutoresizingMaskIntoConstraints = false
-        cell.addSubview(stack)
+        let state = lead.isDismissed ? L.t(.dismissed)
+                  : lead.isAnswered ? L.t(.answered)
+                  : Self.bandName(lead.verdict.band)
+        let meta = NSTextField.themed(
+            "\(state)  ·  r/\(lead.post.source)  ·  \(Self.ago(lead.post.posted))",
+            size: 11, color: spent ? Theme.textMuted : Theme.textSecond)
+        meta.lineBreakMode = .byTruncatingTail
+
+        let words = NSStackView(views: [title, meta])
+        words.orientation = .vertical
+        words.alignment = .leading
+        words.spacing = 3
+        words.translatesAutoresizingMaskIntoConstraints = false
+
+        cell.addSubview(bar)
+        cell.addSubview(words)
         NSLayoutConstraint.activate([
-            stack.leadingAnchor.constraint(equalTo: cell.leadingAnchor),
-            stack.trailingAnchor.constraint(equalTo: cell.trailingAnchor),
-            stack.topAnchor.constraint(equalTo: cell.topAnchor),
+            bar.leadingAnchor.constraint(equalTo: cell.leadingAnchor, constant: 2),
+            bar.topAnchor.constraint(equalTo: cell.topAnchor, constant: 9),
+            bar.bottomAnchor.constraint(equalTo: cell.bottomAnchor, constant: -9),
+            bar.widthAnchor.constraint(equalToConstant: 3),
+            words.leadingAnchor.constraint(equalTo: bar.trailingAnchor, constant: 12),
+            words.trailingAnchor.constraint(equalTo: cell.trailingAnchor, constant: -10),
+            words.topAnchor.constraint(equalTo: cell.topAnchor, constant: 9),
         ])
 
-        if row == tableView.selectedRow {
-            stack.wantsLayer = true
-            stack.layer?.backgroundColor = Theme.accent.withAlphaComponent(0.14).cgColor
-            stack.layer?.borderColor = Theme.accent.withAlphaComponent(0.4).cgColor
-            stack.layer?.borderWidth = 1
-            stack.layer?.cornerRadius = 8
-        }
         return cell
     }
 
+    /// The row draws its own selection.
+    ///
+    /// This was a tinted view inside the cell, rebuilt on `reloadData` from
+    /// inside the selection delegate — which AppKit does not honour. Measured:
+    /// every row was built exactly once, with `selectedRow = -1`, so the
+    /// highlight was written and never drawn and you could not tell what was
+    /// selected. A row view redraws itself when the selection changes, which is
+    /// what it is for.
+    func tableView(_ tableView: NSTableView, rowViewForRow row: Int) -> NSTableRowView? {
+        LeadRow()
+    }
+
     func tableViewSelectionDidChange(_ notification: Notification) {
-        table.reloadData()
         showSelection(leads[safe: table.selectedRow])
     }
 
@@ -805,4 +849,29 @@ extension RadarTab: NSTextViewDelegate {
 /// Top-left origin, so a stack in a scroll view fills downwards.
 final class FlippedView: NSView {
     override var isFlipped: Bool { true }
+}
+
+
+/// A row that lifts off the page when it is the one being read.
+///
+/// White on the paper list, with a soft shadow — the same relationship the
+/// detail panel has to the page, so selecting a lead and reading it look like
+/// one gesture.
+final class LeadRow: NSTableRowView {
+    override func drawSelection(in dirtyRect: NSRect) {
+        guard selectionHighlightStyle != .none else { return }
+        let box = bounds.insetBy(dx: 0, dy: 3)
+        let path = NSBezierPath(roundedRect: NSRect(x: box.minX, y: box.minY,
+                                                    width: box.width - 6, height: box.height),
+                                xRadius: 8, yRadius: 8)
+        NSGraphicsContext.current?.saveGraphicsState()
+        let lift = NSShadow()
+        lift.shadowColor = NSColor(white: 0, alpha: 0.09)
+        lift.shadowOffset = NSSize(width: 0, height: -1)
+        lift.shadowBlurRadius = 4
+        lift.set()
+        Theme.card.setFill()
+        path.fill()
+        NSGraphicsContext.current?.restoreGraphicsState()
+    }
 }

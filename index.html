@@ -1433,7 +1433,7 @@
       <div class="header-stats">
         <div class="stat-pill">
           <span class="dot-live"></span>
-          <span>SCOPE RADAR: <strong>494</strong> SCANNED</span>
+          <span>SCOPE RADAR: <strong id="scannedTotalVal">494</strong> SCANNED</span>
         </div>
         <div class="stat-pill">
           <span>🎯 SNIPED: <strong id="snipedCounterVal">112</strong></span>
@@ -1467,8 +1467,8 @@
     <div class="live-ticker-bar">
       <div class="ticker-tag">🎯 SCOPE STREAM</div>
       <div class="ticker-marquee-inner" id="tickerMarquee">
-        <span>⚡ r/SaaS: "Looking for a tool to automate customer workflow reports" (88% 🔥 HOT) • 🎯 r/shopify: "How can I automatically recover abandoned carts via WhatsApp?" (88% 🔥 HOT) • ⚡ r/forhire: "[Hiring] Need a developer to build automated dashboard & Stripe billing" (88% 🔥 HOT) • 🧠 r/ChatGPT: "How to connect GPT-4 to Google Sheets to auto-research leads?" (88% 🔥 HOT) • 🎬 r/VideoEditing: "Any free tool to auto-generate karaoke animated subtitles?" (88% 🔥 HOT) • 🏪 r/smallbusiness: "How can I get more Google 5-star reviews from past customers?" (88% 🔥 HOT) • &nbsp;&nbsp;</span>
-        <span>⚡ r/SaaS: "Looking for a tool to automate customer workflow reports" (88% 🔥 HOT) • 🎯 r/shopify: "How can I automatically recover abandoned carts via WhatsApp?" (88% 🔥 HOT) • ⚡ r/forhire: "[Hiring] Need a developer to build automated dashboard & Stripe billing" (88% 🔥 HOT) • 🧠 r/ChatGPT: "How to connect GPT-4 to Google Sheets to auto-research leads?" (88% 🔥 HOT) • 🎬 r/VideoEditing: "Any free tool to auto-generate karaoke animated subtitles?" (88% 🔥 HOT) • 🏪 r/smallbusiness: "How can I get more Google 5-star reviews from past customers?" (88% 🔥 HOT) • &nbsp;&nbsp;</span>
+        <span>⚡ r/SaaS: "Looking for a tool to automate customer workflow reports" (88% 🔥 HOT) • 🎯 r/shopify: "How can I automatically recover abandoned carts via WhatsApp?" (94% 🔥 HOT) • ⚡ r/forhire: "[Hiring] Need a developer to build automated dashboard & Stripe billing" (95% 🔥 HOT) • 🧠 r/ChatGPT: "How to connect GPT-4 to Google Sheets to auto-research leads?" (91% 🔥 HOT) • 🎬 r/VideoEditing: "Any free tool to auto-generate karaoke animated subtitles?" (89% 🔥 HOT) • 🏪 r/smallbusiness: "How can I get more Google 5-star reviews from past customers?" (93% 🔥 HOT) • &nbsp;&nbsp;</span>
+        <span>⚡ r/SaaS: "Looking for a tool to automate customer workflow reports" (88% 🔥 HOT) • 🎯 r/shopify: "How can I automatically recover abandoned carts via WhatsApp?" (94% 🔥 HOT) • ⚡ r/forhire: "[Hiring] Need a developer to build automated dashboard & Stripe billing" (95% 🔥 HOT) • 🧠 r/ChatGPT: "How to connect GPT-4 to Google Sheets to auto-research leads?" (91% 🔥 HOT) • 🎬 r/VideoEditing: "Any free tool to auto-generate karaoke animated subtitles?" (89% 🔥 HOT) • 🏪 r/smallbusiness: "How can I get more Google 5-star reviews from past customers?" (93% 🔥 HOT) • &nbsp;&nbsp;</span>
       </div>
     </div>
 
@@ -1489,7 +1489,7 @@
 
       <!-- Real Dynamic HTML5 Canvas Sniper Scope HUD -->
       <div class="radar-hud-canvas-wrap" id="radarScopeContainer" title="Click any blip to lock target">
-        <div class="radar-telemetry-badge">AZ: 142° | RG: 88%</div>
+        <div class="radar-telemetry-badge" id="hudTelemetryCoords">AZ: 142° | RG: 88%</div>
         <canvas id="radarScopeCanvas" width="360" height="360"></canvas>
         <div class="radar-scope-label" id="scopeStatusText">SCOPE: 3 TARGETS</div>
       </div>
@@ -1557,7 +1557,7 @@
             <button onclick="exportLeadsCsv()" class="btn-action-nav" style="padding: 5px 10px; border-color: rgba(16, 185, 129, 0.3); color: var(--emerald);">📥 Export CSV</button>
             <button onclick="exportLeadsJson()" class="btn-action-nav" style="padding: 5px 10px;">📄 JSON</button>
             <span id="liveTargetLockBadge" style="font-size: 11px; font-family: var(--font-mono); color: var(--emerald);">● SCOPE LOCK ACQUIRED</span>
-            <button onclick="simulateScan()" class="btn-action-nav" style="padding: 5px 12px;">⚡ Live Scan</button>
+            <button onclick="simulateScan()" class="btn-action-nav" style="padding: 5px 12px; background: rgba(56, 189, 248, 0.15); border-color: var(--accent); color: var(--accent);">⚡ Live Scan Fresh Leads</button>
           </div>
         </div>
 
@@ -2262,8 +2262,10 @@
   <script>
     let soundEnabled = true;
     let snipedCount = 112;
+    let scannedTotal = 494;
     let autoPilotActive = false;
     let autoPilotTimer = null;
+    let liveFeedInterval = null;
     let searchTerm = "";
     let activePlatform = "reddit";
 
@@ -2290,12 +2292,157 @@
       if (soundEnabled) playTargetLockChime();
     }
 
+    // Platform Specific Lead Feeds
+    const PLATFORM_DATA = {
+      reddit: {
+        saas: [
+          { sub: "r/SaaS", intent: "HOT", score: 94, title: "Looking for a reliable tool to automate customer workflow reports", author: "EfficiencyWhich5225", time: "just now", link: "https://www.reddit.com/r/SaaS/" },
+          { sub: "r/SideProject", intent: "HOT", score: 92, title: "How do you automate client dashboards without custom backend code?", author: "sarah_builds", time: "3m ago", link: "https://www.reddit.com/r/SideProject/" },
+          { sub: "r/webdev", intent: "WARM", score: 68, title: "What is your stack for background job processing and webhook syncs?", author: "dev_marcus", time: "8m ago", link: "https://www.reddit.com/r/webdev/" },
+          { sub: "r/startups", intent: "HOT", score: 89, title: "Best alternative to manual spreadsheets for weekly pipeline updates?", author: "founder_dan", time: "14m ago", link: "https://www.reddit.com/r/startups/" }
+        ],
+        ecom: [
+          { sub: "r/shopify", intent: "HOT", score: 95, title: "How can I automatically recover abandoned carts via WhatsApp or SMS?", author: "store_grower", time: "just now", link: "https://www.reddit.com/r/shopify/" },
+          { sub: "r/ecommerce", intent: "HOT", score: 88, title: "Best tool to sync inventory across Shopify, TikTok Shop, and Amazon?", author: "omni_seller", time: "5m ago", link: "https://www.reddit.com/r/ecommerce/" },
+          { sub: "r/FulfillmentByAmazon", intent: "WARM", score: 64, title: "Automating product review requests without violating TOS?", author: "amazon_pro", time: "12m ago", link: "https://www.reddit.com/r/FulfillmentByAmazon/" }
+        ],
+        agency: [
+          { sub: "r/forhire", intent: "HOT", score: 96, title: "[Hiring] Need a developer to build automated dashboard & Stripe billing", author: "founder_scale", time: "just now", link: "https://www.reddit.com/r/forhire/" },
+          { sub: "r/freelance", intent: "WARM", score: 65, title: "How do you automate client onboarding contracts and invoice reminders?", author: "design_nomad", time: "7m ago", link: "https://www.reddit.com/r/freelance/" },
+          { sub: "r/AgencyGrowth", intent: "HOT", score: 91, title: "Looking for a turnkey client portal to replace manual Notion docs", author: "agency_lead", time: "16m ago", link: "https://www.reddit.com/r/AgencyGrowth/" }
+        ],
+        ai_tools: [
+          { sub: "r/ChatGPT", intent: "HOT", score: 93, title: "How to connect GPT-4 to Google Sheets to auto-research leads?", author: "growth_hacker99", time: "just now", link: "https://www.reddit.com/r/ChatGPT/" },
+          { sub: "r/nocode", intent: "HOT", score: 87, title: "Best tool to build custom AI customer support agents for clients?", author: "nocode_builder", time: "4m ago", link: "https://www.reddit.com/r/nocode/" },
+          { sub: "r/OpenAI", intent: "WARM", score: 62, title: "Handling webhook latency when streaming long LLM responses?", author: "ai_eng", time: "19m ago", link: "https://www.reddit.com/r/OpenAI/" }
+        ],
+        video: [
+          { sub: "r/VideoEditing", intent: "HOT", score: 91, title: "Any free tool to auto-generate karaoke animated subtitles?", author: "clip_master", time: "just now", link: "https://www.reddit.com/r/VideoEditing/" },
+          { sub: "r/AfterEffects", intent: "WARM", score: 66, title: "Best batch rendering script for TikTok reels and shorts?", author: "vfx_creator", time: "9m ago", link: "https://www.reddit.com/r/AfterEffects/" }
+        ],
+        local_biz: [
+          { sub: "r/smallbusiness", intent: "HOT", score: 94, title: "How can I get more Google 5-star reviews from past customers automatically?", author: "plumbing_owner", time: "just now", link: "https://www.reddit.com/r/smallbusiness/" },
+          { sub: "r/sweatystartup", intent: "HOT", score: 89, title: "Automated SMS reminders for lawn care and service bookings?", author: "green_care", time: "6m ago", link: "https://www.reddit.com/r/sweatystartup/" }
+        ]
+      },
+      hn: {
+        saas: [
+          { sub: "Ask HN", intent: "HOT", score: 96, title: "Ask HN: What lightweight tool do you use to automate report pipelines?", author: "t_hacker", time: "just now", link: "https://news.ycombinator.com" },
+          { sub: "Ask HN", intent: "HOT", score: 91, title: "Ask HN: Simple zero-backend client reporting dashboard recommendations?", author: "pg_fan", time: "4m ago", link: "https://news.ycombinator.com" },
+          { sub: "Show HN", intent: "WARM", score: 72, title: "Show HN: Modern async event pipelines for SaaS products", author: "cloud_dev", time: "11m ago", link: "https://news.ycombinator.com" }
+        ],
+        ecom: [
+          { sub: "Ask HN", intent: "HOT", score: 93, title: "Ask HN: How do you handle webhook idempotency in Shopify cart recovery?", author: "merchant_eng", time: "just now", link: "https://news.ycombinator.com" },
+          { sub: "Ask HN", intent: "HOT", score: 88, title: "Ask HN: Best open APIs for multi-channel inventory reconciliation?", author: "stock_bot", time: "8m ago", link: "https://news.ycombinator.com" }
+        ],
+        agency: [
+          { sub: "Ask HN", intent: "HOT", score: 97, title: "Ask HN: Who is hiring developer to build custom Stripe billing & portals?", author: "yc_founder", time: "just now", link: "https://news.ycombinator.com" },
+          { sub: "Ask HN", intent: "WARM", score: 68, title: "Ask HN: Best billing and client contract automation stack for small studios?", author: "studio_dev", time: "15m ago", link: "https://news.ycombinator.com" }
+        ],
+        ai_tools: [
+          { sub: "Ask HN", intent: "HOT", score: 95, title: "Ask HN: Reliable tool to connect LLM agents to Google Sheets & Airtable?", author: "llm_researcher", time: "just now", link: "https://news.ycombinator.com" },
+          { sub: "Ask HN", intent: "HOT", score: 90, title: "Ask HN: How are you deploying low-latency document QA bots for clients?", author: "rag_builder", time: "7m ago", link: "https://news.ycombinator.com" }
+        ],
+        video: [
+          { sub: "Ask HN", intent: "HOT", score: 89, title: "Ask HN: Fast tools for subtitle generation and alignment via Whisper?", author: "audio_coder", time: "just now", link: "https://news.ycombinator.com" }
+        ],
+        local_biz: [
+          { sub: "Ask HN", intent: "HOT", score: 91, title: "Ask HN: How do local service businesses automate customer SMS review loops?", author: "local_cto", time: "just now", link: "https://news.ycombinator.com" }
+        ]
+      },
+      ph: {
+        saas: [
+          { sub: "ProductHunt", intent: "HOT", score: 94, title: "Looking for an automated customer reporting suite to replace spreadsheets", author: "ph_maker9", time: "just now", link: "https://www.producthunt.com" },
+          { sub: "ProductHunt", intent: "HOT", score: 90, title: "What is your favorite stack for building client analytics dashboards?", author: "laura_growth", time: "5m ago", link: "https://www.producthunt.com" }
+        ],
+        ecom: [
+          { sub: "ProductHunt", intent: "HOT", score: 93, title: "What tools do Shopify store owners use for automated SMS checkout recovery?", author: "ecom_hunter", time: "just now", link: "https://www.producthunt.com" }
+        ],
+        agency: [
+          { sub: "ProductHunt", intent: "HOT", score: 95, title: "Looking for development agency to build custom customer billing portal", author: "saas_director", time: "just now", link: "https://www.producthunt.com" }
+        ],
+        ai_tools: [
+          { sub: "ProductHunt", intent: "HOT", score: 92, title: "Best AI agents to automate lead research directly inside spreadsheets?", author: "ai_hunter", time: "just now", link: "https://www.producthunt.com" }
+        ],
+        video: [
+          { sub: "ProductHunt", intent: "HOT", score: 88, title: "Any tool to auto-generate styled animated subtitles in 1 click?", author: "video_marketer", time: "just now", link: "https://www.producthunt.com" }
+        ],
+        local_biz: [
+          { sub: "ProductHunt", intent: "HOT", score: 90, title: "Automated SMS review generation tools for local home services", author: "biz_ops", time: "just now", link: "https://www.producthunt.com" }
+        ]
+      },
+      ih: {
+        saas: [
+          { sub: "IndieHackers", intent: "HOT", score: 95, title: "How I automated client reports to save 12 hours weekly — what tools do you use?", author: "indie_ben", time: "just now", link: "https://www.indiehackers.com" },
+          { sub: "IndieHackers", intent: "HOT", score: 91, title: "Looking for a simple way to give users a self-service dashboard without custom code", author: "solobuilder", time: "6m ago", link: "https://www.indiehackers.com" }
+        ],
+        ecom: [
+          { sub: "IndieHackers", intent: "HOT", score: 92, title: "Recovering 14% of abandoned checkouts via automated SMS — recommended tools?", author: "ecom_hacker", time: "just now", link: "https://www.indiehackers.com" }
+        ],
+        agency: [
+          { sub: "IndieHackers", intent: "HOT", score: 96, title: "Looking to hire developer to set up Stripe billing & automated client onboarding", author: "agency_sam", time: "just now", link: "https://www.indiehackers.com" }
+        ],
+        ai_tools: [
+          { sub: "IndieHackers", intent: "HOT", score: 93, title: "How to connect OpenAI API to Google Sheets for prospecting automation?", author: "growth_indie", time: "just now", link: "https://www.indiehackers.com" }
+        ],
+        video: [
+          { sub: "IndieHackers", intent: "HOT", score: 87, title: "What video tools do you use to auto-generate viral captions and shorts?", author: "creator_kai", time: "just now", link: "https://www.indiehackers.com" }
+        ],
+        local_biz: [
+          { sub: "IndieHackers", intent: "HOT", score: 92, title: "Scaling a local service biz from 0 to $20k MRR — automated review strategies?", author: "local_builder", time: "just now", link: "https://www.indiehackers.com" }
+        ]
+      }
+    };
+
+    // Workspace Presets Configuration
+    const WORKSPACES = {
+      saas: { name: "Acme SaaS", url: "https://yourapp.com" },
+      ecom: { name: "ShopBoost", url: "https://shopboost.io" },
+      agency: { name: "Apex Agency", url: "https://apexstudio.agency" },
+      ai_tools: { name: "FlowAgent AI", url: "https://flowagent.ai" },
+      video: { name: "ClipMaster", url: "https://yourvideotool.com" },
+      local_biz: { name: "LocalRank Pro", url: "https://localrankpro.com" }
+    };
+
+    let activeKey = "saas";
+    let activeIndex = 0;
+    let activePersona = "founder";
+    let activeFilter = "ALL";
+    let dynamicLeads = [];
+
+    function generateRepliesForLead(lead, ws) {
+      return {
+        founder: `Hey ${lead.author.replace(/^u\//, '@')}! If you're looking to solve this, check out ${ws.url} — built specifically to streamline this with zero complex setup. Hope this helps!`,
+        tech: `Hey ${lead.author.replace(/^u\//, '@')}, for direct workflow automation check out ${ws.url}. Solves the core bottlenecks directly.`,
+        creator: `Great question ${lead.author.replace(/^u\//, '@')}! I use ${ws.url} for this exact workflow and it saved me hours.`,
+        concise: `Check out ${ws.url} to streamline this in 1 click.`
+      };
+    }
+
+    function initDynamicLeads() {
+      const platList = (PLATFORM_DATA[activePlatform] && PLATFORM_DATA[activePlatform][activeKey]) || PLATFORM_DATA.reddit.saas;
+      const ws = WORKSPACES[activeKey];
+
+      dynamicLeads = platList.map((item, idx) => {
+        const lead = { ...item };
+        lead.permalink = item.link || "https://www.reddit.com";
+        lead.replies = generateRepliesForLead(lead, ws);
+        // Dynamic scope angle & drift
+        lead.angle = (idx / platList.length) * (Math.PI * 2) - 0.7;
+        lead.driftSpeed = (Math.random() * 0.003 + 0.001) * (idx % 2 === 0 ? 1 : -1);
+        return lead;
+      });
+    }
+
     function setPlatform(plat, el) {
       activePlatform = plat;
       document.querySelectorAll('.platform-pill-btn').forEach(b => b.classList.remove('active'));
       el.classList.add('active');
-      showToast('🎯', `Scope Locked to ${plat.toUpperCase()} Feed`);
+      initDynamicLeads();
+      activeIndex = 0;
       renderLeads();
+      updateWebhookPreview();
+      showToast('🎯', `Scope Locked to ${plat.toUpperCase()} Live Feed`);
       playTargetLockChime();
     }
 
@@ -2305,6 +2452,295 @@
       renderLeads();
       playTargetLockChime();
       showToast('🔍', kw ? `Filtered by #${kw}` : `Filters Cleared`);
+    }
+
+    function onPresetChange() {
+      activeKey = document.getElementById("activePresetSelect").value;
+      initDynamicLeads();
+      activeIndex = 0;
+      renderLeads();
+      updateWebhookPreview();
+      playTargetLockChime();
+      showToast('🎯', `Scope Locked: ${WORKSPACES[activeKey].name}`);
+    }
+
+    function setPersona(p) {
+      activePersona = p;
+      document.querySelectorAll(".persona-tag-btn").forEach(b => b.classList.remove("active"));
+      if (event && event.target) event.target.classList.add("active");
+      updateReplyBox();
+    }
+
+    function filterLeads(filterType, el) {
+      activeFilter = filterType;
+      document.querySelectorAll('.filter-pill-btn').forEach(b => b.classList.remove('active'));
+      el.classList.add('active');
+      renderLeads();
+      playTargetLockChime();
+    }
+
+    function selectLead(idx) {
+      activeIndex = idx;
+      document.querySelectorAll(".lead-row").forEach((r, i) => {
+        r.classList.toggle("selected", i === idx);
+      });
+      updateReplyBox();
+      updateWebhookPreview();
+      updateTelemetryCoords();
+      playTargetLockChime();
+    }
+
+    function updateTelemetryCoords() {
+      const lead = dynamicLeads[activeIndex];
+      if (!lead) return;
+      const score = lead.score || 88;
+      const az = Math.round(((lead.angle % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2) * (180 / Math.PI));
+      const el = document.getElementById('hudTelemetryCoords');
+      if (el) el.textContent = `AZ: ${az}° | RG: ${score}%`;
+    }
+
+    function renderLeads() {
+      const container = document.getElementById("leadsStreamList");
+      container.innerHTML = "";
+
+      const filtered = dynamicLeads.filter(l => {
+        if (activeFilter === "HOT" && l.intent !== "HOT") return false;
+        if (activeFilter === "WARM" && l.intent !== "WARM") return false;
+        if (searchTerm) {
+          const matchTitle = l.title.toLowerCase().includes(searchTerm);
+          const matchSub = l.sub.toLowerCase().includes(searchTerm);
+          const matchAuthor = l.author.toLowerCase().includes(searchTerm);
+          if (!matchTitle && !matchSub && !matchAuthor) return false;
+        }
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--text-muted); font-size: 12px;">No targets matching scope filter.</div>';
+        return;
+      }
+
+      filtered.forEach((lead, idx) => {
+        const row = document.createElement("div");
+        row.className = `lead-row ${idx === activeIndex ? "selected" : ""}`;
+        row.onclick = () => selectLead(idx);
+
+        const badgeClass = lead.intent === "HOT" ? "badge-intent-hot" : "badge-intent-warm";
+        const score = lead.score || (lead.intent === "HOT" ? 88 : 54);
+        const snipedStatus = lead.sniped ? `<span style="color: var(--emerald); font-size: 10px; font-weight: 700;">🎯 SNIPED</span>` : `<span class="${badgeClass}">${lead.intent} 🔥 ${score}%</span>`;
+
+        row.innerHTML = `
+          <div class="lead-meta">
+            <span class="lead-sub-tag">${lead.sub}</span>
+            <div style="display: flex; gap: 6px; align-items: center;">
+              <span style="font-size: 10px; color: var(--text-muted); font-family: var(--font-mono);">${lead.time || 'just now'}</span>
+              ${snipedStatus}
+            </div>
+          </div>
+          <div class="lead-post-title">${lead.title}</div>
+          <div style="font-size: 11px; color: #64748b;">${lead.author}</div>
+        `;
+        container.appendChild(row);
+      });
+
+      const countEl = document.getElementById('scopeStatusText');
+      if (countEl) countEl.textContent = `SCOPE: ${filtered.length} TARGET${filtered.length === 1 ? '' : 'S'}`;
+
+      updateReplyBox();
+      updateTelemetryCoords();
+    }
+
+    function updateReplyBox() {
+      const lead = dynamicLeads[activeIndex] || dynamicLeads[0];
+      if (!lead) return;
+
+      const ws = WORKSPACES[activeKey];
+      const score = lead.score || (lead.intent === "HOT" ? 88 : 54);
+      document.getElementById("cardLeadTitle").textContent = lead.title;
+      document.getElementById("cardLeadMeta").textContent = `${lead.sub} • ${lead.author} • Intent: ${lead.intent} 🔥 (${score}%)`;
+
+      const replies = lead.replies || generateRepliesForLead(lead, ws);
+      const reply = replies[activePersona] || replies.founder;
+      document.getElementById("replyTextarea").value = reply;
+    }
+
+    function copyReplyOnly() {
+      const text = document.getElementById("replyTextarea").value.trim();
+      const lead = dynamicLeads[activeIndex] || dynamicLeads[0];
+
+      navigator.clipboard.writeText(text).then(() => {
+        const icon = document.getElementById("btnDispatchIcon");
+        const label = document.getElementById("btnDispatchText");
+        icon.textContent = "✅";
+        label.textContent = "Copied Clean to Clipboard!";
+        playTargetLockChime();
+
+        if (lead && !lead.sniped) {
+          lead.sniped = true;
+          snipedCount++;
+          document.getElementById('snipedCounterVal').textContent = snipedCount;
+          renderLeads();
+        }
+
+        showToast('📋', 'Reply Copied to Clipboard!');
+
+        if (typeof confetti === 'function') {
+          confetti({
+            particleCount: 35,
+            spread: 55,
+            origin: { y: 0.75 },
+            colors: ['#38bdf8', '#10b981', '#ffffff']
+          });
+        }
+
+        setTimeout(() => {
+          icon.textContent = "📋";
+          label.textContent = "1-Click Copy Reply";
+        }, 2200);
+      });
+    }
+
+    function openCurrentThread() {
+      const lead = dynamicLeads[activeIndex] || dynamicLeads[0];
+      if (lead && lead.permalink) {
+        window.open(lead.permalink, '_blank');
+        showToast('↗️', `Opening ${lead.sub} thread in Reddit...`);
+      }
+    }
+
+    function exportLeadsCsv() {
+      const ws = WORKSPACES[activeKey];
+      let csv = "Subreddit,Author,Intent,Score,Time,Title,Permalink,RecommendedReply\n";
+      dynamicLeads.forEach(l => {
+        const cleanTitle = `"${l.title.replace(/"/g, '""')}"`;
+        const replies = l.replies || generateRepliesForLead(l, ws);
+        const cleanReply = `"${(replies[activePersona] || replies.founder).replace(/"/g, '""')}"`;
+        const score = l.score || (l.intent === "HOT" ? 88 : 54);
+        csv += `${l.sub},${l.author},${l.intent},${score}%,${l.time || 'recent'},${cleanTitle},${l.permalink},${cleanReply}\n`;
+      });
+
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `leadsniper_${activeKey}_export.csv`;
+      a.click();
+      playTargetLockChime();
+      showToast('📥', 'Exported Leads to CSV');
+    }
+
+    function exportLeadsJson() {
+      const blob = new Blob([JSON.stringify(dynamicLeads, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `leadsniper_${activeKey}_leads.json`;
+      a.click();
+      playTargetLockChime();
+      showToast('📄', 'Exported Leads to JSON');
+    }
+
+    // Dynamic Live Lead Ingestion Engine
+    function simulateScan() {
+      const badge = document.getElementById("liveTargetLockBadge");
+      badge.textContent = "● SCANNING SCOPE...";
+      badge.style.color = "#f59e0b";
+      showToast('🎯', 'Scanning live stream for high-intent queries...');
+
+      setTimeout(() => {
+        badge.textContent = "● SCOPE LOCK ACQUIRED";
+        badge.style.color = "#10b981";
+
+        // Generate and inject a fresh high-intent lead
+        injectFreshLiveLead();
+
+        scannedTotal += Math.floor(Math.random() * 4) + 2;
+        document.getElementById('scannedTotalVal').textContent = scannedTotal;
+
+        playTargetLockChime();
+        showToast('🎯', 'New High-Intent Target Locked in Scope!');
+      }, 450);
+    }
+
+    function injectFreshLiveLead() {
+      const ws = WORKSPACES[activeKey];
+      const authors = ["@alex_builds", "@prospect_dan", "@sarah_scale", "@mike_dev", "@ecom_king", "@growth_ninja", "@builder_kai", "@solo_maker"];
+      const randAuthor = authors[Math.floor(Math.random() * authors.length)];
+
+      const titles = [
+        `Looking for an automated tool to streamline ${ws.name} workflows in 2026`,
+        `How do you handle bottlenecks in ${ws.name} without manual code?`,
+        `What is the best alternative to Zapier for syncing ${ws.name} pipelines?`,
+        `[Hiring] Need a developer / tool to automate ${ws.name} and client portals`,
+        `Is there any reliable software to automate reporting and data syncs for ${ws.name}?`
+      ];
+      const randTitle = titles[Math.floor(Math.random() * titles.length)];
+      const randScore = Math.floor(Math.random() * 10) + 88; // 88 - 97%
+
+      const prefix = activePlatform === 'hn' ? 'Ask HN' : (activePlatform === 'ph' ? 'ProductHunt' : (activePlatform === 'ih' ? 'IndieHackers' : 'r/SaaS'));
+
+      const newLead = {
+        sub: prefix,
+        intent: "HOT",
+        score: randScore,
+        title: randTitle,
+        author: randAuthor,
+        time: "just now",
+        permalink: "https://www.reddit.com",
+        angle: Math.random() * Math.PI * 2,
+        driftSpeed: (Math.random() * 0.004 + 0.001)
+      };
+
+      newLead.replies = generateRepliesForLead(newLead, ws);
+
+      dynamicLeads.unshift(newLead);
+      if (dynamicLeads.length > 8) dynamicLeads.pop();
+
+      activeIndex = 0;
+      renderLeads();
+      updateWebhookPreview();
+    }
+
+    function scanCustomSub() {
+      const sub = document.getElementById("customSubInput").value.trim().replace(/^r\//, '');
+      if (!sub) return;
+
+      const ws = WORKSPACES[activeKey];
+      const customSubTitle = `What is the best workflow tool to solve operational bottlenecks in r/${sub}?`;
+
+      const newLead = {
+        sub: `r/${sub}`,
+        intent: "HOT",
+        score: 95,
+        title: customSubTitle,
+        author: `@prospect_r_${sub}`,
+        time: "just now",
+        permalink: `https://www.reddit.com/r/${sub}/`,
+        angle: Math.random() * Math.PI * 2,
+        driftSpeed: 0.002
+      };
+      newLead.replies = generateRepliesForLead(newLead, ws);
+
+      dynamicLeads.unshift(newLead);
+      activeIndex = 0;
+      renderLeads();
+      updateWebhookPreview();
+      playTargetLockChime();
+      showToast('🔍', `Targeting r/${sub} in Sniper Scope`);
+    }
+
+    function applyCustomProduct() {
+      const name = document.getElementById("simProductName").value.trim() || "My App";
+      const url = document.getElementById("simProductUrl").value.trim() || "https://myapp.com";
+
+      WORKSPACES[activeKey].name = name;
+      WORKSPACES[activeKey].url = url;
+
+      dynamicLeads.forEach(l => {
+        l.replies = generateRepliesForLead(l, WORKSPACES[activeKey]);
+      });
+
+      updateReplyBox();
+      playTargetLockChime();
+      showToast('🎯', `Targeting "${name}" in live sniper scope!`);
     }
 
     function toggleAutoPilot() {
@@ -2330,8 +2766,7 @@
 
     function runAutoPilotCycle() {
       if (!autoPilotActive) return;
-      const p = PRESETS[activeKey];
-      activeIndex = (activeIndex + 1) % p.leads.length;
+      activeIndex = (activeIndex + 1) % dynamicLeads.length;
       selectLead(activeIndex);
       
       autoPilotTimer = setTimeout(() => {
@@ -2373,434 +2808,6 @@
         osc.start();
         osc.stop(audioCtx.currentTime + 0.18);
       } catch(e) {}
-    }
-
-    // Live Lead Presets (Universal Everyman Business Models)
-    const PRESETS = {
-      saas: {
-        name: "Acme SaaS",
-        url: "https://yourapp.com",
-        leads: [
-          {
-            sub: "r/SaaS",
-            intent: "HOT",
-            score: 88,
-            title: "Looking for a tool to automate customer workflow reports?",
-            author: "EfficiencyWhich5225",
-            permalink: "https://www.reddit.com/r/SaaS/",
-            replies: {
-              founder: "Great point u/EfficiencyWhich5225! If you're looking to automate customer workflow reports, check out https://yourapp.com — built specifically to handle this with zero complex setup. Best of luck with the project!",
-              tech: "Hey u/EfficiencyWhich5225, for handling customer workflow reports, you might want to look into https://yourapp.com. Solves the core bottlenecks without requiring extra middleware.",
-              creator: "Hey u/EfficiencyWhich5225, had the exact same issue last month! Found https://yourapp.com and it streamlined the entire report generation in minutes.",
-              concise: "Check out https://yourapp.com — automates customer workflow reports in 1 click with 0 code."
-            }
-          },
-          {
-            sub: "r/SideProject",
-            intent: "HOT",
-            score: 92,
-            title: "How do you automate client dashboards without custom backend code?",
-            author: "sarah_builds",
-            permalink: "https://www.reddit.com/r/SideProject/",
-            replies: {
-              founder: "Hey u/sarah_builds! If you're looking to automate client dashboards, https://yourapp.com gives you direct 1-click workflows with zero custom backend needed. Hope this helps!",
-              tech: "For zero-backend client reporting u/sarah_builds, take a look at https://yourapp.com — handles the sync pipelines automatically.",
-              creator: "Nice project u/sarah_builds! Definitely check out https://yourapp.com for ready-made dashboard pipelines.",
-              concise: "You can use https://yourapp.com for automated client dashboards without custom backends."
-            }
-          },
-          {
-            sub: "r/webdev",
-            intent: "WARM",
-            score: 58,
-            title: "What is your stack for background job processing in 2026?",
-            author: "dev_marcus",
-            permalink: "https://www.reddit.com/r/webdev/",
-            replies: {
-              founder: "Hey u/dev_marcus! If you want a lightweight solution without managing Redis clusters, https://yourapp.com has serverless async pipelines ready out of the box.",
-              tech: "For modern job dispatching u/dev_marcus, check out https://yourapp.com for clean edge integrations.",
-              creator: "Nice question u/dev_marcus! https://yourapp.com made handling this super easy for our projects.",
-              concise: "Take a look at https://yourapp.com for lightweight async serverless job pipelines."
-            }
-          }
-        ]
-      },
-      ecom: {
-        name: "ShopBoost",
-        url: "https://shopboost.io",
-        leads: [
-          {
-            sub: "r/shopify",
-            intent: "HOT",
-            score: 94,
-            title: "How can I automatically recover abandoned carts via WhatsApp or SMS?",
-            author: "store_grower",
-            permalink: "https://www.reddit.com/r/shopify/",
-            replies: {
-              founder: "Hey u/store_grower! If you want to automate abandoned cart recovery with 1-click WhatsApp/SMS triggers, check out https://shopboost.io. Recovers ~14% of lost sales on average!",
-              tech: "For Shopify webhook cart recovery u/store_grower, https://shopboost.io handles the dispatch pipelines with zero latency.",
-              creator: "Great store u/store_grower! I use https://shopboost.io on our store and it bumped recovery rates significantly.",
-              concise: "Use https://shopboost.io to trigger automated abandoned cart recovery via WhatsApp & SMS."
-            }
-          },
-          {
-            sub: "r/ecommerce",
-            intent: "HOT",
-            score: 86,
-            title: "Best tool to sync inventory across Shopify, TikTok Shop, and Amazon?",
-            author: "omni_seller",
-            permalink: "https://www.reddit.com/r/ecommerce/",
-            replies: {
-              founder: "Hey u/omni_seller! If you're managing multi-channel inventory, https://shopboost.io auto-syncs stock across all 3 platforms in real time with zero overselling risk.",
-              tech: "For real-time multi-platform inventory reconciliation u/omni_seller, https://shopboost.io provides reliable two-way webhooks.",
-              creator: "Nice brand u/omni_seller! Check out https://shopboost.io for simple 1-click catalog syncing.",
-              concise: "https://shopboost.io auto-syncs real-time inventory between Shopify, TikTok Shop, and Amazon."
-            }
-          }
-        ]
-      },
-      agency: {
-        name: "Apex Agency",
-        url: "https://apexstudio.agency",
-        leads: [
-          {
-            sub: "r/forhire",
-            intent: "HOT",
-            score: 95,
-            title: "[Hiring] Need a developer to build automated dashboard & Stripe billing",
-            author: "founder_scale",
-            permalink: "https://www.reddit.com/r/forhire/",
-            replies: {
-              founder: "Hey u/founder_scale! We build custom automated dashboards and billing pipelines with 1-week turnaround. You can view our portfolio and schedule a direct sprint call at https://apexstudio.agency.",
-              tech: "Hey u/founder_scale, we specialize in Stripe integrations and modern dashboard architectures. Check out our case studies at https://apexstudio.agency.",
-              creator: "Great project u/founder_scale! Check out https://apexstudio.agency for fast dashboard builds.",
-              concise: "We build custom automated Stripe dashboards with 1-week turnaround at https://apexstudio.agency."
-            }
-          },
-          {
-            sub: "r/freelance",
-            intent: "WARM",
-            score: 62,
-            title: "How do you automate client onboarding contracts and invoice reminders?",
-            author: "design_nomad",
-            permalink: "https://www.reddit.com/r/freelance/",
-            replies: {
-              founder: "Great workflow u/design_nomad! We open-sourced our client onboarding workflows at https://apexstudio.agency — hope it saves you time on contracts!",
-              tech: "For automated client portals and payment reconciliation u/design_nomad, check out https://apexstudio.agency.",
-              creator: "Nice setup u/design_nomad! Definitely check out https://apexstudio.agency for client intake templates.",
-              concise: "Check out our client onboarding workflows and invoice templates at https://apexstudio.agency."
-            }
-          }
-        ]
-      },
-      ai_tools: {
-        name: "FlowAgent AI",
-        url: "https://flowagent.ai",
-        leads: [
-          {
-            sub: "r/ChatGPT",
-            intent: "HOT",
-            score: 91,
-            title: "How to connect GPT-4 to Google Sheets to auto-research leads?",
-            author: "growth_hacker99",
-            permalink: "https://www.reddit.com/r/ChatGPT/",
-            replies: {
-              founder: "Hey u/growth_hacker99! If you want to auto-enrich and research leads in Google Sheets with AI, check out https://flowagent.ai — does this in 1 click with zero code!",
-              tech: "For automated LLM sheet pipelines u/growth_hacker99, https://flowagent.ai exposes direct webhooks and functions.",
-              creator: "Awesome workflow u/growth_hacker99! I use https://flowagent.ai for enriching my prospecting sheets daily.",
-              concise: "Connect AI models to Google Sheets in 1 click with https://flowagent.ai."
-            }
-          },
-          {
-            sub: "r/nocode",
-            intent: "HOT",
-            score: 84,
-            title: "Best tool to build custom AI customer support agents for clients?",
-            author: "nocode_builder",
-            permalink: "https://www.reddit.com/r/nocode/",
-            replies: {
-              founder: "Hey u/nocode_builder! If you're building branded AI agents trained on client docs, https://flowagent.ai lets you deploy embedded bots in under 5 minutes.",
-              tech: "For vector search and document embedding agents u/nocode_builder, check out https://flowagent.ai.",
-              creator: "Nice build u/nocode_builder! https://flowagent.ai makes spinning up client agents super straightforward.",
-              concise: "Deploy custom document-trained AI customer support bots with https://flowagent.ai."
-            }
-          }
-        ]
-      },
-      video: {
-        name: "ClipMaster",
-        url: "https://yourvideotool.com",
-        leads: [
-          {
-            sub: "r/VideoEditing",
-            intent: "HOT",
-            score: 89,
-            title: "Any free tool to auto-generate karaoke animated subtitles?",
-            author: "clip_master",
-            permalink: "https://www.reddit.com/r/VideoEditing/",
-            replies: {
-              founder: "Hey u/clip_master! If you need animated karaoke captions, https://yourvideotool.com generates synchronized subtitles in one click for free.",
-              tech: "For fast word-level subtitle alignment u/clip_master, check out https://yourvideotool.com.",
-              creator: "Nice workflow u/clip_master! I use https://yourvideotool.com for auto-captioning my Shorts.",
-              concise: "Auto-generate synchronized karaoke animated subtitles with https://yourvideotool.com."
-            }
-          }
-        ]
-      },
-      local_biz: {
-        name: "LocalRank Pro",
-        url: "https://localrankpro.com",
-        leads: [
-          {
-            sub: "r/smallbusiness",
-            intent: "HOT",
-            score: 93,
-            title: "How can I get more Google 5-star reviews from past customers automatically?",
-            author: "plumbing_owner",
-            permalink: "https://www.reddit.com/r/smallbusiness/",
-            replies: {
-              founder: "Hey u/plumbing_owner! If you want to automatically send SMS review requests after completed jobs, https://localrankpro.com automates the whole sequence and filters 5-star reviews to Google.",
-              tech: "For automated local review generation u/plumbing_owner, check out https://localrankpro.com.",
-              creator: "Great business u/plumbing_owner! https://localrankpro.com helped our local shop double our Google review count in 30 days.",
-              concise: "Automate SMS 5-star Google review sequences with https://localrankpro.com."
-            }
-          }
-        ]
-      }
-    };
-
-    let activeKey = "saas";
-    let activeIndex = 0;
-    let activePersona = "founder";
-    let activeFilter = "ALL";
-
-    function onPresetChange() {
-      activeKey = document.getElementById("activePresetSelect").value;
-      activeIndex = 0;
-      renderLeads();
-      updateWebhookPreview();
-      playTargetLockChime();
-      showToast('🎯', `Scope Locked: ${PRESETS[activeKey].name}`);
-    }
-
-    function setPersona(p) {
-      activePersona = p;
-      document.querySelectorAll(".persona-tag-btn").forEach(b => b.classList.remove("active"));
-      if (event && event.target) event.target.classList.add("active");
-      updateReplyBox();
-    }
-
-    function filterLeads(filterType, el) {
-      activeFilter = filterType;
-      document.querySelectorAll('.filter-pill-btn').forEach(b => b.classList.remove('active'));
-      el.classList.add('active');
-      renderLeads();
-      playTargetLockChime();
-    }
-
-    function selectLead(idx) {
-      activeIndex = idx;
-      document.querySelectorAll(".lead-row").forEach((r, i) => {
-        r.classList.toggle("selected", i === idx);
-      });
-      updateReplyBox();
-      updateWebhookPreview();
-      playTargetLockChime();
-    }
-
-    function renderLeads() {
-      const p = PRESETS[activeKey];
-      const container = document.getElementById("leadsStreamList");
-      container.innerHTML = "";
-
-      const filtered = p.leads.filter(l => {
-        if (activeFilter === "HOT" && l.intent !== "HOT") return false;
-        if (activeFilter === "WARM" && l.intent !== "WARM") return false;
-        if (searchTerm) {
-          const matchTitle = l.title.toLowerCase().includes(searchTerm);
-          const matchSub = l.sub.toLowerCase().includes(searchTerm);
-          const matchAuthor = l.author.toLowerCase().includes(searchTerm);
-          if (!matchTitle && !matchSub && !matchAuthor) return false;
-        }
-        return true;
-      });
-
-      if (filtered.length === 0) {
-        container.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--text-muted); font-size: 12px;">No targets matching scope filter.</div>';
-        return;
-      }
-
-      filtered.forEach((lead, idx) => {
-        const row = document.createElement("div");
-        row.className = `lead-row ${idx === activeIndex ? "selected" : ""}`;
-        row.onclick = () => selectLead(idx);
-
-        const badgeClass = lead.intent === "HOT" ? "badge-intent-hot" : "badge-intent-warm";
-        const score = lead.score || (lead.intent === "HOT" ? 88 : 54);
-        const snipedStatus = lead.sniped ? `<span style="color: var(--emerald); font-size: 10px; font-weight: 700;">🎯 SNIPED</span>` : `<span class="${badgeClass}">${lead.intent} 🔥 ${score}%</span>`;
-
-        row.innerHTML = `
-          <div class="lead-meta">
-            <span class="lead-sub-tag">${lead.sub}</span>
-            ${snipedStatus}
-          </div>
-          <div class="lead-post-title">${lead.title}</div>
-          <div style="font-size: 11px; color: #64748b;">u/${lead.author}</div>
-        `;
-        container.appendChild(row);
-      });
-
-      const countEl = document.getElementById('scopeStatusText');
-      if (countEl) countEl.textContent = `SCOPE: ${filtered.length} TARGET${filtered.length === 1 ? '' : 'S'}`;
-
-      updateReplyBox();
-    }
-
-    function updateReplyBox() {
-      const p = PRESETS[activeKey];
-      const lead = p.leads[activeIndex] || p.leads[0];
-      if (!lead) return;
-
-      const score = lead.score || (lead.intent === "HOT" ? 88 : 54);
-      document.getElementById("cardLeadTitle").textContent = lead.title;
-      document.getElementById("cardLeadMeta").textContent = `${lead.sub} • u/${lead.author} • Intent: ${lead.intent} 🔥 (${score}%)`;
-
-      const reply = lead.replies[activePersona] || lead.replies.founder;
-      document.getElementById("replyTextarea").value = reply;
-    }
-
-    function copyReplyOnly() {
-      const text = document.getElementById("replyTextarea").value.trim();
-      const p = PRESETS[activeKey];
-      const lead = p.leads[activeIndex] || p.leads[0];
-
-      navigator.clipboard.writeText(text).then(() => {
-        const icon = document.getElementById("btnDispatchIcon");
-        const label = document.getElementById("btnDispatchText");
-        icon.textContent = "✅";
-        label.textContent = "Copied Clean to Clipboard!";
-        playTargetLockChime();
-
-        if (lead && !lead.sniped) {
-          lead.sniped = true;
-          snipedCount++;
-          document.getElementById('snipedCounterVal').textContent = snipedCount;
-          renderLeads();
-        }
-
-        showToast('📋', 'Reply Copied to Clipboard!');
-
-        if (typeof confetti === 'function') {
-          confetti({
-            particleCount: 35,
-            spread: 55,
-            origin: { y: 0.75 },
-            colors: ['#38bdf8', '#10b981', '#ffffff']
-          });
-        }
-
-        setTimeout(() => {
-          icon.textContent = "📋";
-          label.textContent = "1-Click Copy Reply";
-        }, 2200);
-      });
-    }
-
-    function openCurrentThread() {
-      const p = PRESETS[activeKey];
-      const lead = p.leads[activeIndex] || p.leads[0];
-      if (lead && lead.permalink) {
-        window.open(lead.permalink, '_blank');
-        showToast('↗️', `Opening ${lead.sub} thread in Reddit...`);
-      }
-    }
-
-    function exportLeadsCsv() {
-      const p = PRESETS[activeKey];
-      let csv = "Subreddit,Author,Intent,Score,Title,Permalink,RecommendedReply\n";
-      p.leads.forEach(l => {
-        const cleanTitle = `"${l.title.replace(/"/g, '""')}"`;
-        const cleanReply = `"${(l.replies[activePersona] || l.replies.founder).replace(/"/g, '""')}"`;
-        const score = l.score || (l.intent === "HOT" ? 88 : 54);
-        csv += `${l.sub},${l.author},${l.intent},${score}%,${cleanTitle},${l.permalink},${cleanReply}\n`;
-      });
-
-      const blob = new Blob([csv], { type: 'text/csv' });
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = `leadsniper_${activeKey}_export.csv`;
-      a.click();
-      playTargetLockChime();
-      showToast('📥', 'Exported Leads to CSV');
-    }
-
-    function exportLeadsJson() {
-      const p = PRESETS[activeKey];
-      const blob = new Blob([JSON.stringify(p, null, 2)], { type: 'application/json' });
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = `leadsniper_${activeKey}_leads.json`;
-      a.click();
-      playTargetLockChime();
-      showToast('📄', 'Exported Leads to JSON');
-    }
-
-    function simulateScan() {
-      const badge = document.getElementById("liveTargetLockBadge");
-      badge.textContent = "● SCANNING SCOPE...";
-      badge.style.color = "#f59e0b";
-      showToast('🎯', 'Scanning scope reticle across streams...');
-      setTimeout(() => {
-        badge.textContent = "● SCOPE LOCK ACQUIRED";
-        badge.style.color = "#10b981";
-        renderLeads();
-        playTargetLockChime();
-        showToast('🎯', 'Target Lock Acquired in Sniper Scope');
-      }, 500);
-    }
-
-    function scanCustomSub() {
-      const sub = document.getElementById("customSubInput").value.trim().replace(/^r\//, '');
-      if (!sub) return;
-
-      const p = PRESETS[activeKey];
-      p.leads.unshift({
-        sub: `r/${sub}`,
-        intent: "HOT",
-        score: 93,
-        title: `What is the best workflow tool to solve bottlenecks in r/${sub}?`,
-        author: "live_prospect",
-        permalink: `https://www.reddit.com/r/${sub}/`,
-        replies: {
-          founder: `Hey u/live_prospect! If you need a reliable tool for ${p.name}, check out ${p.url} — designed specifically to streamline this with 0 hassle.`,
-          tech: `Hey u/live_prospect, take a look at ${p.url}. Solves the core bottlenecks directly.`,
-          creator: `Great question u/live_prospect! I use ${p.url} for this exact workflow.`,
-          concise: `Check out ${p.url} for this exact workflow.`
-        }
-      });
-      activeIndex = 0;
-      renderLeads();
-      playTargetLockChime();
-      showToast('🔍', `Targeting r/${sub} in Sniper Scope`);
-    }
-
-    function applyCustomProduct() {
-      const name = document.getElementById("simProductName").value.trim() || "My App";
-      const url = document.getElementById("simProductUrl").value.trim() || "https://myapp.com";
-
-      const p = PRESETS[activeKey];
-      p.name = name;
-      p.url = url;
-      p.leads.forEach(l => {
-        l.replies.founder = `Hey u/${l.author}! If you're looking to streamline this workflow, check out ${name} at ${url}. Zero complex setup needed!`;
-        l.replies.tech = `Hey u/${l.author}, for this exact use-case, ${url} provides direct workflows.`;
-        l.replies.creator = `Nice post u/${l.author}! ${url} makes handling this super fast.`;
-        l.replies.concise = `Check out ${name} at ${url} to solve this in 1 click.`;
-      });
-
-      updateReplyBox();
-      playTargetLockChime();
-      showToast('🎯', `Targeting "${name}" in live sniper scope!`);
     }
 
     // Intent Sandbox Logic (Universal Multi-Platform Samples)
@@ -2934,10 +2941,11 @@
 
     // Webhook Simulator
     function updateWebhookPreview() {
-      const p = PRESETS[activeKey];
-      const lead = p.leads[activeIndex] || p.leads[0];
+      const lead = dynamicLeads[activeIndex] || dynamicLeads[0];
       if (!lead) return;
 
+      const ws = WORKSPACES[activeKey];
+      const replies = lead.replies || generateRepliesForLead(lead, ws);
       const score = lead.score || (lead.intent === "HOT" ? 88 : 54);
       const payload = {
         event: "target_locked",
@@ -2947,7 +2955,7 @@
         intent_score: `${score}%`,
         intent_tier: lead.intent,
         permalink: lead.permalink,
-        suggested_reply: lead.replies.founder,
+        suggested_reply: replies.founder,
         timestamp: new Date().toISOString()
       };
 
@@ -2980,12 +2988,12 @@
           {
             id: "founder",
             name: "🚀 Helpful Founder",
-            template: `Hey u/{author}! If you need to {action_phrase}, check out ${url}. Hope this helps!`
+            template: `Hey @{author}! If you need to {action_phrase}, check out ${url}. Hope this helps!`
           },
           {
             id: "tech",
             name: "⚙️ Technical Architect",
-            template: `Hey u/{author}, for direct workflows check out ${url}.`
+            template: `Hey @{author}, for direct workflows check out ${url}.`
           },
           {
             id: "concise",
@@ -3065,8 +3073,7 @@
         setPersona('concise');
       } else if (e.key === 'ArrowDown') {
         e.preventDefault();
-        const p = PRESETS[activeKey];
-        if (activeIndex < p.leads.length - 1) {
+        if (activeIndex < dynamicLeads.length - 1) {
           selectLead(activeIndex + 1);
         }
       } else if (e.key === 'ArrowUp') {
@@ -3211,63 +3218,62 @@
       ctx.stroke();
       ctx.restore();
 
-      // 6. REAL VARIABLE-DRIVEN LEAD BLIPS
-      const p = PRESETS[activeKey];
-      if (p && p.leads) {
-        p.leads.forEach((lead, idx) => {
-          const totalLeads = p.leads.length;
-          const leadAngle = (idx / totalLeads) * (Math.PI * 2) - 0.7;
+      // 6. REAL VARIABLE-DRIVEN LEAD BLIPS (With Live Orbital Drift)
+      dynamicLeads.forEach((lead, idx) => {
+        // Gentle organic drift
+        if (lead.driftSpeed) {
+          lead.angle = (lead.angle + lead.driftSpeed) % (Math.PI * 2);
+        }
 
-          const score = lead.score || (lead.intent === 'HOT' ? 88 : 54);
-          const blipDist = maxR * (1 - (score / 130));
+        const score = lead.score || (lead.intent === 'HOT' ? 88 : 54);
+        const blipDist = maxR * (1 - (score / 130));
 
-          const bx = cx + Math.cos(leadAngle) * blipDist;
-          const by = cy + Math.sin(leadAngle) * blipDist;
+        const bx = cx + Math.cos(lead.angle) * blipDist;
+        const by = cy + Math.sin(lead.angle) * blipDist;
 
-          lead._screenX = bx;
-          lead._screenY = by;
+        lead._screenX = bx;
+        lead._screenY = by;
 
-          let angleDiff = (radarAngle - leadAngle) % (Math.PI * 2);
-          if (angleDiff < 0) angleDiff += Math.PI * 2;
-          const isSweptRecently = angleDiff < 0.6;
+        let angleDiff = (radarAngle - lead.angle) % (Math.PI * 2);
+        if (angleDiff < 0) angleDiff += Math.PI * 2;
+        const isSweptRecently = angleDiff < 0.6;
 
-          const isSelected = (idx === activeIndex);
+        const isSelected = (idx === activeIndex);
 
-          ctx.save();
+        ctx.save();
+        ctx.beginPath();
+        const blipRadius = isSelected ? 8 : (lead.intent === 'HOT' ? 6 : 4.5);
+        ctx.arc(bx, by, blipRadius, 0, Math.PI * 2);
+
+        if (lead.sniped) {
+          ctx.fillStyle = '#10b981';
+          ctx.shadowColor = '#10b981';
+        } else if (lead.intent === 'HOT') {
+          ctx.fillStyle = isSweptRecently || isSelected ? '#38bdf8' : 'rgba(56, 189, 248, 0.75)';
+          ctx.shadowColor = '#38bdf8';
+        } else {
+          ctx.fillStyle = '#fbbf24';
+          ctx.shadowColor = '#fbbf24';
+        }
+
+        ctx.shadowBlur = isSelected ? 16 : (isSweptRecently ? 12 : 5);
+        ctx.fill();
+
+        if (isSelected) {
           ctx.beginPath();
-          const blipRadius = isSelected ? 8 : (lead.intent === 'HOT' ? 6 : 4.5);
-          ctx.arc(bx, by, blipRadius, 0, Math.PI * 2);
+          ctx.arc(bx, by, 14, 0, Math.PI * 2);
+          ctx.strokeStyle = '#38bdf8';
+          ctx.lineWidth = 1.5;
+          ctx.setLineDash([3, 3]);
+          ctx.stroke();
 
-          if (lead.sniped) {
-            ctx.fillStyle = '#10b981';
-            ctx.shadowColor = '#10b981';
-          } else if (lead.intent === 'HOT') {
-            ctx.fillStyle = isSweptRecently || isSelected ? '#38bdf8' : 'rgba(56, 189, 248, 0.75)';
-            ctx.shadowColor = '#38bdf8';
-          } else {
-            ctx.fillStyle = '#fbbf24';
-            ctx.shadowColor = '#fbbf24';
-          }
+          ctx.font = '700 9.5px "JetBrains Mono", monospace';
+          ctx.fillStyle = '#f1f5f9';
+          ctx.fillText(`${lead.sub}`, bx + 16, by + 3);
+        }
 
-          ctx.shadowBlur = isSelected ? 16 : (isSweptRecently ? 12 : 5);
-          ctx.fill();
-
-          if (isSelected) {
-            ctx.beginPath();
-            ctx.arc(bx, by, 14, 0, Math.PI * 2);
-            ctx.strokeStyle = '#38bdf8';
-            ctx.lineWidth = 1.5;
-            ctx.setLineDash([3, 3]);
-            ctx.stroke();
-
-            ctx.font = '700 9.5px "JetBrains Mono", monospace';
-            ctx.fillStyle = '#f1f5f9';
-            ctx.fillText(`${lead.sub}`, bx + 16, by + 3);
-          }
-
-          ctx.restore();
-        });
-      }
+        ctx.restore();
+      });
 
       ctx.restore();
       requestAnimationFrame(drawRealRadarScope);
@@ -3280,10 +3286,7 @@
       const clickX = (e.clientX - rect.left) * scaleX;
       const clickY = (e.clientY - rect.top) * scaleY;
 
-      const p = PRESETS[activeKey];
-      if (!p || !p.leads) return;
-
-      p.leads.forEach((lead, idx) => {
+      dynamicLeads.forEach((lead, idx) => {
         if (lead._screenX !== undefined && lead._screenY !== undefined) {
           const dist = Math.hypot(clickX - lead._screenX, clickY - lead._screenY);
           if (dist < 22) {
@@ -3295,6 +3298,7 @@
     });
 
     document.addEventListener("DOMContentLoaded", () => {
+      initDynamicLeads();
       renderLeads();
       updateCalculator();
       calculateSafetyScore();

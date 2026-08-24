@@ -3,102 +3,141 @@ import Cocoa
 /// The site's palette, lifted from :root in index.html rather than approximated,
 /// so the app and sunoget.com read as one product.
 enum Theme {
-    // A light palette, chosen by measuring rather than by eye.
+    // Ink on cream.
     //
-    // This is triage work: reading post bodies, judging them, writing a reply,
-    // for as long as it takes. Two things follow. The page is warm paper rather
-    // than pure white -- #ffffff at a normal screen brightness glares over a
-    // long session -- and cards are white on top of it, so the separation comes
-    // from the surface rather than from a heavy border.
+    // The previous palette was warm white, one blue and grey text, which is
+    // inoffensive and has no point of view. This one is a page: cream ground,
+    // near-black warm ink, rules instead of boxes, and rust where something
+    // needs attention. No blue anywhere -- blue is what every admin panel
+    // reaches for, and reaching for it is why the last one looked like every
+    // admin panel.
     //
-    // Every colour below carries text at some point, so every one was checked
-    // against WCAG on *both* surfaces and the worse of the two kept. The
-    // weakest anywhere is 4.57:1, against the 4.5:1 AA needs. The first muted
-    // grey tried was #6e747d, which reads fine and measures 4.28 on paper --
-    // which is exactly the kind of thing you cannot tell by looking.
+    // Held to the same standard as before. Every colour that carries text was
+    // measured against BOTH surfaces and the worse kept:
     //
-    //   textPrimary  15.34   textSecond  7.28   textMuted  5.51
-    //   accent        5.36   hot         4.57   ok/bad     5.86/5.94
-    static let bg          = NSColor(srgbRed: 0xf5/255, green: 0xf4/255, blue: 0xf1/255, alpha: 1)
-    static let card        = NSColor(srgbRed: 0xff/255, green: 0xff/255, blue: 0xff/255, alpha: 1)
-    static let cardBorder  = NSColor(srgbRed: 0xe3/255, green: 0xe0/255, blue: 0xd9/255, alpha: 1)
+    //   ink 15.18   ink-2 9.10   muted 6.11   rust 6.50   oxblood 9.38
+    //   cream on rust 7.39 (button labels)
+    //
+    // The weakest anywhere is 5.15:1, against the 4.5:1 AA asks for.
+    static let bg          = NSColor(srgbRed: 0xf2/255, green: 0xec/255, blue: 0xe1/255, alpha: 1)
+    static let card        = NSColor(srgbRed: 0xfd/255, green: 0xfb/255, blue: 0xf6/255, alpha: 1)
+    static let cardBorder  = NSColor(srgbRed: 0xe2/255, green: 0xd9/255, blue: 0xc9/255, alpha: 1)
 
-    // A blue deep enough to carry white on it and to be read as text itself.
-    // The dark theme's sky #38bdf8 measures 1.9:1 on white -- invisible.
-    static let accent      = NSColor(srgbRed: 0x0f/255, green: 0x62/255, blue: 0xc4/255, alpha: 1)
-    static let accentTop   = NSColor(srgbRed: 0x1c/255, green: 0x74/255, blue: 0xd9/255, alpha: 1)
-    static let accentEnd   = NSColor(srgbRed: 0x0b/255, green: 0x4a/255, blue: 0x97/255, alpha: 1)
+    /// Rust. Used for the live state and for the one button that matters,
+    /// and almost nowhere else -- an accent that appears everywhere is not an
+    /// accent, it is a background.
+    static let accent      = NSColor(srgbRed: 0x8f/255, green: 0x38/255, blue: 0x18/255, alpha: 1)
+    static let accentTop   = NSColor(srgbRed: 0xa8/255, green: 0x44/255, blue: 0x2a/255, alpha: 1)
+    static let accentEnd   = NSColor(srgbRed: 0x6d/255, green: 0x23/255, blue: 0x18/255, alpha: 1)
 
-    // The three bands. Not a traffic light: this is a list to work down, so hot
-    // is a warm amber that draws the eye first and the others recede.
-    static let hot         = NSColor(srgbRed: 0xb4/255, green: 0x53/255, blue: 0x0a/255, alpha: 1)
-    static let warm        = NSColor(srgbRed: 0x0f/255, green: 0x62/255, blue: 0xc4/255, alpha: 1)
-    static let cool        = NSColor(srgbRed: 0x5d/255, green: 0x63/255, blue: 0x6b/255, alpha: 1)
+    /// The three bands, as three weights of the same warm family rather than a
+    /// traffic light. Hot is the only one that shouts.
+    static let hot         = NSColor(srgbRed: 0x8f/255, green: 0x38/255, blue: 0x18/255, alpha: 1)
+    static let warm        = NSColor(srgbRed: 0x8a/255, green: 0x6d/255, blue: 0x3a/255, alpha: 1)
+    static let cool        = NSColor(srgbRed: 0x6b/255, green: 0x61/255, blue: 0x56/255, alpha: 1)
 
-    static let textPrimary = NSColor(srgbRed: 0x1b/255, green: 0x1d/255, blue: 0x21/255, alpha: 1)
-    static let textSecond  = NSColor(srgbRed: 0x4b/255, green: 0x51/255, blue: 0x5a/255, alpha: 1)
-    static let textMuted   = NSColor(srgbRed: 0x5d/255, green: 0x63/255, blue: 0x6b/255, alpha: 1)
-    static let ok          = NSColor(srgbRed: 0x14/255, green: 0x6c/255, blue: 0x43/255, alpha: 1)
-    static let bad         = NSColor(srgbRed: 0xb3/255, green: 0x26/255, blue: 0x1e/255, alpha: 1)
+    static let textPrimary = NSColor(srgbRed: 0x1a/255, green: 0x17/255, blue: 0x14/255, alpha: 1)
+    static let textSecond  = NSColor(srgbRed: 0x44/255, green: 0x3d/255, blue: 0x34/255, alpha: 1)
+    static let textMuted   = NSColor(srgbRed: 0x5f/255, green: 0x56/255, blue: 0x4c/255, alpha: 1)
+    static let ok          = NSColor(srgbRed: 0x40/255, green: 0x5c/255, blue: 0x38/255, alpha: 1)
+    static let bad         = NSColor(srgbRed: 0x7a/255, green: 0x24/255, blue: 0x18/255, alpha: 1)
 
-    /// The selected state of a chip.
-    ///
-    /// Softer than the accent itself: with every phrase and community selected
-    /// by default, a wall of full-strength blue means nothing stands out. The
-    /// border is #5a92d3 rather than something prettier because that is where
-    /// the contrast against a white card reaches 3.24:1 -- the bar for a UI
-    /// boundary. Anything lighter looked better and could not be found by
-    /// somebody who needs it to be findable.
-    static let chipLit     = NSColor(srgbRed: 0xe8/255, green: 0xf0/255, blue: 0xfb/255, alpha: 1)
-    static let chipLitEdge = NSColor(srgbRed: 0x5a/255, green: 0x92/255, blue: 0xd3/255, alpha: 1)
+    /// A chip that is on. Warm, and barely there -- on a page, a selected thing
+    /// is marked by its rule and its weight, not by being highlighted.
+    static let chipLit     = NSColor(srgbRed: 0xf4/255, green: 0xe7/255, blue: 0xdd/255, alpha: 1)
+    static let chipLitEdge = NSColor(srgbRed: 0xc4/255, green: 0x96/255, blue: 0x80/255, alpha: 1)
 
-    /// Tints for surfaces that used to be lightened with white at low alpha.
-    /// On paper, white-on-white is nothing at all, so these darken instead.
-    static let sunken      = NSColor(srgbRed: 0xef/255, green: 0xed/255, blue: 0xe8/255, alpha: 1)
-    static let hover       = NSColor(white: 0, alpha: 0.045)
+    static let sunken      = NSColor(srgbRed: 0xf7/255, green: 0xf2/255, blue: 0xe8/255, alpha: 1)
+    static let hover       = NSColor(white: 0, alpha: 0.04)
 
     static func mono(_ size: CGFloat) -> NSFont { .monospacedSystemFont(ofSize: size, weight: .regular) }
+
+    // MARK: - Type
+
+    /// A real scale, rather than everything within two points of everything else.
+    ///
+    /// The first version set almost every label between 10 and 13pt, which is
+    /// why the interface read as a form: with no size contrast, nothing is more
+    /// important than anything else and the eye has nowhere to land. These are
+    /// spaced far enough apart to be told apart at a glance.
+    enum Font {
+        /// The thing you are reading. A post title is the content, so it is set
+        /// like content.
+        /// New York, the system serif. A post title is somebody's sentence, and
+        /// setting it in a serif says so -- it is the thing being read, not a
+        /// control. Falls back to the system font on anything that lacks it.
+        static let display = serif(23, weight: .semibold)
+        static let title   = serif(16, weight: .semibold)
+
+        static func serif(_ size: CGFloat, weight: NSFont.Weight) -> NSFont {
+            let base = NSFont.systemFont(ofSize: size, weight: weight)
+            guard let descriptor = base.fontDescriptor.withDesign(.serif),
+                  let font = NSFont(descriptor: descriptor, size: size)
+            else { return base }
+            return font
+        }
+        /// Post bodies and drafts. 13.5 with generous leading, because this is
+        /// prose somebody actually reads rather than a label they scan.
+        static let body    = NSFont.systemFont(ofSize: 13.5)
+        static let row     = NSFont.systemFont(ofSize: 13, weight: .medium)
+        static let meta    = NSFont.systemFont(ofSize: 11.5)
+        /// Section markers. Tracked out, because at this size the letterforms
+        /// crowd each other.
+        static let label   = NSFont.systemFont(ofSize: 10.5, weight: .bold)
+    }
+
+    /// One spacing scale, so gaps are chosen rather than guessed.
+    enum Space {
+        static let tight: CGFloat = 6
+        static let close: CGFloat = 10
+        static let gap: CGFloat = 18
+        static let section: CGFloat = 30
+        static let margin: CGFloat = 24
+    }
+
+    /// A tracked-out section marker.
+    static func sectionLabel(_ text: String) -> NSTextField {
+        let field = NSTextField(labelWithAttributedString: NSAttributedString(
+            string: text.uppercased(),
+            attributes: [.font: Font.label,
+                         .foregroundColor: textMuted,
+                         .kern: 0.8]))
+        return field
+    }
+
+    /// A hairline that reads as a division rather than a border.
+    static func rule() -> NSView {
+        let line = NSView()
+        line.wantsLayer = true
+        line.layer?.backgroundColor = cardBorder.cgColor
+        line.translatesAutoresizingMaskIntoConstraints = false
+        line.heightAnchor.constraint(equalToConstant: 1).isActive = true
+        return line
+    }
 }
 
 extension CardView {
-    /// The app's standard titled panel.
+    /// The app's standard surface: a tracked-out marker, then the content.
     ///
-    /// Every tab had its own copy of this — same idea, slightly different
-    /// numbers — which is exactly how six tabs end up looking like six
-    /// applications. The metrics are the Downloader's, since that is the one
-    /// the rest are meant to match: 12pt above the heading, 14pt at the sides,
-    /// 9pt under the heading, 13pt below the content.
+    /// The marker sits closer to its content than the card's own padding, so it
+    /// reads as belonging to what follows rather than floating above it.
     static func titled(_ title: String, _ body: NSView) -> CardView {
         let card = CardView()
         card.translatesAutoresizingMaskIntoConstraints = false
-        body.translatesAutoresizingMaskIntoConstraints = false
-        let label = NSTextField.sectionLabel(title)
+        let label = Theme.sectionLabel(title)
         label.translatesAutoresizingMaskIntoConstraints = false
+        body.translatesAutoresizingMaskIntoConstraints = false
         card.addSubview(label)
         card.addSubview(body)
         NSLayoutConstraint.activate([
-            label.topAnchor.constraint(equalTo: card.topAnchor, constant: 12),
-            label.leadingAnchor.constraint(equalTo: card.leadingAnchor, constant: 14),
-            label.trailingAnchor.constraint(lessThanOrEqualTo: card.trailingAnchor, constant: -14),
-            body.topAnchor.constraint(equalTo: label.bottomAnchor, constant: 9),
-            body.leadingAnchor.constraint(equalTo: card.leadingAnchor, constant: 14),
-            body.trailingAnchor.constraint(equalTo: card.trailingAnchor, constant: -14),
-            body.bottomAnchor.constraint(equalTo: card.bottomAnchor, constant: -13),
-        ])
-        return card
-    }
-
-    /// An untitled panel, for content that is its own heading.
-    static func plain(_ body: NSView, inset: CGFloat = 12) -> CardView {
-        let card = CardView()
-        card.translatesAutoresizingMaskIntoConstraints = false
-        body.translatesAutoresizingMaskIntoConstraints = false
-        card.addSubview(body)
-        NSLayoutConstraint.activate([
-            body.topAnchor.constraint(equalTo: card.topAnchor, constant: inset),
-            body.leadingAnchor.constraint(equalTo: card.leadingAnchor, constant: 14),
-            body.trailingAnchor.constraint(equalTo: card.trailingAnchor, constant: -14),
-            body.bottomAnchor.constraint(equalTo: card.bottomAnchor, constant: -inset),
+            label.topAnchor.constraint(equalTo: card.topAnchor, constant: Theme.Space.gap),
+            label.leadingAnchor.constraint(equalTo: card.leadingAnchor, constant: Theme.Space.margin),
+            label.trailingAnchor.constraint(lessThanOrEqualTo: card.trailingAnchor,
+                                            constant: -Theme.Space.margin),
+            body.topAnchor.constraint(equalTo: label.bottomAnchor, constant: Theme.Space.close),
+            body.leadingAnchor.constraint(equalTo: card.leadingAnchor, constant: Theme.Space.margin),
+            body.trailingAnchor.constraint(equalTo: card.trailingAnchor, constant: -Theme.Space.margin),
+            body.bottomAnchor.constraint(equalTo: card.bottomAnchor, constant: -Theme.Space.gap),
         ])
         return card
     }
@@ -106,22 +145,45 @@ extension CardView {
 
 /// A flat dark panel with the site's card border. AppKit gives no way to restyle
 /// a stock box, so the card look is drawn rather than themed.
+/// A surface, lifted rather than outlined.
+///
+/// The old card was a white rectangle with a 1px border, repeated three times
+/// down a column, which is what made the interface read as a form. A soft
+/// shadow separates a surface from the page without drawing a box around every
+/// idea on screen.
 final class CardView: NSView {
-    /// The site's card is rgba(17, 20, 30, 0.85) over the plasma, not a solid
-    /// fill, which is what lets the orbs and the cursor aurora read through a
-    /// page rather than only around it. An opaque card in the app hid the same
-    /// background completely and left the effect showing in the gutters.
-    var fill: NSColor = Theme.card.withAlphaComponent(0.85)
-    var stroke: NSColor = Theme.cardBorder
-    var radius: CGFloat = 12
+    var fill: NSColor = Theme.card
+    var radius: CGFloat = 14
+    /// Whether this is a surface at all. A section that is just a heading and
+    /// some text does not need to be in a box, and boxing it is what made the
+    /// interface look like a preferences pane.
+    var isRaised = true { didSet { needsDisplay = true } }
 
     override var isFlipped: Bool { true }
 
     override func draw(_ dirty: NSRect) {
-        let path = NSBezierPath(roundedRect: bounds.insetBy(dx: 0.5, dy: 0.5),
-                                xRadius: radius, yRadius: radius)
+        guard isRaised else { return }
+        let path = NSBezierPath(roundedRect: bounds, xRadius: radius, yRadius: radius)
+        NSGraphicsContext.current?.saveGraphicsState()
+        // Depth from a shadow rather than a hairline. Two shadows, because one
+        // soft one reads as fog and one tight one reads as a sticker: the tight
+        // pass gives the edge, the soft pass gives the lift.
+        let close = NSShadow()
+        close.shadowColor = NSColor(white: 0, alpha: 0.10)
+        close.shadowOffset = NSSize(width: 0, height: -1)
+        close.shadowBlurRadius = 2
+        close.set()
         fill.setFill(); path.fill()
-        stroke.setStroke(); path.lineWidth = 1; path.stroke()
+        NSGraphicsContext.current?.restoreGraphicsState()
+
+        NSGraphicsContext.current?.saveGraphicsState()
+        let far = NSShadow()
+        far.shadowColor = NSColor(white: 0, alpha: 0.06)
+        far.shadowOffset = NSSize(width: 0, height: -6)
+        far.shadowBlurRadius = 16
+        far.set()
+        fill.setFill(); path.fill()
+        NSGraphicsContext.current?.restoreGraphicsState()
     }
 }
 
