@@ -125,8 +125,8 @@ enum HackerNews {
             return Feed.Post(
                 id: "hn-\(id)",
                 source: "news.ycombinator.com",
-                title: title.isEmpty ? String(body.prefix(80)) : title,
-                body: body,
+                title: String((title.isEmpty ? String(body.prefix(80)) : title).prefix(400)),
+                body: String(body.prefix(4_000)),
                 author: hit["author"] as? String ?? "someone",
                 // The item, not the linked article: the conversation is the
                 // thing being answered.

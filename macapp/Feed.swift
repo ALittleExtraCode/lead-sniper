@@ -211,6 +211,13 @@ enum Feed {
             case "entry":
                 inEntry = false
                 guard !id.isEmpty, !title.isEmpty else { return }
+                // Capped. Reddit allows 300 characters in a title and this app
+                // never shows more than three lines of a body, so nothing is
+                // lost -- but a feed is somebody else's data and a malformed or
+                // hostile one should not be able to put a megabyte into a table
+                // row. Tested against a title of 10,000 characters.
+                if title.count > 400 { title = String(title.prefix(400)) }
+                if body.count > 4_000 { body = String(body.prefix(4_000)) }
                 posts.append(Post(id: id, source: community.isEmpty ? source : community,
                                   title: title, body: body,
                                   author: author.isEmpty ? "someone" : author,

@@ -30,6 +30,49 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
+  <!-- Schema.org JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebApplication",
+        "name": "LeadSniper",
+        "url": "https://leadsniper.com",
+        "description": "Zero-API autonomous community radar and lead acquisition engine.",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "All (Web, macOS, Windows, Linux)",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        }
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "How does LeadSniper work without Reddit API keys?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "LeadSniper parses public XML/Atom streams from multi-subreddit feeds. This completely bypasses Reddit's 403 API paywalls and rate limits."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Why does LeadSniper enforce unbracketed raw links?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Markdown link brackets look like automated spam bots and trigger AutoMod filters. Raw URLs read as genuine human recommendations."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
   <style>
     :root {
       --bg: #07090e;
@@ -310,7 +353,7 @@
       100% { transform: translateX(-50%); }
     }
 
-    /* Hero Banner */
+    /* Hero Banner with Radar Sweep HUD */
     .hero-panel {
       background: radial-gradient(circle at top right, rgba(56, 189, 248, 0.08) 0%, var(--card) 60%);
       border: 1px solid var(--card-border);
@@ -318,6 +361,69 @@
       padding: 26px 24px;
       position: relative;
       overflow: hidden;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 20px;
+      align-items: center;
+    }
+
+    @media (max-width: 800px) {
+      .hero-panel { grid-template-columns: 1fr; }
+      .radar-hud-canvas-wrap { display: none; }
+    }
+
+    .radar-hud-canvas-wrap {
+      width: 140px;
+      height: 140px;
+      position: relative;
+      border-radius: 50%;
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      background: rgba(10, 13, 21, 0.8);
+      box-shadow: 0 0 24px rgba(56, 189, 248, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .radar-sweep-line {
+      position: absolute;
+      width: 50%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent));
+      top: 50%;
+      left: 50%;
+      transform-origin: 0% 0%;
+      animation: radarSweepAnim 3s linear infinite;
+      box-shadow: 0 0 8px var(--accent);
+    }
+
+    @keyframes radarSweepAnim {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .radar-hud-ring {
+      position: absolute;
+      border: 1px dashed rgba(56, 189, 248, 0.25);
+      border-radius: 50%;
+    }
+
+    .radar-hud-ring.r1 { width: 45px; height: 45px; }
+    .radar-hud-ring.r2 { width: 90px; height: 90px; }
+
+    .radar-blip {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      background: var(--emerald);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--emerald);
+      animation: blipPulse 1.5s infinite;
+    }
+
+    @keyframes blipPulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.6); opacity: 0.4; }
     }
 
     .hero-meta-badge {
@@ -939,6 +1045,34 @@
       font-weight: 600;
     }
 
+    /* Floating HUD Toast Notification */
+    .hud-toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: rgba(14, 18, 29, 0.95);
+      border: 1px solid var(--accent);
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.3);
+      padding: 12px 18px;
+      border-radius: 10px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-primary);
+      z-index: 999999;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.25s ease;
+      pointer-events: none;
+    }
+
+    .hud-toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
     /* Footer */
     .footer-bar {
       border-top: 1px solid var(--card-border);
@@ -972,6 +1106,12 @@
 <body>
   <div class="bg-grid-overlay"></div>
   <div class="ambient-glow-top"></div>
+
+  <!-- HUD Toast Container -->
+  <div id="hudToast" class="hud-toast">
+    <span id="toastIcon">🎯</span>
+    <span id="toastMsg">Target Acquired</span>
+  </div>
 
   <div class="container">
     <!-- Top HUD Header -->
@@ -1011,18 +1151,30 @@
       </div>
     </div>
 
-    <!-- Tactical Hero Panel -->
+    <!-- Tactical Hero Panel with Radar Sweep Widget -->
     <section class="hero-panel">
-      <div class="hero-meta-badge">
-        <span>⚡ ZERO-API TARGET LOCK & SOCIAL RADAR</span>
+      <div>
+        <div class="hero-meta-badge">
+          <span>⚡ ZERO-API TARGET LOCK & SOCIAL RADAR</span>
+        </div>
+        <h1 class="hero-heading">
+          Snip High-Intent Community Leads <br>
+          <span class="cyan">In Real Time With 1-Click Conversion.</span>
+        </h1>
+        <p class="hero-subtext">
+          LeadSniper continuously monitors community discussions, extracts user pain points, scores buying intent, and crafts authentic, non-spam responses with 100% clean direct links for any business or creator.
+        </p>
       </div>
-      <h1 class="hero-heading">
-        Snip High-Intent Community Leads <br>
-        <span class="cyan">In Real Time With 1-Click Conversion.</span>
-      </h1>
-      <p class="hero-subtext">
-        LeadSniper continuously monitors community discussions, extracts user pain points, scores buying intent, and crafts authentic, non-spam responses with 100% clean direct links for any business or creator.
-      </p>
+
+      <!-- Animated Radar Canvas Sweep HUD Widget -->
+      <div class="radar-hud-canvas-wrap">
+        <div class="radar-hud-ring r1"></div>
+        <div class="radar-hud-ring r2"></div>
+        <div class="radar-sweep-line"></div>
+        <div class="radar-blip" style="top: 28%; left: 62%;"></div>
+        <div class="radar-blip" style="bottom: 25%; left: 35%; animation-delay: 0.8s;"></div>
+        <div style="font-size: 9px; font-family: var(--font-mono); color: var(--accent); position: absolute; bottom: 8px; font-weight: 600;">ACTIVE SCAN</div>
+      </div>
     </section>
 
     <!-- Navigation Tabs (SunoGet Studio Layout) -->
@@ -1403,10 +1555,19 @@
   <script>
     let soundEnabled = true;
 
+    function showToast(icon, msg) {
+      const toast = document.getElementById('hudToast');
+      document.getElementById('toastIcon').textContent = icon;
+      document.getElementById('toastMsg').textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2400);
+    }
+
     function toggleSound() {
       soundEnabled = !soundEnabled;
       document.getElementById('soundIcon').textContent = soundEnabled ? '🔊' : '🔇';
       document.getElementById('soundLabel').textContent = soundEnabled ? 'Audio ON' : 'Audio OFF';
+      showToast(soundEnabled ? '🔊' : '🔇', `Sound alerts ${soundEnabled ? 'Enabled' : 'Muted'}`);
       if (soundEnabled) playTargetLockChime();
     }
 
@@ -1621,6 +1782,7 @@
       activeIndex = 0;
       renderLeads();
       playTargetLockChime();
+      showToast('🎯', `Workspace Switched: ${PRESETS[activeKey].name}`);
     }
 
     function setPersona(p) {
@@ -1708,6 +1870,7 @@
         icon.textContent = "✅";
         label.textContent = "Copied to Clipboard & Opened Reddit!";
         playTargetLockChime();
+        showToast('🚀', 'Reply Copied! Opening Reddit Post...');
 
         // Confetti burst animation
         if (typeof confetti === 'function') {
@@ -1745,17 +1908,20 @@
       a.download = `leadsniper_${activeKey}_export.csv`;
       a.click();
       playTargetLockChime();
+      showToast('📥', 'Exported Leads to CSV');
     }
 
     function simulateScan() {
       const badge = document.getElementById("liveTargetLockBadge");
       badge.textContent = "● HARVESTING FEEDS...";
       badge.style.color = "#f59e0b";
+      showToast('📡', 'Scanning live subreddit streams...');
       setTimeout(() => {
         badge.textContent = "● TARGET LOCK ACQUIRED";
         badge.style.color = "#10b981";
         renderLeads();
         playTargetLockChime();
+        showToast('🎯', 'Target Lock Acquired: Live Leads Ready');
       }, 500);
     }
 
@@ -1779,6 +1945,7 @@
       activeIndex = 0;
       renderLeads();
       playTargetLockChime();
+      showToast('🔍', `Scanned and added r/${sub}`);
     }
 
     function applyCustomProduct() {
@@ -1796,7 +1963,7 @@
 
       updateReplyBox();
       playTargetLockChime();
-      alert(`✅ Product "${name}" injected! Look at the generated replies in the studio panel.`);
+      showToast('🛠️', `Injected "${name}" into live studio!`);
     }
 
     // Preset Builder Sync
@@ -1841,13 +2008,14 @@
       a.download = `${obj.id}.json`;
       a.click();
       playTargetLockChime();
+      showToast('📥', `Downloaded ${obj.id}.json preset`);
     }
 
     function copyPresetJson() {
       const text = document.getElementById('jsonPreviewBox').textContent;
       navigator.clipboard.writeText(text).then(() => {
         playTargetLockChime();
-        alert('📋 Preset JSON copied to clipboard!');
+        showToast('📋', 'Preset JSON copied to clipboard!');
       });
     }
 

@@ -760,5 +760,128 @@ let wrong = await Webhook.send([hot], workspace: Fixtures.workspace, to: "https:
 if case .failed = wrong { check(true, "a foreign address is refused before any request") }
 else { check(false, "a foreign address is refused before any request") }
 
+
+// ─────────────────────────────────────────────────────────────────────────────
+print("\n[23] the one real secret is not stored as a preference")
+
+// A Slack webhook URL grants write access to a channel. It was being written
+// into UserDefaults -- a plain plist any process running as this user can read
+// -- and into the export file people send each other.
+let hookID = "test-workspace-\(Int(Fixtures.now.timeIntervalSince1970))"
+Secret.remove(for: hookID)
+check(Secret.read(for: hookID).isEmpty, "nothing stored to begin with")
+Secret.save("https://hooks.slack.com/services/T/B/secret", for: hookID)
+check(Secret.read(for: hookID) == "https://hooks.slack.com/services/T/B/secret",
+      "it goes in and comes back")
+Secret.save("https://hooks.slack.com/services/T/B/changed", for: hookID)
+check(Secret.read(for: hookID).hasSuffix("changed"), "and can be replaced, not duplicated")
+Secret.save("", for: hookID)
+check(Secret.read(for: hookID).isEmpty, "clearing it removes it")
+Secret.remove(for: hookID)
+
+// The exported file must not carry it, because that file gets emailed.
+var withHook = Fixtures.workspace
+withHook.id = hookID
+withHook.webhook = "https://hooks.slack.com/services/T/B/private"
+let shared = String(data: try! Share.export(withHook), encoding: .utf8)!
+check(!shared.contains("hooks.slack.com"), "an exported workspace carries no webhook address")
+check(!shared.contains("private"), "nor any part of it")
+check(shared.contains("hasWebhook"), "only the fact that one is set")
+Secret.remove(for: hookID)
+
+// ─────────────────────────────────────────────────────────────────────────────
+print("\n[24] two sweeps cannot run at once")
+
+// The manual sweep had a guard and the half-hourly watch did not, so pressing
+// "Sweep now" as the timer fired ran both: they interleaved on the seen set,
+// both saved so the second overwrote the first, both pushed a list into the
+// interface, and both spent the same rate-limit budget on the same posts.
+let busyStore = UserDefaults(suiteName: "leadsniper.tests.busy")!
+busyStore.removePersistentDomain(forName: "leadsniper.tests.busy")
+let busyRadar = Radar(store: busyStore)
+check(!busyRadar.isSweeping, "idle to begin with")
+
+var sawBusy = false
+async let firstSweep = busyRadar.sweep(Fixtures.workspace, now: Fixtures.now,
+    fetch: { _ in
+        // While this one is mid-flight, a second caller tries to start.
+        sawBusy = busyRadar.isSweeping
+        return .posts(Feed.parse(Fixtures.atomData, source: ""))
+    }, wait: { _ in })
+let firstResult = await firstSweep
+check(sawBusy, "a sweep reports itself as running while it runs")
+check(!busyRadar.isSweeping, "and idle again afterwards")
+check(!firstResult.leads.isEmpty, "the one that got in did its work")
+
+// A second, started while the first holds the flag, is turned away rather than
+// interleaving.
+busyRadar.forgetKept()
+let held = Radar(store: busyStore)
+async let a = held.sweep(Fixtures.workspace, now: Fixtures.now,
+    fetch: { _ in
+        try? await Task.sleep(nanoseconds: 40_000_000)
+        return .posts(Feed.parse(Fixtures.atomData, source: ""))
+    }, wait: { _ in })
+try? await Task.sleep(nanoseconds: 5_000_000)
+let b = await held.sweep(Fixtures.workspace, now: Fixtures.now,
+    fetch: { _ in .posts(Feed.parse(Fixtures.atomData, source: "")) }, wait: { _ in })
+let aResult = await a
+check(!aResult.leads.isEmpty, "the first sweep completes")
+check(b.leads.isEmpty && b.problems.contains { $0.contains("already running") },
+      "and the second is turned away, saying so: \(b.problems)")
+busyStore.removePersistentDomain(forName: "leadsniper.tests.busy")
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+print("\n[25] hostile and malformed input is survived, not trusted")
+
+// A feed is somebody else's data. None of this can crash, and none of it can
+// put a megabyte into a table row.
+let huge = String(repeating: "export ", count: 1500)
+let hostile = """
+<?xml version="1.0"?><feed xmlns="http://www.w3.org/2005/Atom">
+<entry><id>t3_a</id><title>\(huge)</title><category term="x"/>
+<updated>2026-08-23T21:00:00+00:00</updated>
+<content type="html">\(huge)\(huge)</content></entry>
+</feed>
+"""
+let capped = Feed.parse(Data(hostile.utf8), source: "x")
+check(capped.count == 1, "a 10,000-character post still parses")
+check(capped[0].title.count <= 400, "the title is capped (\(capped[0].title.count))")
+check(capped[0].body.count <= 4_000, "and so is the body (\(capped[0].body.count))")
+
+for (name, data) in [("empty", Data()), ("not xml", Data("hello".utf8)),
+                     ("truncated", Data("<feed><entry><title>x".utf8))] {
+    check(Feed.parse(data, source: "s").isEmpty, "\(name) input yields nothing rather than crashing")
+}
+for (name, data) in [("empty", Data()), ("html", Data("<html>".utf8)),
+                     ("wrong shape", Data("{\"hits\":\"nope\"}".utf8))] {
+    check(HackerNews.parse(data).isEmpty, "malformed HN JSON (\(name)) yields nothing")
+}
+
+// Terms are matched by string range, not regex, so a metacharacter in somebody's
+// keyword is a keyword rather than a syntax error or a runaway pattern.
+var meta = Workspace.empty(id: "meta")
+meta.name = "T"; meta.communities = ["x"]
+meta.terms = ["c++", "a.b", "(paren)", "[bracket]", "$dollar", "back\\slash"]
+for term in meta.terms {
+    let post = Feed.Post(id: "m", source: "x", title: "I use \(term) daily",
+                         body: "", author: "a", link: nil, posted: Fixtures.now)
+    let verdict = Score.judge(post, against: meta, now: Fixtures.now)
+    check(verdict.reasons.contains { $0.label == .titleMatch },
+          "\"\(term)\" is matched as text, not as a pattern")
+}
+
+// Empty and whitespace-only posts are judged, not crashed on.
+for (name, title, body) in [("empty", "", ""), ("whitespace", "   ", "\n\t"),
+                            ("emoji", "🎧🎛️", "🎵")] {
+    let post = Feed.Post(id: "e", source: "x", title: title, body: body,
+                         author: "a", link: nil, posted: Fixtures.now)
+    let verdict = Score.judge(post, against: Fixtures.workspace, now: Fixtures.now)
+    check(!verdict.isLead, "\(name) content is not a lead")
+    check(Draft.write(for: post, verdict: verdict, workspace: Fixtures.workspace) == nil,
+          "  and nothing is drafted for it")
+}
+
 print(failures == 0 ? "\nAll engine tests passed." : "\n\(failures) FAILURE(S)")
 exit(failures == 0 ? 0 : 1)
