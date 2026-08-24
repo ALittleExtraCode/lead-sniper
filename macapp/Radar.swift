@@ -192,7 +192,8 @@ final class Radar {
                 guard verdict.isLead else { continue }
                 result.leads.append(Lead(post: post, verdict: verdict,
                                          isNew: !seen.contains(post.id),
-                                         isAnswered: answered.contains(post.id)))
+                                         isAnswered: answered.contains(post.id),
+                                         isDismissed: dismissed.contains(post.id)))
             }
         }
 
