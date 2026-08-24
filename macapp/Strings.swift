@@ -221,7 +221,7 @@ enum L {
         .menuCheckUpdates: "Check for Updates",
         .updateNewer: "Version %@ is out. Opening the download page.",
         .updateCurrent: "This is the newest version.",
-        .updateUnreachable: "Could not reach leadsniper.com just now.",
+        .updateUnreachable: "Could not reach lead-sniper.com just now.",
 
         .alsoHackerNews: "Also search Hacker News",
         .tabFind: "Find",

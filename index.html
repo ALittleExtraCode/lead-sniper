@@ -634,6 +634,37 @@
       color: var(--accent);
     }
 
+    /* Trending Keywords Cloud Bar */
+    .intent-keywords-cloud {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      flex-wrap: wrap;
+      padding: 8px 12px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      border-radius: 8px;
+      font-size: 11px;
+    }
+
+    .kw-tag-btn {
+      background: rgba(56, 189, 248, 0.08);
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      color: var(--text-secondary);
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      padding: 2px 7px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .kw-tag-btn:hover {
+      background: rgba(56, 189, 248, 0.2);
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+
     /* Split Radar Layout */
     .radar-split {
       display: grid;
@@ -1492,6 +1523,19 @@
           <button class="platform-pill-btn" onclick="setPlatform('ih', this)">💙 IndieHackers</button>
         </div>
 
+        <!-- Trending Keywords Filter Bar -->
+        <div class="intent-keywords-cloud">
+          <span style="font-family: var(--font-mono); color: var(--text-muted); font-size: 10.5px; font-weight: 700;">🔥 TRENDING INTENT CLOUD:</span>
+          <button class="kw-tag-btn" onclick="filterByTag('automate')">#automate</button>
+          <button class="kw-tag-btn" onclick="filterByTag('tool')">#tool</button>
+          <button class="kw-tag-btn" onclick="filterByTag('dashboard')">#dashboard</button>
+          <button class="kw-tag-btn" onclick="filterByTag('cart')">#cart</button>
+          <button class="kw-tag-btn" onclick="filterByTag('hiring')">#hiring</button>
+          <button class="kw-tag-btn" onclick="filterByTag('sheets')">#sheets</button>
+          <button class="kw-tag-btn" onclick="filterByTag('reviews')">#reviews</button>
+          <button class="kw-tag-btn" onclick="filterByTag('')" style="color: var(--accent); border-color: rgba(56, 189, 248, 0.4);">✕ Clear Filter</button>
+        </div>
+
         <div class="radar-top-controls">
           <div class="control-row">
             <span style="font-size: 12px; font-weight: 600; color: var(--text-muted);">Workspace:</span>
@@ -2216,6 +2260,14 @@
       showToast('🎯', `Scope Locked to ${plat.toUpperCase()} Feed`);
       renderLeads();
       playTargetLockChime();
+    }
+
+    function filterByTag(kw) {
+      document.getElementById('searchLeadsInput').value = kw;
+      searchTerm = kw.toLowerCase();
+      renderLeads();
+      playTargetLockChime();
+      showToast('🔍', kw ? `Filtered by #${kw}` : `Filters Cleared`);
     }
 
     function toggleAutoPilot() {
@@ -3002,13 +3054,13 @@
 
     // Target Lock on clickable elements
     document.addEventListener('mouseover', (e) => {
-      if (e.target.closest('button, a, select, textarea, .lead-row, .tab-btn, .persona-tag-btn, input, .faq-header, .theme-dot, .proof-card, .platform-pill-btn, .brand-icon-img, .radar-hud-canvas-wrap, .perk-card, .coffee-btn-header')) {
+      if (e.target.closest('button, a, select, textarea, .lead-row, .tab-btn, .persona-tag-btn, input, .faq-header, .theme-dot, .proof-card, .platform-pill-btn, .brand-icon-img, .radar-hud-canvas-wrap, .perk-card, .coffee-btn-header, .kw-tag-btn')) {
         crosshair.classList.add('locked');
       }
     });
 
     document.addEventListener('mouseout', (e) => {
-      if (e.target.closest('button, a, select, textarea, .lead-row, .tab-btn, .persona-tag-btn, input, .faq-header, .theme-dot, .proof-card, .platform-pill-btn, .brand-icon-img, .radar-hud-canvas-wrap, .perk-card, .coffee-btn-header')) {
+      if (e.target.closest('button, a, select, textarea, .lead-row, .tab-btn, .persona-tag-btn, input, .faq-header, .theme-dot, .proof-card, .platform-pill-btn, .brand-icon-img, .radar-hud-canvas-wrap, .perk-card, .coffee-btn-header, .kw-tag-btn')) {
         crosshair.classList.remove('locked');
       }
     });

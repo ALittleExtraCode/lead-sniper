@@ -174,6 +174,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     @objc func openSite(_ sender: Any?) {
-        if let url = URL(string: "https://leadsniper.com") { NSWorkspace.shared.open(url) }
+        NSWorkspace.shared.open(Build.site)
     }
 }

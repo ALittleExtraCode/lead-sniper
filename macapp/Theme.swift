@@ -731,7 +731,10 @@ final class Guide: NSView {
             stack.topAnchor.constraint(equalTo: topAnchor),
             stack.leadingAnchor.constraint(equalTo: leadingAnchor),
             stack.trailingAnchor.constraint(equalTo: trailingAnchor),
-            stack.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor),
+            // Equal, not lessThanOrEqualTo. With the loose constraint nothing
+            // pushed the view's height, so it laid out 560 wide and 0 tall and
+            // drew nothing at all -- present, sized, invisible.
+            stack.bottomAnchor.constraint(equalTo: bottomAnchor),
         ])
         stack.setViews(steps.enumerated().map { build($0.offset + 1, $0.element) }, in: .leading)
         reveal()
@@ -785,19 +788,25 @@ final class Guide: NSView {
 
     /// A gentle stagger, once.
     ///
-    /// The only animation in the app, and it earns its place: it walks the eye
-    /// down the steps in order, which is the order they happen in. 60ms apart,
-    /// so it reads as one movement rather than four.
+    /// Slides only. It does NOT fade, and that is the whole lesson from getting
+    /// this wrong: the first version set every row's alpha to 0 and relied on an
+    /// animation to bring it back. Measured, the view laid out correctly at
+    /// 560x350 with every row at alpha 0 — present, sized, and completely
+    /// invisible, because the animation had not run by the time it was drawn.
+    ///
+    /// An effect whose failure mode is "the content is gone" is not worth
+    /// having. A transform can fail and the worst case is that the steps are
+    /// already where they belong.
     private func reveal() {
+        guard !NSWorkspace.shared.accessibilityDisplayShouldReduceMotion else { return }
         for (index, view) in stack.arrangedSubviews.enumerated() {
-            view.alphaValue = 0
             view.wantsLayer = true
-            view.layer?.setAffineTransform(CGAffineTransform(translationX: 0, y: -6))
-            NSAnimationContext.runAnimationGroup { context in
-                context.duration = 0.28
-                context.timingFunction = CAMediaTimingFunction(name: .easeOut)
-                DispatchQueue.main.asyncAfter(deadline: .now() + Double(index) * 0.06) {
-                    view.animator().alphaValue = 1
+            view.layer?.setAffineTransform(CGAffineTransform(translationX: 0, y: -10))
+            DispatchQueue.main.asyncAfter(deadline: .now() + Double(index) * 0.06) {
+                NSAnimationContext.runAnimationGroup { context in
+                    context.duration = 0.3
+                    context.timingFunction = CAMediaTimingFunction(name: .easeOut)
+                    context.allowsImplicitAnimation = true
                     view.layer?.setAffineTransform(.identity)
                 }
             }

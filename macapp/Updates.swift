@@ -23,12 +23,12 @@ enum Updates {
         case couldNotReach
     }
 
-    static let manifest = URL(string: "https://leadsniper.com/dist/latest.json")!
+    static var manifest: URL { Build.manifest }
 
     /// Only ever links to our own site, over https.
     static func trusted(_ url: URL) -> Bool {
         guard url.scheme == "https", let host = url.host?.lowercased() else { return false }
-        return host == "leadsniper.com" || host.hasSuffix(".leadsniper.com")
+        return host == Build.host || host.hasSuffix(".\(Build.host)")
     }
 
     /// Digits and dots, and short. It comes off the network and is shown to a

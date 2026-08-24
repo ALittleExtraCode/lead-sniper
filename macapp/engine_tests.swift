@@ -317,14 +317,22 @@ store3.removePersistentDomain(forName: "leadsniper.tests.answered")
 // ─────────────────────────────────────────────────────────────────────────────
 print("\n[11] the updater only ever points at our own site")
 
-check(Updates.trusted(URL(string: "https://leadsniper.com/dist/LeadSniper.dmg")!),
-      "our own https link is followed")
-check(Updates.trusted(URL(string: "https://www.leadsniper.com/dist/x.dmg")!),
+// Written against Build.host rather than a spelled-out domain. The domain was
+// written out in five places and one of them was this allowlist; with the wrong
+// spelling there, the updater fetched the manifest, saw a newer version, failed
+// its own check and reported "up to date" — hiding every release, silently.
+check(Build.host == "lead-sniper.com", "the domain is the real one (\(Build.host))")
+check(Updates.trusted(Build.download), "the actual download link is followed")
+check(Updates.trusted(Build.manifest), "and the actual manifest")
+check(Updates.trusted(URL(string: "https://www.\(Build.host)/dist/x.dmg")!),
       "and a subdomain of it")
-check(!Updates.trusted(URL(string: "http://leadsniper.com/dist/x.dmg")!),
+check(!Updates.trusted(URL(string: "http://\(Build.host)/dist/x.dmg")!),
       "plain http is refused")
-check(!Updates.trusted(URL(string: "https://leadsniper.com.evil.test/x.dmg")!),
+check(!Updates.trusted(URL(string: "https://\(Build.host).evil.test/x.dmg")!),
       "and a lookalike domain is refused")
+// The spelling that was wrong, asserted as wrong, so it cannot come back.
+check(!Updates.trusted(URL(string: "https://leadsniper.com/dist/x.dmg")!),
+      "the hyphen-less spelling is not our domain")
 check(!Updates.trusted(URL(string: "https://example.com/x.dmg")!), "and anywhere else")
 check(!Updates.trusted(URL(string: "file:///tmp/x.dmg")!), "and a local file")
 

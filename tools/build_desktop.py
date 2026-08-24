@@ -28,8 +28,9 @@ BUILD = ROOT / ".build"
 DIST = ROOT / "site" / "dist"
 
 APP_NAME = "LeadSniper.app"
-APP_VERSION = "1.4"
+APP_VERSION = "1.5"
 BUNDLE_ID = "com.leadsniper.app"
+HOST = "lead-sniper.com"
 NOTARY_PROFILE = os.environ.get("LEADSNIPER_NOTARY_PROFILE", "sunoget-notary")
 
 # Every source except the test suites and their fixtures.
@@ -323,7 +324,7 @@ def dmg_background(dest: Path) -> bool:
     d.polygon([(x2, y), (x2 - 15 * S, y - 9 * S), (x2 - 15 * S, y + 9 * S)],
               fill=(0x9f, 0xa5, 0xad))
 
-    text((W // 2, 372), "leadsniper.com", 12, (0x8d, 0x93, 0x9b))
+    text((W // 2, 372), HOST, 12, (0x8d, 0x93, 0x9b))
     im.save(dest, dpi=(144, 144))
     return dest.is_file()
 
@@ -463,7 +464,7 @@ def main() -> int:
     digest = sh("shasum", "-a", "256", str(published)).stdout.split()[0]
     (DIST / "latest.json").write_text(json.dumps({
         "version": APP_VERSION,
-        "url": "https://leadsniper.com/dist/LeadSniper.dmg",
+        "url": f"https://{HOST}/dist/LeadSniper.dmg",
         "sha256": digest,
     }, indent=2) + "\n")
 
