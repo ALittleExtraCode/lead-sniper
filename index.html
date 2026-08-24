@@ -974,10 +974,12 @@
           <div class="control-row">
             <span style="font-size: 12px; font-weight: 600; color: var(--text-muted);">Preset:</span>
             <select id="activePresetSelect" class="preset-selector" onchange="onPresetChange()">
-              <option value="sunoget" selected>SunoGet Studio (AI Music & DAW)</option>
-              <option value="saas">Micro-SaaS & Indie Product</option>
-              <option value="video">Video Editor & Auto-Captions</option>
-              <option value="agency">Agency & Freelance Client Acquisition</option>
+              <option value="saas" selected>🚀 Micro-SaaS & Web Apps (r/SaaS, r/SideProject)</option>
+              <option value="ecom">🛍️ E-Commerce & Shopify (r/ecommerce, r/shopify)</option>
+              <option value="agency">💼 Freelancers & Agencies (r/forhire, r/freelance)</option>
+              <option value="ai_tools">🧠 AI Tools & No-Code (r/ChatGPT, r/nocode)</option>
+              <option value="video">🎬 Creators & Video Editors (r/VideoEditing)</option>
+              <option value="local_biz">🏪 Local Business & Services (r/smallbusiness)</option>
             </select>
             
             <input type="text" id="customSubInput" class="custom-sub-input" placeholder="r/custom_sub..." onkeydown="if(event.key==='Enter')scanCustomSub()">
@@ -1210,7 +1212,7 @@
             <span class="faq-arrow">▼</span>
           </div>
           <div class="faq-body">
-            Markdown links like <code>[Click Here](https://...)</code> immediately look like spam affiliate bot links. Reddit users downvote them, and AutoModerator bots aggressively flag them. Raw unbracketed URLs (e.g. <code>https://sunoget.com/daw</code>) read as genuine creator recommendations, convert 300% higher, and render rich auto-previews on mobile apps.
+            Markdown links like <code>[Click Here](https://...)</code> immediately look like spam affiliate bot links. Reddit users downvote them, and AutoModerator bots aggressively flag them. Raw unbracketed URLs (e.g. <code>https://yourapp.com/tool</code>) read as genuine creator recommendations, convert 300% higher, and render rich auto-previews on mobile apps.
           </div>
         </div>
 
@@ -1307,50 +1309,8 @@
       } catch(e) {}
     }
 
-    // Live Lead Presets
+    // Live Lead Presets (Universal Everyman Business Models)
     const PRESETS = {
-      sunoget: {
-        name: "SunoGet",
-        url: "https://www.sunoget.com/daw",
-        leads: [
-          {
-            sub: "r/SunoAI",
-            intent: "HOT",
-            title: "Is there any way to batch download all my Suno MP3s at once?",
-            author: "cyber_producer",
-            permalink: "https://www.reddit.com/r/SunoAI/",
-            replies: {
-              founder: "Awesome post u/cyber_producer! SunoGet is 100% free and lets you batch-export your entire library as high-bitrate MP3s with ID3 tags in 1 click: https://www.sunoget.com/daw. Keep creating!",
-              tech: "Hey u/cyber_producer, you can grab the desktop DAW applet at https://www.sunoget.com/daw to batch-export all master audio directly to your local DAW folders.",
-              creator: "Hey u/cyber_producer, I use SunoGet for this! Takes 1 click to save all tracks at https://www.sunoget.com/daw."
-            }
-          },
-          {
-            sub: "r/aimusic",
-            intent: "HOT",
-            title: "How to make 9:16 vertical video visualizers for TikTok/Shorts?",
-            author: "neon_vibes",
-            permalink: "https://www.reddit.com/r/aimusic/",
-            replies: {
-              founder: "Awesome track u/neon_vibes! SunoGet has a built-in 60fps audio-reactive 9:16 visualizer engine completely free at https://www.sunoget.com/daw. Zero signup needed!",
-              tech: "Great mix u/neon_vibes. For 9:16 vertical video waveforms, https://www.sunoget.com/daw renders hardware-accelerated visualizers directly in browser.",
-              creator: "Sick beat u/neon_vibes! You can generate quick TikTok audio visualizers for it at https://www.sunoget.com/daw."
-            }
-          },
-          {
-            sub: "r/Songwriting",
-            intent: "WARM",
-            title: "How can I improve my creativity & organize generated stems?",
-            author: "bunno_bb",
-            permalink: "https://www.reddit.com/r/Songwriting/",
-            replies: {
-              founder: "Great question u/bunno_bb! Running a dedicated desktop DAW workflow like https://www.sunoget.com/daw makes organizing prompts and master audio seamless.",
-              tech: "Hey u/bunno_bb, for organizing DAW project stems, https://www.sunoget.com/daw auto-formats track tags and exports cleanly.",
-              creator: "Nice work u/bunno_bb! Check out https://www.sunoget.com/daw to streamline your studio workspace."
-            }
-          }
-        ]
-      },
       saas: {
         name: "Acme SaaS",
         url: "https://yourapp.com",
@@ -1378,6 +1338,108 @@
               tech: "For zero-backend client reporting u/sarah_builds, take a look at https://yourapp.com — handles the sync pipelines automatically.",
               creator: "Nice project u/sarah_builds! Definitely check out https://yourapp.com for ready-made dashboard pipelines."
             }
+          },
+          {
+            sub: "r/webdev",
+            intent: "WARM",
+            title: "What is your stack for background job processing in 2026?",
+            author: "dev_marcus",
+            permalink: "https://www.reddit.com/r/webdev/",
+            replies: {
+              founder: "Hey u/dev_marcus! If you want a lightweight solution without managing Redis clusters, https://yourapp.com has serverless async pipelines ready out of the box.",
+              tech: "For modern job dispatching u/dev_marcus, check out https://yourapp.com for clean edge integrations.",
+              creator: "Nice question u/dev_marcus! https://yourapp.com made handling this super easy for our projects."
+            }
+          }
+        ]
+      },
+      ecom: {
+        name: "ShopBoost",
+        url: "https://shopboost.io",
+        leads: [
+          {
+            sub: "r/shopify",
+            intent: "HOT",
+            title: "How can I automatically recover abandoned carts via WhatsApp or SMS?",
+            author: "store_grower",
+            permalink: "https://www.reddit.com/r/shopify/",
+            replies: {
+              founder: "Hey u/store_grower! If you want to automate abandoned cart recovery with 1-click WhatsApp/SMS triggers, check out https://shopboost.io. Recovers ~14% of lost sales on average!",
+              tech: "For Shopify webhook cart recovery u/store_grower, https://shopboost.io handles the dispatch pipelines with zero latency.",
+              creator: "Great store u/store_grower! I use https://shopboost.io on our store and it bumped recovery rates significantly."
+            }
+          },
+          {
+            sub: "r/ecommerce",
+            intent: "HOT",
+            title: "Best tool to sync inventory across Shopify, TikTok Shop, and Amazon?",
+            author: "omni_seller",
+            permalink: "https://www.reddit.com/r/ecommerce/",
+            replies: {
+              founder: "Hey u/omni_seller! If you're managing multi-channel inventory, https://shopboost.io auto-syncs stock across all 3 platforms in real time with zero overselling risk.",
+              tech: "For real-time multi-platform inventory reconciliation u/omni_seller, https://shopboost.io provides reliable two-way webhooks.",
+              creator: "Nice brand u/omni_seller! Check out https://shopboost.io for simple 1-click catalog syncing."
+            }
+          }
+        ]
+      },
+      agency: {
+        name: "Apex Agency",
+        url: "https://apexstudio.agency",
+        leads: [
+          {
+            sub: "r/forhire",
+            intent: "HOT",
+            title: "[Hiring] Need a developer to build automated dashboard & Stripe billing",
+            author: "founder_scale",
+            permalink: "https://www.reddit.com/r/forhire/",
+            replies: {
+              founder: "Hey u/founder_scale! We build custom automated dashboards and billing pipelines with 1-week turnaround. You can view our portfolio and schedule a direct sprint call at https://apexstudio.agency.",
+              tech: "Hey u/founder_scale, we specialize in Stripe integrations and modern dashboard architectures. Check out our case studies at https://apexstudio.agency.",
+              creator: "Great project u/founder_scale! Check out https://apexstudio.agency for fast dashboard builds."
+            }
+          },
+          {
+            sub: "r/freelance",
+            intent: "WARM",
+            title: "How do you automate client onboarding contracts and invoice reminders?",
+            author: "design_nomad",
+            permalink: "https://www.reddit.com/r/freelance/",
+            replies: {
+              founder: "Great workflow u/design_nomad! We open-sourced our client onboarding workflows at https://apexstudio.agency — hope it saves you time on contracts!",
+              tech: "For automated client portals and payment reconciliation u/design_nomad, check out https://apexstudio.agency.",
+              creator: "Nice setup u/design_nomad! Definitely check out https://apexstudio.agency for client intake templates."
+            }
+          }
+        ]
+      },
+      ai_tools: {
+        name: "FlowAgent AI",
+        url: "https://flowagent.ai",
+        leads: [
+          {
+            sub: "r/ChatGPT",
+            intent: "HOT",
+            title: "How to connect GPT-4 to Google Sheets to auto-research leads?",
+            author: "growth_hacker99",
+            permalink: "https://www.reddit.com/r/ChatGPT/",
+            replies: {
+              founder: "Hey u/growth_hacker99! If you want to auto-enrich and research leads in Google Sheets with AI, check out https://flowagent.ai — does this in 1 click with zero code!",
+              tech: "For automated LLM sheet pipelines u/growth_hacker99, https://flowagent.ai exposes direct webhooks and functions.",
+              creator: "Awesome workflow u/growth_hacker99! I use https://flowagent.ai for enriching my prospecting sheets daily."
+            }
+          },
+          {
+            sub: "r/nocode",
+            intent: "HOT",
+            title: "Best tool to build custom AI customer support agents for clients?",
+            author: "nocode_builder",
+            permalink: "https://www.reddit.com/r/nocode/",
+            replies: {
+              founder: "Hey u/nocode_builder! If you're building branded AI agents trained on client docs, https://flowagent.ai lets you deploy embedded bots in under 5 minutes.",
+              tech: "For vector search and document embedding agents u/nocode_builder, check out https://flowagent.ai.",
+              creator: "Nice build u/nocode_builder! https://flowagent.ai makes spinning up client agents super straightforward."
+            }
           }
         ]
       },
@@ -1399,27 +1461,27 @@
           }
         ]
       },
-      agency: {
-        name: "Apex Agency",
-        url: "https://apexstudio.agency",
+      local_biz: {
+        name: "LocalRank Pro",
+        url: "https://localrankpro.com",
         leads: [
           {
-            sub: "r/forhire",
+            sub: "r/smallbusiness",
             intent: "HOT",
-            title: "[Hiring] Need a developer to build automated dashboard & Stripe billing",
-            author: "founder_scale",
-            permalink: "https://www.reddit.com/r/forhire/",
+            title: "How can I get more Google 5-star reviews from past customers automatically?",
+            author: "plumbing_owner",
+            permalink: "https://www.reddit.com/r/smallbusiness/",
             replies: {
-              founder: "Hey u/founder_scale! We build custom automated dashboards and billing pipelines with 1-week turnaround. You can view our portfolio and schedule a direct sprint call at https://apexstudio.agency.",
-              tech: "Hey u/founder_scale, we specialize in Stripe integrations and modern dashboard architectures. Check out our case studies at https://apexstudio.agency.",
-              creator: "Great project u/founder_scale! Check out https://apexstudio.agency for fast dashboard builds."
+              founder: "Hey u/plumbing_owner! If you want to automatically send SMS review requests after completed jobs, https://localrankpro.com automates the whole sequence and filters 5-star reviews to Google.",
+              tech: "For automated local review generation u/plumbing_owner, check out https://localrankpro.com.",
+              creator: "Great business u/plumbing_owner! https://localrankpro.com helped our local shop double our Google review count in 30 days."
             }
           }
         ]
       }
     };
 
-    let activeKey = "sunoget";
+    let activeKey = "saas";
     let activeIndex = 0;
     let activePersona = "founder";
 
