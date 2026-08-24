@@ -28,7 +28,7 @@ BUILD = ROOT / ".build"
 DIST = ROOT / "site" / "dist"
 
 APP_NAME = "LeadSniper.app"
-APP_VERSION = "1.2"
+APP_VERSION = "1.3"
 BUNDLE_ID = "com.leadsniper.app"
 NOTARY_PROFILE = os.environ.get("LEADSNIPER_NOTARY_PROFILE", "sunoget-notary")
 

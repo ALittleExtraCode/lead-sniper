@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>LeadSniper — Autonomous Community Radar & Real-Time Lead Acquisition Suite</title>
-  <meta name="description" content="Acquire high-intent buyers, clients, and active users from Reddit, HackerNews, and communities in real time. Zero API keys, AI intent scoring, multi-persona response engine, and 1-click assisted conversion.">
+  <meta name="description" content="Acquire high-intent buyers, clients, and active users from Reddit, HackerNews, ProductHunt, and IndieHackers in real time. Zero API keys, AI intent scoring, multi-persona response engine, and 1-click assisted conversion.">
   <meta name="keywords" content="lead sniper, reddit lead generation, community radar, ai growth tool, saas marketing, automated outreach, reddit marketing, social listening, indie hacker tools, client acquisition">
   <meta name="author" content="LeadSniper Team">
   <link rel="canonical" href="https://leadsniper.com/">
@@ -559,6 +559,32 @@
       border-color: var(--accent);
     }
 
+    /* Platform Tabs */
+    .platform-pills {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 2px;
+      flex-wrap: wrap;
+    }
+
+    .platform-pill-btn {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .platform-pill-btn.active {
+      background: rgba(56, 189, 248, 0.15);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
     /* Split Radar Layout */
     .radar-split {
       display: grid;
@@ -629,9 +655,8 @@
       font-family: var(--font-mono);
       border-radius: 5px;
       outline: none;
-      width: 100%;
-      margin: 6px 12px;
       width: calc(100% - 24px);
+      margin: 6px 12px;
     }
 
     .search-input-stream:focus {
@@ -1307,6 +1332,15 @@
     <!-- TAB 1: LIVE RADAR STUDIO -->
     <div id="tab-radar" class="tab-content active">
       <div class="radar-card">
+        <!-- Community Multi-Platform Switcher -->
+        <div class="platform-pills">
+          <span style="font-size: 11px; font-family: var(--font-mono); color: var(--text-muted); align-self: center;">SOURCE RADAR:</span>
+          <button class="platform-pill-btn active" onclick="setPlatform('reddit', this)">🔴 Reddit (Public RSS)</button>
+          <button class="platform-pill-btn" onclick="setPlatform('hn', this)">🔶 HackerNews (Ask HN)</button>
+          <button class="platform-pill-btn" onclick="setPlatform('ph', this)">🐱 ProductHunt</button>
+          <button class="platform-pill-btn" onclick="setPlatform('ih', this)">💙 IndieHackers</button>
+        </div>
+
         <div class="radar-top-controls">
           <div class="control-row">
             <span style="font-size: 12px; font-weight: 600; color: var(--text-muted);">Workspace:</span>
@@ -1782,6 +1816,7 @@
     let autoPilotActive = false;
     let autoPilotTimer = null;
     let searchTerm = "";
+    let activePlatform = "reddit";
 
     function setTheme(accentColor) {
       document.documentElement.style.setProperty('--accent', accentColor);
@@ -1804,6 +1839,15 @@
       document.getElementById('soundLabel').textContent = soundEnabled ? 'Audio ON' : 'Audio OFF';
       showToast(soundEnabled ? '🔊' : '🔇', `Sound alerts ${soundEnabled ? 'Enabled' : 'Muted'}`);
       if (soundEnabled) playTargetLockChime();
+    }
+
+    function setPlatform(plat, el) {
+      activePlatform = plat;
+      document.querySelectorAll('.platform-pill-btn').forEach(b => b.classList.remove('active'));
+      el.classList.add('active');
+      showToast('📡', `Connected to ${plat.toUpperCase()} Community Feed`);
+      renderLeads();
+      playTargetLockChime();
     }
 
     function toggleAutoPilot() {
@@ -2463,13 +2507,13 @@
 
     // Target Lock on clickable elements
     document.addEventListener('mouseover', (e) => {
-      if (e.target.closest('button, a, select, textarea, .lead-row, .tab-btn, .persona-tag-btn, input, .faq-header, .theme-dot, .proof-card')) {
+      if (e.target.closest('button, a, select, textarea, .lead-row, .tab-btn, .persona-tag-btn, input, .faq-header, .theme-dot, .proof-card, .platform-pill-btn')) {
         crosshair.classList.add('locked');
       }
     });
 
     document.addEventListener('mouseout', (e) => {
-      if (e.target.closest('button, a, select, textarea, .lead-row, .tab-btn, .persona-tag-btn, input, .faq-header, .theme-dot, .proof-card')) {
+      if (e.target.closest('button, a, select, textarea, .lead-row, .tab-btn, .persona-tag-btn, input, .faq-header, .theme-dot, .proof-card, .platform-pill-btn')) {
         crosshair.classList.remove('locked');
       }
     });

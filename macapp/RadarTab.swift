@@ -152,6 +152,9 @@ final class RadarTab: NSView, NSTableViewDataSource, NSTableViewDelegate, Primar
         emptyLabel.alignment = .center
         emptyLabel.translatesAutoresizingMaskIntoConstraints = false
 
+        // Shortcuts nobody is told about are shortcuts nobody uses.
+        let keys = NSTextField.themed(L.t(.keyboardHint), size: 10, color: Theme.textMuted)
+
         let watchRow = NSStackView(views: [
             NSTextField.themed(L.t(.watchingLabel), size: 10.5, color: Theme.textMuted),
             watchPicker, countdown, NSView()])
@@ -166,7 +169,9 @@ final class RadarTab: NSView, NSTableViewDataSource, NSTableViewDelegate, Primar
         meter.heightAnchor.constraint(equalToConstant: 4).isActive = true
         meter.isHidden = true
 
+        keys.translatesAutoresizingMaskIntoConstraints = false
         left.addSubview(watchRow)
+        left.addSubview(keys)
         left.addSubview(meter)
         left.addSubview(controls)
         left.addSubview(listScroll)
@@ -177,7 +182,9 @@ final class RadarTab: NSView, NSTableViewDataSource, NSTableViewDelegate, Primar
             controls.trailingAnchor.constraint(lessThanOrEqualTo: left.trailingAnchor),
             watchRow.topAnchor.constraint(equalTo: controls.bottomAnchor, constant: 10),
             watchRow.leadingAnchor.constraint(equalTo: left.leadingAnchor),
-            meter.topAnchor.constraint(equalTo: watchRow.bottomAnchor, constant: 10),
+            keys.topAnchor.constraint(equalTo: watchRow.bottomAnchor, constant: 8),
+            keys.leadingAnchor.constraint(equalTo: left.leadingAnchor),
+            meter.topAnchor.constraint(equalTo: keys.bottomAnchor, constant: 8),
             meter.leadingAnchor.constraint(equalTo: left.leadingAnchor),
             meter.trailingAnchor.constraint(equalTo: left.trailingAnchor),
             listScroll.topAnchor.constraint(equalTo: meter.bottomAnchor, constant: 10),
