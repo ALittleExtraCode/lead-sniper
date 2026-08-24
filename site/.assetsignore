@@ -1,0 +1,10 @@
+# Nothing that is not the site itself. The Python project served its own .git
+# publicly for a while; naming things explicitly is cheaper than finding out.
+.git/
+.github/
+.DS_Store
+_worker.js
+wrangler.toml
+*.py
+*.swift
+*.sh

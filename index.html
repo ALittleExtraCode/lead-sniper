@@ -292,6 +292,26 @@
       50% { opacity: 0.4; transform: scale(0.85); }
     }
 
+    .theme-picker {
+      display: flex;
+      gap: 4px;
+      background: var(--card-inner);
+      border: 1px solid var(--card-border);
+      padding: 4px 6px;
+      border-radius: 7px;
+    }
+
+    .theme-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: transform 0.15s ease;
+    }
+
+    .theme-dot:hover { transform: scale(1.25); }
+
     .btn-action-nav {
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid var(--card-border);
@@ -870,6 +890,69 @@
       border-color: var(--accent);
     }
 
+    /* Intent Sandbox */
+    .sandbox-split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    @media (max-width: 860px) {
+      .sandbox-split { grid-template-columns: 1fr; }
+    }
+
+    .intent-gauge-card {
+      background: var(--card-inner);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      text-align: center;
+    }
+
+    .gauge-circle-wrap {
+      position: relative;
+      width: 120px;
+      height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .gauge-svg {
+      transform: rotate(-90deg);
+      width: 120px;
+      height: 120px;
+    }
+
+    .gauge-bg {
+      fill: none;
+      stroke: rgba(255, 255, 255, 0.08);
+      stroke-width: 10;
+    }
+
+    .gauge-bar {
+      fill: none;
+      stroke: var(--accent);
+      stroke-width: 10;
+      stroke-linecap: round;
+      stroke-dasharray: 314;
+      stroke-dashoffset: 60;
+      transition: stroke-dashoffset 0.6s ease, stroke 0.3s ease;
+    }
+
+    .gauge-val-text {
+      position: absolute;
+      font-family: var(--font-display);
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+
     /* Preset Builder */
     .preset-builder-grid {
       display: grid;
@@ -939,6 +1022,20 @@
       accent-color: var(--accent);
       margin: 8px 0;
       cursor: pointer;
+    }
+
+    .milestone-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-family: var(--font-mono);
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: var(--emerald);
+      font-weight: 600;
     }
 
     /* Comparison Matrix */
@@ -1121,7 +1218,7 @@
         <div>
           <div class="brand-title">LeadSniper</div>
         </div>
-        <span class="brand-tag">v1.3.0</span>
+        <span class="brand-tag">v1.4.0</span>
       </a>
 
       <div class="header-stats">
@@ -1132,6 +1229,15 @@
         <div class="stat-pill">
           <span>🎯 SNIPED: <strong>112</strong></span>
         </div>
+        
+        <!-- Theme Accent Switcher -->
+        <div class="theme-picker" title="Switch HUD Accent">
+          <div class="theme-dot" style="background: #38bdf8;" onclick="setTheme('#38bdf8')"></div>
+          <div class="theme-dot" style="background: #10b981;" onclick="setTheme('#10b981')"></div>
+          <div class="theme-dot" style="background: #f59e0b;" onclick="setTheme('#f59e0b')"></div>
+          <div class="theme-dot" style="background: #a855f7;" onclick="setTheme('#a855f7')"></div>
+        </div>
+
         <button id="soundToggleBtn" onclick="toggleSound()" class="btn-action-nav" style="padding: 5px 9px;">
           <span id="soundIcon">🔊</span>
           <span id="soundLabel">Audio ON</span>
@@ -1180,6 +1286,7 @@
     <!-- Navigation Tabs (SunoGet Studio Layout) -->
     <nav class="tabs-nav">
       <button class="tab-btn active" onclick="openTab('tab-radar')">🎯 Live Target Radar</button>
+      <button class="tab-btn" onclick="openTab('tab-sandbox')">🧠 Intent Sandbox</button>
       <button class="tab-btn" onclick="openTab('tab-builder')">🛠️ Preset Builder & Export</button>
       <button class="tab-btn" onclick="openTab('tab-comparison')">⚔️ Anti-Spam Playbook</button>
       <button class="tab-btn" onclick="openTab('tab-features')">⚡ Architecture & Specs</button>
@@ -1283,7 +1390,69 @@
       </div>
     </div>
 
-    <!-- TAB 2: PRESET BUILDER & EXPORT -->
+    <!-- TAB 2: LIVE INTENT SANDBOX -->
+    <div id="tab-sandbox" class="tab-content">
+      <div class="radar-card">
+        <h3 style="font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px;">🧠 Live AI Intent Analyzer Sandbox</h3>
+        <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 14px;">Paste any real Reddit post, question, or forum thread to watch LeadSniper score buying intent and synthesize responses in real time.</p>
+
+        <div style="display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap;">
+          <span style="font-size: 11px; font-family: var(--font-mono); color: var(--text-muted); align-self: center;">TEST PRESETS:</span>
+          <button onclick="loadSandboxSample('saas')" class="btn-action-nav" style="padding: 4px 10px; font-size: 11px;">🚀 SaaS Question</button>
+          <button onclick="loadSandboxSample('ecom')" class="btn-action-nav" style="padding: 4px 10px; font-size: 11px;">🛍️ Shopify Inactive Carts</button>
+          <button onclick="loadSandboxSample('agency')" class="btn-action-nav" style="padding: 4px 10px; font-size: 11px;">💼 Hiring Developer</button>
+        </div>
+
+        <div class="sandbox-split">
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <div>
+              <label style="font-size: 11.5px; font-weight: 600; color: var(--text-muted);">PASTE THREAD TITLE / QUESTION:</label>
+              <textarea id="sbxInputText" class="reply-textarea" style="min-height: 100px; margin-top: 4px;" oninput="runSandboxAnalysis()" placeholder="e.g. Is there any good tool to automate customer reporting without coding?"></textarea>
+            </div>
+
+            <div>
+              <label style="font-size: 11.5px; font-weight: 600; color: var(--text-muted);">POSTER USERNAME (OPTIONAL):</label>
+              <input type="text" id="sbxAuthor" class="input-field" value="curious_founder" oninput="runSandboxAnalysis()" style="width: 100%; margin-top: 4px;">
+            </div>
+
+            <div>
+              <label style="font-size: 11.5px; font-weight: 600; color: var(--text-muted);">SYNTHESIZED INTENT-OPTIMIZED REPLY:</label>
+              <textarea id="sbxReplyOutput" class="reply-textarea" style="min-height: 110px; margin-top: 4px;" readonly></textarea>
+            </div>
+          </div>
+
+          <!-- Intent Score Gauge & Signal Breakdown -->
+          <div class="intent-gauge-card">
+            <div class="gauge-circle-wrap">
+              <svg class="gauge-svg">
+                <circle class="gauge-bg" cx="60" cy="60" r="50"></circle>
+                <circle id="gaugeBar" class="gauge-bar" cx="60" cy="60" r="50"></circle>
+              </svg>
+              <div id="gaugeValText" class="gauge-val-text">88%</div>
+            </div>
+            
+            <div id="gaugeTierBadge" class="badge-intent-hot" style="font-size: 12px; padding: 4px 12px;">🔥 HOT BUYING INTENT</div>
+
+            <div style="text-align: left; width: 100%; display: flex; flex-direction: column; gap: 6px; font-size: 12px; margin-top: 8px;">
+              <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 4px;">
+                <span style="color: var(--text-muted);">Question Archetype:</span>
+                <span id="sbxArchetype" style="color: var(--emerald); font-family: var(--font-mono);">+35% (Matched)</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 4px;">
+                <span style="color: var(--text-muted);">Pain Point Keywords:</span>
+                <span id="sbxKeywords" style="color: var(--accent); font-family: var(--font-mono);">+30% (automate, tool)</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 4px;">
+                <span style="color: var(--text-muted);">Negative Filters:</span>
+                <span style="color: var(--emerald); font-family: var(--font-mono);">0% Clean</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: PRESET BUILDER & EXPORT -->
     <div id="tab-builder" class="tab-content">
       <div class="radar-card">
         <h3 style="font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px;">🛠️ Interactive Preset Builder & JSON Exporter</h3>
@@ -1335,7 +1504,7 @@
       </div>
     </div>
 
-    <!-- TAB 3: SPAM VS SNIPER COMPARISON -->
+    <!-- TAB 4: SPAM VS SNIPER COMPARISON -->
     <div id="tab-comparison" class="tab-content">
       <div class="radar-card">
         <h3 style="font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px;">⚔️ The Anti-Spam Battleplan</h3>
@@ -1382,7 +1551,7 @@
       </div>
     </div>
 
-    <!-- TAB 4: ARCHITECTURE & FEATURES -->
+    <!-- TAB 5: ARCHITECTURE & FEATURES -->
     <div id="tab-features" class="tab-content">
       <div class="grid-3col">
         <div class="feature-hud-card">
@@ -1423,7 +1592,7 @@
       </div>
     </div>
 
-    <!-- TAB 5: CONVERSION CALCULATOR -->
+    <!-- TAB 6: CONVERSION CALCULATOR -->
     <div id="tab-calculator" class="tab-content">
       <div class="radar-card">
         <h3 style="font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px;">🎯 Organic Lead Acquisition & ROI Estimator</h3>
@@ -1460,18 +1629,21 @@
           <div style="background: var(--card-inner); border: 1px solid var(--card-border); border-radius: 12px; padding: 20px; display: flex; flex-direction: column; justify-content: center; gap: 16px;">
             <div>
               <div style="font-size: 11px; font-family: var(--font-mono); color: var(--text-muted); text-transform: uppercase;">Estimated Monthly New Customers</div>
-              <div id="calcResultCustomers" style="font-family: var(--font-display); font-size: 32px; font-weight: 700; color: var(--emerald);">36 users/mo</div>
+              <div id="calcResultCustomers" style="font-family: var(--font-display); font-size: 30px; font-weight: 700; color: var(--emerald);">36 users/mo</div>
             </div>
             <div>
               <div style="font-size: 11px; font-family: var(--font-mono); color: var(--text-muted); text-transform: uppercase;">Estimated Added Monthly Revenue</div>
-              <div id="calcResultRevenue" style="font-family: var(--font-display); font-size: 32px; font-weight: 700; color: var(--accent);">$1,764 /mo</div>
+              <div id="calcResultRevenue" style="font-family: var(--font-display); font-size: 30px; font-weight: 700; color: var(--accent);">$1,764 /mo</div>
+            </div>
+            <div>
+              <div class="milestone-badge" id="calcMilestoneBadge">🥈 Full-Time Freedom ($1.7k/mo)</div>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- TAB 6: FAQ & SUPPORT -->
+    <!-- TAB 7: FAQ & SUPPORT -->
     <div id="tab-faq" class="tab-content">
       <div class="radar-card">
         <h3 style="font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px;">❓ Frequently Asked Questions & Operational Help</h3>
@@ -1519,7 +1691,7 @@
       </div>
     </div>
 
-    <!-- TAB 7: DESKTOP APP -->
+    <!-- TAB 8: DESKTOP APP -->
     <div id="tab-desktop" class="tab-content">
       <div class="radar-card" style="text-align: center; padding: 40px 20px;">
         <div style="font-size: 40px; margin-bottom: 12px;">💻</div>
@@ -1543,6 +1715,7 @@
       </div>
       <div class="footer-links">
         <a href="#tab-radar" onclick="openTab('tab-radar')">Live Radar</a>
+        <a href="#tab-sandbox" onclick="openTab('tab-sandbox')">Intent Sandbox</a>
         <a href="#tab-builder" onclick="openTab('tab-builder')">Preset Builder</a>
         <a href="#tab-comparison" onclick="openTab('tab-comparison')">Anti-Spam Playbook</a>
         <a href="#tab-features" onclick="openTab('tab-features')">Architecture</a>
@@ -1554,6 +1727,13 @@
 
   <script>
     let soundEnabled = true;
+
+    function setTheme(accentColor) {
+      document.documentElement.style.setProperty('--accent', accentColor);
+      document.documentElement.style.setProperty('--accent-glow', `${accentColor}55`);
+      showToast('🎨', `HUD Accent Updated`);
+      playTargetLockChime();
+    }
 
     function showToast(icon, msg) {
       const toast = document.getElementById('hudToast');
@@ -1966,6 +2146,73 @@
       showToast('🛠️', `Injected "${name}" into live studio!`);
     }
 
+    // Intent Sandbox Logic
+    function loadSandboxSample(type) {
+      const samples = {
+        saas: {
+          title: "Looking for an automated customer reporting dashboard with zero code",
+          author: "saas_builder",
+          url: "https://yourapp.com"
+        },
+        ecom: {
+          title: "How do you recover abandoned carts on Shopify via SMS?",
+          author: "ecom_queen",
+          url: "https://shopboost.io"
+        },
+        agency: {
+          title: "[Hiring] Need a developer to build Stripe billing and client portal",
+          author: "founder_scale",
+          url: "https://apexstudio.agency"
+        }
+      };
+      const s = samples[type] || samples.saas;
+      document.getElementById('sbxInputText').value = s.title;
+      document.getElementById('sbxAuthor').value = s.author;
+      runSandboxAnalysis();
+      playTargetLockChime();
+    }
+
+    function runSandboxAnalysis() {
+      const text = document.getElementById('sbxInputText').value.trim();
+      const author = document.getElementById('sbxAuthor').value.trim() || "creator";
+      if (!text) return;
+
+      let score = 20;
+      let matchedArchetype = "None";
+      let matchedKws = [];
+
+      if (/how (?:do|can|to)|looking for|recommend|best tool|alternative/i.test(text)) {
+        score += 40;
+        matchedArchetype = "Question Archetype (+40%)";
+      }
+
+      if (/automate|tool|software|dashboard|cart|stripe|billing|leads/i.test(text)) {
+        score += 30;
+        matchedKws.push("workflow intent (+30%)");
+      }
+
+      score = Math.min(score, 94);
+
+      // Update Gauge
+      const offset = 314 - (314 * (score / 100));
+      document.getElementById('gaugeBar').style.strokeDashoffset = offset;
+      document.getElementById('gaugeValText').textContent = `${score}%`;
+
+      const tierBadge = document.getElementById('gaugeTierBadge');
+      if (score >= 60) {
+        tierBadge.className = "badge-intent-hot";
+        tierBadge.textContent = "🔥 HOT BUYING INTENT";
+      } else {
+        tierBadge.className = "badge-intent-warm";
+        tierBadge.textContent = "⚡ WARM INTENT";
+      }
+
+      document.getElementById('sbxArchetype').textContent = matchedArchetype;
+      document.getElementById('sbxKeywords').textContent = matchedKws.join(', ') || "Direct query";
+
+      document.getElementById('sbxReplyOutput').value = `Hey u/${author}! If you're looking to solve this, check out https://yourapp.com — handles this workflow in 1 click with zero complex setup. Best of luck!`;
+    }
+
     // Preset Builder Sync
     function syncBuilderJson() {
       const id = document.getElementById('bldId').value.trim() || "my_tool";
@@ -2035,6 +2282,15 @@
 
       document.getElementById("calcResultCustomers").textContent = `${customers.toLocaleString()} users/mo`;
       document.getElementById("calcResultRevenue").textContent = `$${revenue.toLocaleString()} /mo`;
+
+      const badge = document.getElementById('calcMilestoneBadge');
+      if (revenue >= 10000) {
+        badge.textContent = `👑 Scale SaaS ($${(revenue/1000).toFixed(1)}k/mo • $${((revenue*12)/1000).toFixed(0)}k ARR)`;
+      } else if (revenue >= 4000) {
+        badge.textContent = `🥇 Full-Time Freedom ($${(revenue/1000).toFixed(1)}k/mo)`;
+      } else {
+        badge.textContent = `🥈 Ramen Profitable ($${revenue.toLocaleString()}/mo)`;
+      }
     }
 
     function toggleFaq(el) {
@@ -2097,13 +2353,13 @@
 
     // Target Lock on clickable elements
     document.addEventListener('mouseover', (e) => {
-      if (e.target.closest('button, a, select, textarea, .lead-row, .tab-btn, .persona-tag-btn, input, .faq-header')) {
+      if (e.target.closest('button, a, select, textarea, .lead-row, .tab-btn, .persona-tag-btn, input, .faq-header, .theme-dot')) {
         crosshair.classList.add('locked');
       }
     });
 
     document.addEventListener('mouseout', (e) => {
-      if (e.target.closest('button, a, select, textarea, .lead-row, .tab-btn, .persona-tag-btn, input, .faq-header')) {
+      if (e.target.closest('button, a, select, textarea, .lead-row, .tab-btn, .persona-tag-btn, input, .faq-header, .theme-dot')) {
         crosshair.classList.remove('locked');
       }
     });
@@ -2112,6 +2368,7 @@
       renderLeads();
       updateCalculator();
       syncBuilderJson();
+      runSandboxAnalysis();
     });
   </script>
 </body>

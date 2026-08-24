@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LeadSniper — find the people asking for what you make</title>
+<meta name="description" content="A Mac app that finds the Reddit and Hacker News threads where people are asking for what you make, and helps you write a reply worth posting.">
+<meta property="og:title" content="LeadSniper">
+<meta property="og:description" content="Finds the threads where people are asking for what you make. Mac app, notarised, no account.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* The app's own palette. Every text colour was checked against WCAG on both
+     the paper and the card, and the weakest is 4.57:1. */
+  :root {
+    --paper: #f5f4f1;
+    --card: #ffffff;
+    --edge: #e3e0d9;
+    --ink: #1b1d21;
+    --ink-2: #4b515a;
+    --ink-3: #5d636b;
+    --accent: #0f62c4;
+    --accent-dark: #0b4a97;
+    --hot: #b4530a;
+    --chip: #e8f0fb;
+    --chip-edge: #5a92d3;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font: 400 17px/1.6 Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 940px; margin: 0 auto; padding: 0 24px; }
+  h1, h2, h3 { line-height: 1.2; letter-spacing: -0.02em; margin: 0; }
+  h1 { font-size: clamp(34px, 6vw, 52px); font-weight: 700; }
+  h2 { font-size: clamp(24px, 4vw, 32px); font-weight: 650; margin-bottom: 14px; }
+  h3 { font-size: 18px; font-weight: 650; margin-bottom: 6px; }
+  p { margin: 0 0 16px; }
+  a { color: var(--accent); }
+  code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.86em;
+    background: var(--paper);
+    border: 1px solid var(--edge);
+    border-radius: 5px;
+    padding: 1px 6px;
+  }
+
+  header { padding: 72px 0 48px; }
+  .mark {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-weight: 700; font-size: 15px; letter-spacing: -0.01em;
+    color: var(--ink-2); margin-bottom: 28px;
+  }
+  .mark span[aria-hidden] {
+    width: 26px; height: 26px; border-radius: 7px; display: inline-block;
+    background: linear-gradient(160deg, #22d3ee, #4338ca);
+  }
+  .lede { font-size: clamp(18px, 2.4vw, 21px); color: var(--ink-2); max-width: 40ch; margin-top: 20px; }
+
+  .get { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; margin: 32px 0 10px; }
+  .button {
+    display: inline-block; background: var(--accent); color: #fff;
+    font-weight: 650; font-size: 16px; text-decoration: none;
+    padding: 13px 26px; border-radius: 10px;
+    transition: background .15s ease;
+  }
+  .button:hover { background: var(--accent-dark); }
+  .meta { color: var(--ink-3); font-size: 14px; }
+  .sum {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 12px; color: var(--ink-3);
+    word-break: break-all; margin-top: 8px;
+  }
+
+  section { padding: 44px 0; border-top: 1px solid var(--edge); }
+  .card {
+    background: var(--card); border: 1px solid var(--edge);
+    border-radius: 14px; padding: 26px 28px;
+  }
+  .cards { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+  .cards p:last-child, .card p:last-child { margin-bottom: 0; }
+  .step-n {
+    display: inline-block; font-size: 12px; font-weight: 700; letter-spacing: .08em;
+    color: var(--accent); text-transform: uppercase; margin-bottom: 10px;
+  }
+  figure { margin: 26px 0 0; }
+  figure img {
+    width: 100%; height: auto; display: block;
+    border: 1px solid var(--edge); border-radius: 12px; background: var(--card);
+  }
+  figcaption { color: var(--ink-3); font-size: 14px; margin-top: 10px; }
+
+  .chips { display: flex; flex-wrap: wrap; gap: 7px; margin: 4px 0 16px; }
+  .chip {
+    background: var(--chip); border: 1px solid var(--chip-edge); color: var(--accent);
+    border-radius: 999px; padding: 4px 12px; font-size: 14px; font-weight: 600;
+  }
+  .chip.plain { background: var(--paper); border-color: var(--edge); color: var(--ink-3); }
+
+  ul.plain { list-style: none; padding: 0; margin: 0; }
+  ul.plain li { padding: 9px 0; border-bottom: 1px solid var(--edge); color: var(--ink-2); }
+  ul.plain li:last-child { border-bottom: 0; }
+  ul.plain b { color: var(--ink); font-weight: 600; }
+
+  .measure { width: 100%; border-collapse: collapse; font-size: 15px; }
+  .measure td { padding: 9px 0; border-bottom: 1px solid var(--edge); color: var(--ink-2); vertical-align: top; }
+  .measure tr:last-child td { border-bottom: 0; }
+  .measure td:first-child {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 13px; color: var(--ink); padding-right: 22px; white-space: nowrap;
+  }
+
+  footer { padding: 40px 0 64px; color: var(--ink-3); font-size: 14px; border-top: 1px solid var(--edge); }
+  @media (max-width: 620px) { header { padding: 48px 0 32px; } section { padding: 34px 0; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="mark"><span aria-hidden="true"></span> LeadSniper</div>
+    <h1>Find the people already<br>asking for what you make.</h1>
+    <p class="lede">
+      Somewhere on Reddit right now, someone is describing the exact problem your
+      product solves. LeadSniper finds those threads, tells you why each one
+      matched, and helps you write a reply worth posting.
+    </p>
+
+    <div class="get">
+      <a class="button" href="/dist/LeadSniper.dmg">Download for Mac</a>
+      <span class="meta">
+        v<span data-version>1.2</span> &middot; <span data-size>1.2 MB</span> &middot;
+        Universal &middot; macOS 12+ &middot; notarised by Apple
+      </span>
+    </div>
+    <div class="sum">
+      shasum -a 256 &nbsp;<span data-sha>2fca2de34a439f74a09835592c341ee402d8b47bd063375408e56941c6a42035</span>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <span class="step-n">Step one</span>
+    <h2>Say what you make. It works out where to look.</h2>
+    <p>
+      You type a sentence in plain words. It pulls searchable phrases out of that,
+      searches Reddit for each one, and reports which communities the results
+      actually came from — ranked by how many of your phrases agree, because a
+      community three phrases found beats one that a single phrase hit nine times.
+    </p>
+    <div class="chips">
+      <span class="chip">batch export</span>
+      <span class="chip">music library</span>
+      <span class="chip plain">&rarr; r/selfhosted, r/musichoarder, r/DataHoarder, r/premiere, r/cubase</span>
+    </div>
+    <p>
+      No list of subreddits to compile, and nothing hardcoded — it finds them for
+      whatever you happen to sell. Or start from one of 39 sectors if you would
+      rather not begin with a blank field.
+    </p>
+    <figure>
+      <img src="/img/find.png" alt="The Find tab: a description, the phrases derived from it, and the communities found, each with a real post title as evidence." loading="lazy" width="1120" height="700">
+      <figcaption>Every suggestion shows a real post title, so you can judge it rather than trust it.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <span class="step-n">Step two</span>
+    <h2>It watches, and tells you why.</h2>
+    <p>
+      It sweeps on its own — every half hour by default — and notifies you when
+      something worth answering appears. A lead is worth most in its first hour,
+      so a button you press when you remember to look finds threads that have
+      already been answered by somebody else.
+    </p>
+    <p>
+      Every score is the sum of named reasons, each showing the text that
+      triggered it. Nothing is hidden behind a number you would have to argue
+      with.
+    </p>
+    <div class="chips">
+      <span class="chip">in the title &middot; download, library, bulk</span>
+      <span class="chip">posted &middot; within the hour</span>
+      <span class="chip plain">asking &middot; is there a tool</span>
+      <span class="chip plain">frustrated &middot; by hand</span>
+    </div>
+    <figure>
+      <img src="/img/radar.png" alt="The Radar tab: a list of leads, the selected post, why it matched, and a draft reply." loading="lazy" width="1120" height="700">
+      <figcaption>Answered threads are marked and sink to the bottom — the same thread comes back in every sweep while it is on the front page.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>It will not let you post a template.</h2>
+    <p>
+      LeadSniper writes a starting point that says plainly the product is yours,
+      names one specific thing it does, and leaves a gap for you to fill. Then it
+      refuses to be copied until you have written something of your own — not
+      "changed a character", but actual words that were not in the draft.
+    </p>
+    <p>
+      This is the whole difference between a research tool and a spam cannon.
+      Templated replies at volume are recognisable on sight, and they get the
+      account banned and the domain blocked sitewide — which affects every link
+      you ever post, including the honest ones.
+    </p>
+    <div class="cards">
+      <div class="card">
+        <h3>No auto-posting</h3>
+        <p>You read the thread and write the reply. One click copies it and opens the thread.</p>
+      </div>
+      <div class="card">
+        <h3>No fake identity</h3>
+        <p>The app identifies itself honestly to Reddit. Rotating browser user-agents buys nothing and puts you on the wrong side of a platform you depend on.</p>
+      </div>
+      <div class="card">
+        <h3>No accounts, no server</h3>
+        <p>It runs on your Mac, on your own connection. Nothing is uploaded and there is nothing to sign up for.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>Where it looks, and where it cannot.</h2>
+    <p>
+      Reddit and Hacker News, because those are the two where the content is
+      genuinely public and reading it is permitted.
+    </p>
+    <ul class="plain">
+      <li><b>X / Twitter</b> — removed free API access. Search starts at a paid tier per month, and the terms restrict this kind of monitoring.</li>
+      <li><b>Facebook and Instagram</b> — no public content search exists. The Graph API reaches pages you already own and nothing else.</li>
+      <li><b>LinkedIn</b> — no content search for third parties.</li>
+    </ul>
+    <p style="margin-top:18px">
+      Any tool claiming to sweep all of them is either paying thousands a month
+      or scraping in a way that gets your accounts closed. Worth knowing before
+      you compare.
+    </p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>Built on measurements, not assumptions.</h2>
+    <p>Everything below was measured against the live endpoints, and the app is shaped around the answers.</p>
+    <table class="measure">
+      <tr>
+        <td>403</td>
+        <td>What Reddit returns with no User-Agent. With an honest identifying one: <b>200</b>. So the app says who it is.</td>
+      </tr>
+      <tr>
+        <td>1 / 20s</td>
+        <td>The real budget, and it counts <b>requests, not communities</b>. Everything in the app shares one queue, so a background sweep cannot collide with a search you started.</td>
+      </tr>
+      <tr>
+        <td>41 of 50</td>
+        <td>How many results came from the busiest community when several are combined. So sweeps go out in small groups — otherwise your quiet niche is never actually watched.</td>
+      </tr>
+      <tr>
+        <td>20,907</td>
+        <td>Posts matching the single word "export", including trade tariffs. Two- and three-word phrases are what find people; single words find everything.</td>
+      </tr>
+      <tr>
+        <td>4.57:1</td>
+        <td>The weakest text contrast anywhere in the interface, against the 4.5:1 that WCAG AA requires.</td>
+      </tr>
+    </table>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>
+      LeadSniper is a Mac app. It reads public feeds from your own machine, stores
+      everything locally, and has no account, server or telemetry. Signed with a
+      Developer ID and notarised by Apple, so it opens on a double-click.
+    </p>
+    <p style="margin-bottom:0">
+      Reddit is a trademark of Reddit, Inc. LeadSniper is not affiliated with,
+      endorsed by, or connected to Reddit or Y Combinator.
+    </p>
+  </div>
+</footer>
+
+<script>
+  // The version, size and checksum come from the file that was actually built,
+  // so the page cannot drift from the download the way a hand-edited number does.
+  fetch('/dist/latest.json', { cache: 'no-store' })
+    .then(function (r) { return r.ok ? r.json() : null; })
+    .then(function (d) {
+      if (!d) return;
+      document.querySelectorAll('[data-version]').forEach(function (el) { el.textContent = d.version; });
+      if (d.sha256) {
+        document.querySelectorAll('[data-sha]').forEach(function (el) { el.textContent = d.sha256; });
+      }
+    })
+    .catch(function () { /* the page is readable without it */ });
+
+  fetch('/dist/LeadSniper.dmg', { method: 'HEAD' })
+    .then(function (r) {
+      var n = parseInt(r.headers.get('content-length') || '0', 10);
+      if (!n) return;
+      var mb = (n / 1048576).toFixed(1) + ' MB';
+      document.querySelectorAll('[data-size]').forEach(function (el) { el.textContent = mb; });
+    })
+    .catch(function () {});
+</script>
+</body>
+</html>
