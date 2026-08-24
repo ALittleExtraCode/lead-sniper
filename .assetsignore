@@ -1,10 +1,17 @@
 .git/
 .github/
+.build/
+macapp/
+tools/
 _worker.js
 wrangler.toml
 .assetsignore
+.gitignore
 README.md
+AGENT_GUIDE.md
+GROWTH_PLAYBOOK.md
 __pycache__/
 core/__pycache__/
 *.pyc
 *.py
+*.dmg
